@@ -1,159 +1,146 @@
 personal:
-  name: "Praise Oyimi"
+  name: Praise Oyimi
   age: 22
-  location: "Mount Pleasant, Michigan"
-  heritage: "Delta State, Nigeria (Ijaw)"
-  current_status: "CMU Senior, CEO, Entrepreneur"
-
+  location: Mount Pleasant, Michigan
+  heritage: Delta State, Nigeria (Ijaw)
+  current_status: CMU Senior, CEO, Entrepreneur
+  birthday: '2003-01-16'
+  birth_year: 2003
 education:
   current:
-    institution: "Central Michigan University"
-    degree: "BS Information Technology"
-    concentration: "Web Design & Development"
-    graduation: "May 2026"
+    institution: Central Michigan University
+    degree: BS Information Technology
+    concentration: Web Design & Development
+    graduation: May 2026
     gpa: 3.0
     current_classes:
-      - "Database Systems"
-      - "Geology"
-      - "Business Communications"
-      - "3 other classes"
-    
+    - Database Systems
+    - Geology
+    - Business Communications
+    - 3 other classes
   applying:
-    - institution: "DePaul University"
-      program: "MS Software Engineering"
-      start_term: "Fall 2026"
-      application_deadline_days: 15
-      progress_percent: 30
-      status: "In progress - essay incomplete"
-
+  - institution: DePaul University
+    program: MS Software Engineering
+    start_term: Fall 2026
+    application_deadline_days: 15
+    progress_percent: 30
+    status: In progress - essay incomplete
 companies:
   shiprite:
-    role: "CEO & Founder"
-    type: "Product Studio"
+    role: CEO & Founder
+    type: Product Studio
     team_size: 8
     team_members:
-      - name: "Abayomi"
-        role: "Lead Engineer"
-        salary_amount: 145000
-        salary_currency: "NGN"
-        salary_frequency: "monthly"
-      - name: "Collins"
-        role: "Designer"
-        salary_amount: 75000
-        salary_currency: "NGN"
-        salary_frequency: "monthly"
-      - name: "Developer"
-        role: "Developer"
-        salary_amount: 100000
-        salary_currency: "NGN"
-        salary_frequency: "monthly"
-    
+    - name: Abayomi
+      role: Lead Engineer
+      salary_amount: 145000
+      salary_currency: NGN
+      salary_frequency: monthly
+    - name: Collins
+      role: Designer
+      salary_amount: 75000
+      salary_currency: NGN
+      salary_frequency: monthly
+    - name: Developer
+      role: Developer
+      salary_amount: 100000
+      salary_currency: NGN
+      salary_frequency: monthly
   remi_guardian:
-    name: "Remi Guardian"
-    description: "AI study assistant desktop app"
-    status: "In development - launching January 2026"
+    name: Remi Guardian
+    description: AI study assistant desktop app
+    status: In development - launching January 2026
     target_users: 2381
-    target_date: "March 2026"
+    target_date: March 2026
     current_progress_percent: 60
     behind_schedule: true
-    blocking_feature: "Whiteboard mode"
-    brand_colors: ["#D75C37", "#2E4C9D"]
+    blocking_feature: Whiteboard mode
+    brand_colors:
+    - '#D75C37'
+    - '#2E4C9D'
     revenue_target_monthly: 6250
     user_share_percent: 25
-    
   fraudzero:
-    name: "FraudZero"
-    description: "Fraud prevention desktop application"
-    status: "In development"
-    
+    name: FraudZero
+    description: Fraud prevention desktop application
+    status: In development
   flickchoice:
-    name: "FlickChoice"
-    description: "AI decision-making assistant"
-    status: "In development"
-    
+    name: FlickChoice
+    description: AI decision-making assistant
+    status: In development
   bible_path:
-    name: "Bible Path"
-    description: "Faith accountability app"
-    status: "In development"
-    
+    name: Bible Path
+    description: Faith accountability app
+    status: In development
   twine_campus:
-    name: "Twine Campus"
-    description: "Campus networking platform"
-    status: "Launched"
-    achievement: "Won CMU New Venture Challenge"
-    users: "1000+"
-
+    name: Twine Campus
+    description: Campus networking platform
+    status: Launched
+    achievement: Won CMU New Venture Challenge
+    users: 1000+
 goals:
   immediate:
-    - task: "Launch Remi Guardian"
-      deadline: "January 2026"
-    - task: "Reach 2,381 Remi users"
-      deadline: "March 2026"
-    - task: "Complete 75 Hard challenge"
-      current_day: 24
-      total_days: 75
-    - task: "Maintain 3.0 GPA"
-      current_status: 3.0
-    - task: "Complete DePaul application"
-      deadline_days: 15
-      progress_percent: 30
-      
-  medium_term:
-    - "Graduate CMU (May 2026)"
-    - "Start DePaul MS program (Fall 2026)"
-    - "Grow ShipRite to $200K ARR"
-    
-  long_term:
-    - "Francis Dauphin Foundation (youth development)"
-    - "Bowen Group (hospitality company, launching 2030)"
-    - "Governor of Delta State by age 45"
-
-current_priorities:
-  - task: "Database exam"
-    datetime: "Today 2pm"
-    notes: "Weak on normalization, especially 3NF"
-    
-  - task: "75 Hard workout"
-    due: "Daily"
-    status: "Not done yet today"
-    importance: "Don't break streak"
-    
-  - task: "Remi whiteboard feature"
-    progress: 60
-    behind_schedule: true
-    time_needed_hours: 3
-    
-  - task: "DePaul essay"
-    progress: 30
+  - task: Launch Remi Guardian
+    deadline: January 2026
+  - task: Reach 2,381 Remi users
+    deadline: March 2026
+  - task: Complete 75 Hard challenge
+    current_day: 24
+    total_days: 75
+  - task: Maintain 3.0 GPA
+    current_status: 3.0
+  - task: Complete DePaul application
     deadline_days: 15
-    needs_work: "Paragraph 3"
-    
-  - task: "Team salaries"
-    due_days: 2
-    total_amount: 320000
-    currency: "NGN"
-    breakdown:
-      - {name: "Abayomi", amount: 145000}
-      - {name: "Collins", amount: 75000}
-      - {name: "Developer", amount: 100000}
-
+    progress_percent: 30
+  medium_term:
+  - Graduate CMU (May 2026)
+  - Start DePaul MS program (Fall 2026)
+  - Grow ShipRite to $200K ARR
+  long_term:
+  - Francis Dauphin Foundation (youth development)
+  - Bowen Group (hospitality company, launching 2030)
+  - Governor of Delta State by age 45
+current_priorities:
+- task: Database exam
+  datetime: Today 2pm
+  notes: Weak on normalization, especially 3NF
+- task: 75 Hard workout
+  due: Daily
+  status: Not done yet today
+  importance: Don't break streak
+- task: Remi whiteboard feature
+  progress: 60
+  behind_schedule: true
+  time_needed_hours: 3
+- task: DePaul essay
+  progress: 30
+  deadline_days: 15
+  needs_work: Paragraph 3
+- task: Team salaries
+  due_days: 2
+  total_amount: 320000
+  currency: NGN
+  breakdown:
+  - name: Abayomi
+    amount: 145000
+  - name: Collins
+    amount: 75000
+  - name: Developer
+    amount: 100000
 technical_context:
   tech_stack:
-    - "React"
-    - "Python"
-    - "Electron"
-    - "Flutter"
-  
+  - React
+  - Python
+  - Electron
+  - Flutter
   current_work_patterns:
-    - "Codes primarily at 3pm"
-    - "Works out around 8pm"
-    - "Morning classes 9am-12pm"
-  
+  - Codes primarily at 3pm
+  - Works out around 8pm
+  - Morning classes 9am-12pm
   struggle_areas:
-    - "Database normalization (3NF)"
-    - "Staying on schedule with Remi"
-  
+  - Database normalization (3NF)
+  - Staying on schedule with Remi
   communication_preferences:
-    - "Brief responses"
-    - "Direct communication"
-    - "No excessive formality"
+  - Brief responses
+  - Direct communication
+  - No excessive formality
