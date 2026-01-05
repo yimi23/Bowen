@@ -9,7 +9,7 @@
       "expires": "2026-01-09T23:59:59",
       "source": "manual_input",
       "confidence": 1.0,
-      "told_on": "2026-01-05T01:21:31.200848"
+      "told_on": "2026-01-05T01:25:47.695986"
     }
   },
   "events": [
@@ -126,11 +126,17 @@
       "user_input": "upgrade now",
       "response": "\u2705 **Already Up to Date**\n\nNo newer models available for upgrade.",
       "type": "conversation"
+    },
+    {
+      "timestamp": "2026-01-05T01:24:10.481452",
+      "user_input": "exam monday",
+      "response": "Understood. I will assist you in preparing for your upcoming exam.\n\nHere's what I can do:\n\n1. Perform a comprehensive research on the exam topics and provide you with a detailed summary.\n2. Analyze an...",
+      "type": "conversation"
     }
   ],
   "patterns": {},
   "temporal_tracking": {},
-  "last_updated": "2026-01-05T00:21:55.205616",
+  "last_updated": "2026-01-05T01:24:10.481452",
   "learned_facts": {
     "deadlines": [
       {
@@ -188,6 +194,13 @@
         "notes": "",
         "expires": "2026-01-03T14:00:00",
         "learned_at": "2026-01-05T00:20:37.013124"
+      },
+      {
+        "task": "exam",
+        "date": "2026-01-06T00:00:00",
+        "notes": "",
+        "expires": "2026-01-07T00:00:00",
+        "learned_at": "2026-01-05T01:24:10.481452"
       }
     ],
     "team_updates": [
