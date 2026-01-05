@@ -1,0 +1,14 @@
+{
+  "timestamp": "2026-01-05T11:26:40.364339",
+  "current_date": "2026-01-05",
+  "current_time": "11:26:40",
+  "day_of_week": "Monday",
+  "formatted_datetime": "Monday, January 05, 2026 at 11:26 AM",
+  "location": "Mount Pleasant, Michigan, US",
+  "timezone": "America/Detroit",
+  "user": {
+    "age": 22,
+    "birthday_coming": "in 10 days",
+    "turning": 23
+  }
+}

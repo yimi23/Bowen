@@ -1,0 +1,3544 @@
+[
+  {
+    "file": "bowen_core.py",
+    "line": 328,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return recent_memories[-max_items*2:]  # Last N exchanges"
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 666,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "structure = self.execute_bash(f\"find {directory} -type f -name '*.py' -o -name '*.js' -o -name '*.md"
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 666,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "structure = self.execute_bash(f\"find {directory} -type f -name '*.py' -o -name '*.js' -o -name '*.md"
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 729,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "{\"user_input\": input_text, **context}"
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 808,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\ud83d\udcc1 **Directory Analysis:**\\n{result}\""
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 808,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\ud83d\udcc1 **Directory Analysis:**\\n{result}\""
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 814,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\ud83d\udd0d **Codebase Analysis:**\\n{result}\""
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 814,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\ud83d\udd0d **Codebase Analysis:**\\n{result}\""
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 817,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\ud83d\udd0d **Codebase Analysis:**\\n{result}\""
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 817,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\ud83d\udd0d **Codebase Analysis:**\\n{result}\""
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 820,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\ud83d\udd0d **Codebase Analysis:**\\n{result}\""
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 820,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\ud83d\udd0d **Codebase Analysis:**\\n{result}\""
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 833,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\ud83d\udcdd **File Created:**\\n{result}\""
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 833,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\ud83d\udcdd **File Created:**\\n{result}\""
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 842,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\ud83d\udce6 **Package Installation:**\\n{result}\""
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 842,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\ud83d\udce6 **Package Installation:**\\n{result}\""
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 849,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\ud83d\udcbb **Command Execution:**\\n{result}\""
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 849,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\ud83d\udcbb **Command Execution:**\\n{result}\""
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 957,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "result = self.tamara_tools.execute_tool(tool_name, **parameters)"
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 964,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "ai_response = ai_response.replace(tool_block, f\"\\n\\n\ud83d\udd27 **Tool Execution:**\\n{formatted_result}\")"
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 964,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "ai_response = ai_response.replace(tool_block, f\"\\n\\n\ud83d\udd27 **Tool Execution:**\\n{formatted_result}\")"
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 988,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "doc_pattern = r'DOCUMENT_CREATE:\\s*\\{([^}]+(?:\\{[^}]*\\}[^}]*)*)\\}'"
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 988,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "doc_pattern = r'DOCUMENT_CREATE:\\s*\\{([^}]+(?:\\{[^}]*\\}[^}]*)*)\\}'"
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 1009,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "result_text = f\"\u2705 **Strategic Document Created:**\\n{emoji} {doc_type.title()}: {filepath}\""
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 1009,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "result_text = f\"\u2705 **Strategic Document Created:**\\n{emoji} {doc_type.title()}: {filepath}\""
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 1023,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "result_text = f\"\u2705 **Professional Document Created:**\\n{emoji} {doc_type.title()}: {filepath}\""
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 1023,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "result_text = f\"\u2705 **Professional Document Created:**\\n{emoji} {doc_type.title()}: {filepath}\""
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 1032,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "ai_response = ai_response.replace(doc_block, f\"\\n\\n\ud83d\udccb **Document Creation:**\\n{result_text}\")"
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 1032,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "ai_response = ai_response.replace(doc_block, f\"\\n\\n\ud83d\udccb **Document Creation:**\\n{result_text}\")"
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 1082,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "{\"user_input\": input_text, \"ai_response\": action, **context},"
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 1196,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "match = re.search(r'day\\s*(\\d+)', text.lower())"
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 1222,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "**priority,"
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 1226,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "priorities.append({**priority, \"urgency\": \"medium\"})"
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 1609,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "result = \"\ud83c\udfaf **TODAY'S PRIORITIES:**\\n\""
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 1609,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "result = \"\ud83c\udfaf **TODAY'S PRIORITIES:**\\n\""
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 1611,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "result += f\"{i}. **{p['name']}** ({p['category']})\\n\""
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 1611,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "result += f\"{i}. **{p['name']}** ({p['category']})\\n\""
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 1615,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "result = \"\u26a0\ufe0f **URGENT DEADLINES:**\\n\""
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 1615,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "result = \"\u26a0\ufe0f **URGENT DEADLINES:**\\n\""
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 1618,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "result += f\"\u2022 **{d.name}**: {days} days ({d.progress*100:.0f}% done)\\n\""
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 1618,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "result += f\"\u2022 **{d.name}**: {days} days ({d.progress*100:.0f}% done)\\n\""
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 1622,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "result = \"\ud83d\udcc8 **PROGRESS SUMMARY:**\\n\""
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 1622,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "result = \"\ud83d\udcc8 **PROGRESS SUMMARY:**\\n\""
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 1624,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "result += f\"\u2022 **{p['name']}**: {p['progress']}%\""
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 1624,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "result += f\"\u2022 **{p['name']}**: {p['progress']}%\""
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 1631,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "result = \"\ud83d\udcaa **PERSONAL GOALS:**\\n\""
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 1631,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "result = \"\ud83d\udcaa **PERSONAL GOALS:**\\n\""
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 1633,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "result += f\"\u2022 **{g['name']}**: Day {g['current_day']}/{g['total_days']}\\n\""
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 1633,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "result += f\"\u2022 **{g['name']}**: Day {g['current_day']}/{g['total_days']}\\n\""
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 1647,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "result = f\"\ud83d\udcda **{summary['name'].upper()} CONTEXT:**\\n\""
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 1647,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "result = f\"\ud83d\udcda **{summary['name'].upper()} CONTEXT:**\\n\""
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 1658,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "result = \"\ud83e\udde0 **MEMORY CONTEXTS:**\\n\""
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 1658,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "result = \"\ud83e\udde0 **MEMORY CONTEXTS:**\\n\""
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 1660,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "result += f\"\u2022 **{p['name']}** ({p['category']}) - Importance: {p['importance']:.1f}\\n\""
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 1660,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "result += f\"\u2022 **{p['name']}** ({p['category']}) - Importance: {p['importance']:.1f}\\n\""
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 1676,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "help_text = \"\"\"\ud83d\ude80 **BOWEN ENHANCED COMMANDS**"
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 1676,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "help_text = \"\"\"\ud83d\ude80 **BOWEN ENHANCED COMMANDS**"
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 1678,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "**Vision & Screenshot Analysis:**"
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 1678,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "**Vision & Screenshot Analysis:**"
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 1686,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "**Proactive Intelligence:**"
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 1686,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "**Proactive Intelligence:**"
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 1694,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "**Adaptive Memory:**"
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 1694,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "**Adaptive Memory:**"
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 1699,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "**Examples:**"
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 1699,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "**Examples:**"
+  },
+  {
+    "file": "bowen_core.py",
+    "line": 1178,
+    "category": "HARDCODED_DATA",
+    "pattern": "Database exam",
+    "content": "\"task\": \"Database exam\","
+  },
+  {
+    "file": "test_validation.py",
+    "line": 183,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "def create(self, **kwargs):"
+  },
+  {
+    "file": "configure_api_key.py",
+    "line": 13,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "print(\"=\" * 50)"
+  },
+  {
+    "file": "configure_api_key.py",
+    "line": 34,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "masked_key = current_key[:7] + '*' * (len(current_key) - 11) + current_key[-4:] if len(current_key) "
+  },
+  {
+    "file": "test_tamara_tools.py",
+    "line": 20,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "print(\"=\" * 50)"
+  },
+  {
+    "file": "test_tamara_tools.py",
+    "line": 133,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "print(\"-\" * 50)"
+  },
+  {
+    "file": "test_tamara_tools.py",
+    "line": 137,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "if \"\ud83d\udd27 **Tool Execution:**\" in response:"
+  },
+  {
+    "file": "test_tamara_tools.py",
+    "line": 137,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "if \"\ud83d\udd27 **Tool Execution:**\" in response:"
+  },
+  {
+    "file": "test_tamara_tools.py",
+    "line": 182,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "print(f\"\\n\" + \"=\"*60)"
+  },
+  {
+    "file": "adaptive_memory.py",
+    "line": 215,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "**academic_keywords,"
+  },
+  {
+    "file": "adaptive_memory.py",
+    "line": 216,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "**coding_keywords,"
+  },
+  {
+    "file": "adaptive_memory.py",
+    "line": 217,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "**business_keywords,"
+  },
+  {
+    "file": "adaptive_memory.py",
+    "line": 218,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "**personal_keywords"
+  },
+  {
+    "file": "adaptive_memory.py",
+    "line": 400,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "report = \"\ud83d\udcca **ADAPTIVE MEMORY REPORT**\\n\\n\""
+  },
+  {
+    "file": "adaptive_memory.py",
+    "line": 400,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "report = \"\ud83d\udcca **ADAPTIVE MEMORY REPORT**\\n\\n\""
+  },
+  {
+    "file": "adaptive_memory.py",
+    "line": 403,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "report += \"\ud83c\udfaf **Current Priorities:**\\n\""
+  },
+  {
+    "file": "adaptive_memory.py",
+    "line": 403,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "report += \"\ud83c\udfaf **Current Priorities:**\\n\""
+  },
+  {
+    "file": "adaptive_memory.py",
+    "line": 405,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "report += f\"{i}. **{context['name']}** (Importance: {context['importance']:.1f})\\n\""
+  },
+  {
+    "file": "adaptive_memory.py",
+    "line": 405,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "report += f\"{i}. **{context['name']}** (Importance: {context['importance']:.1f})\\n\""
+  },
+  {
+    "file": "adaptive_memory.py",
+    "line": 414,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "report += \"\ud83d\udca1 **Recent Learning Insights:**\\n\""
+  },
+  {
+    "file": "adaptive_memory.py",
+    "line": 414,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "report += \"\ud83d\udca1 **Recent Learning Insights:**\\n\""
+  },
+  {
+    "file": "adaptive_memory.py",
+    "line": 416,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "report += f\"\u2022 **{insight['topic']}**: {insight['insight']}\\n\""
+  },
+  {
+    "file": "adaptive_memory.py",
+    "line": 416,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "report += f\"\u2022 **{insight['topic']}**: {insight['insight']}\\n\""
+  },
+  {
+    "file": "test_enhanced_personalities.py",
+    "line": 16,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "print(\"=\" * 50)"
+  },
+  {
+    "file": "test_enhanced_personalities.py",
+    "line": 240,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "print(\"=\" * 60)"
+  },
+  {
+    "file": "test_enhanced_personalities.py",
+    "line": 305,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "print(f\"\\n\" + \"=\"*70)"
+  },
+  {
+    "file": "jarvis.py",
+    "line": 198,
+    "category": "HARDCODED_DATA",
+    "pattern": "Database exam",
+    "content": "- Database exam today at 2pm (weak on normalization)"
+  },
+  {
+    "file": "jarvis.py",
+    "line": 335,
+    "category": "HARDCODED_DATA",
+    "pattern": "Database exam",
+    "content": "- Database exam today at 2pm"
+  },
+  {
+    "file": "jarvis.py",
+    "line": 363,
+    "category": "HARDCODED_DATA",
+    "pattern": "Database exam",
+    "content": "- Database exam today, 75 Hard challenge, grad school applications"
+  },
+  {
+    "file": "demo_real_vs_fake.py",
+    "line": 16,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "print(\"=\" * 60)"
+  },
+  {
+    "file": "demo_real_vs_fake.py",
+    "line": 36,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "print(\"=\" * 60)"
+  },
+  {
+    "file": "demo_real_vs_fake.py",
+    "line": 98,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "print(\"-\" * 80)"
+  },
+  {
+    "file": "test_autonomous.py",
+    "line": 108,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "print(\"=\" * 50)"
+  },
+  {
+    "file": "test_autonomous.py",
+    "line": 119,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "print(\"\\n\ud83d\udccb **What BOWEN Can Now Do:**\")"
+  },
+  {
+    "file": "audit_fake_responses.py",
+    "line": 15,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "r'\\*[^*]+\\*',  # *does something*"
+  },
+  {
+    "file": "audit_fake_responses.py",
+    "line": 15,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "r'\\*[^*]+\\*',  # *does something*"
+  },
+  {
+    "file": "audit_fake_responses.py",
+    "line": 15,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "r'\\*[^*]+\\*',  # *does something*"
+  },
+  {
+    "file": "audit_fake_responses.py",
+    "line": 69,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "print(\"\\n\" + \"=\"*60)"
+  },
+  {
+    "file": "audit_fake_responses.py",
+    "line": 74,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "for ext in ['*.py']:"
+  },
+  {
+    "file": "audit_fake_responses.py",
+    "line": 16,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "beep",
+    "content": "r'beep',"
+  },
+  {
+    "file": "audit_fake_responses.py",
+    "line": 17,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "whir",
+    "content": "r'whir',"
+  },
+  {
+    "file": "audit_fake_responses.py",
+    "line": 18,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "activating",
+    "content": "r'activating',"
+  },
+  {
+    "file": "audit_fake_responses.py",
+    "line": 19,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "performing",
+    "content": "r'performing',"
+  },
+  {
+    "file": "audit_fake_responses.py",
+    "line": 20,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "executing.*check",
+    "content": "r'executing.*check'"
+  },
+  {
+    "file": "audit_fake_responses.py",
+    "line": 27,
+    "category": "FAKE_CLAIMS",
+    "pattern": "discreetly",
+    "content": "r'discreetly',"
+  },
+  {
+    "file": "audit_fake_responses.py",
+    "line": 32,
+    "category": "HARDCODED_DATA",
+    "pattern": "Database exam",
+    "content": "r'Database exam',"
+  },
+  {
+    "file": "audit_fake_responses.py",
+    "line": 34,
+    "category": "HARDCODED_DATA",
+    "pattern": "salary due",
+    "content": "r'salary due',"
+  },
+  {
+    "file": "audit_fake_responses.py",
+    "line": 35,
+    "category": "HARDCODED_DATA",
+    "pattern": "Team meeting",
+    "content": "r'Team meeting'"
+  },
+  {
+    "file": "computer_tools.py",
+    "line": 357,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "def execute_tool(self, tool_name: str, **kwargs) -> Dict[str, Any]:"
+  },
+  {
+    "file": "proactive_assistant.py",
+    "line": 194,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "briefing = f\"\ud83c\udf05 **GOOD MORNING, PRAISE** - {now.strftime('%A, %B %d, %Y')}\\n\""
+  },
+  {
+    "file": "proactive_assistant.py",
+    "line": 194,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "briefing = f\"\ud83c\udf05 **GOOD MORNING, PRAISE** - {now.strftime('%A, %B %d, %Y')}\\n\""
+  },
+  {
+    "file": "proactive_assistant.py",
+    "line": 198,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "briefing += \"\ud83c\udfaf **TODAY'S PRIORITIES:**\\n\""
+  },
+  {
+    "file": "proactive_assistant.py",
+    "line": 198,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "briefing += \"\ud83c\udfaf **TODAY'S PRIORITIES:**\\n\""
+  },
+  {
+    "file": "proactive_assistant.py",
+    "line": 201,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "briefing += f\"{i}. **{item['name']}** ({item['category']})\\n\""
+  },
+  {
+    "file": "proactive_assistant.py",
+    "line": 201,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "briefing += f\"{i}. **{item['name']}** ({item['category']})\\n\""
+  },
+  {
+    "file": "proactive_assistant.py",
+    "line": 212,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "briefing += \"\u26a0\ufe0f **URGENT DEADLINES:**\\n\""
+  },
+  {
+    "file": "proactive_assistant.py",
+    "line": 212,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "briefing += \"\u26a0\ufe0f **URGENT DEADLINES:**\\n\""
+  },
+  {
+    "file": "proactive_assistant.py",
+    "line": 215,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "briefing += f\"\u2022 **{deadline.name}**: {days_left} days left ({deadline.progress*100:.0f}% complete)\\n"
+  },
+  {
+    "file": "proactive_assistant.py",
+    "line": 215,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "briefing += f\"\u2022 **{deadline.name}**: {days_left} days left ({deadline.progress*100:.0f}% complete)\\n"
+  },
+  {
+    "file": "proactive_assistant.py",
+    "line": 219,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "briefing += \"\ud83d\udcc8 **PROGRESS UPDATES:**\\n\""
+  },
+  {
+    "file": "proactive_assistant.py",
+    "line": 219,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "briefing += \"\ud83d\udcc8 **PROGRESS UPDATES:**\\n\""
+  },
+  {
+    "file": "proactive_assistant.py",
+    "line": 222,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "briefing += f\"\u2022 **{item['name']}**: {item['progress']}% complete\\n\""
+  },
+  {
+    "file": "proactive_assistant.py",
+    "line": 222,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "briefing += f\"\u2022 **{item['name']}**: {item['progress']}% complete\\n\""
+  },
+  {
+    "file": "proactive_assistant.py",
+    "line": 229,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "briefing += \"\ud83d\udcaa **PERSONAL GOALS:**\\n\""
+  },
+  {
+    "file": "proactive_assistant.py",
+    "line": 229,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "briefing += \"\ud83d\udcaa **PERSONAL GOALS:**\\n\""
+  },
+  {
+    "file": "proactive_assistant.py",
+    "line": 232,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "briefing += f\"\u2022 **{goal['name']}**: Day {goal['current_day']} of {goal['total_days']}\\n\""
+  },
+  {
+    "file": "proactive_assistant.py",
+    "line": 232,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "briefing += f\"\u2022 **{goal['name']}**: Day {goal['current_day']} of {goal['total_days']}\\n\""
+  },
+  {
+    "file": "proactive_assistant.py",
+    "line": 241,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "briefing += \"\ud83e\udde0 **INTELLIGENT RECOMMENDATIONS:**\\n\""
+  },
+  {
+    "file": "proactive_assistant.py",
+    "line": 241,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "briefing += \"\ud83e\udde0 **INTELLIGENT RECOMMENDATIONS:**\\n\""
+  },
+  {
+    "file": "proactive_assistant.py",
+    "line": 251,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "briefing += \"\ud83d\udea8 **CRITICAL ALERTS:**\\n\""
+  },
+  {
+    "file": "proactive_assistant.py",
+    "line": 251,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "briefing += \"\ud83d\udea8 **CRITICAL ALERTS:**\\n\""
+  },
+  {
+    "file": "proactive_assistant.py",
+    "line": 256,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "briefing += \"\ud83d\ude80 **Ready to dominate today? Let's make it count!**\\n\""
+  },
+  {
+    "file": "proactive_assistant.py",
+    "line": 256,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "briefing += \"\ud83d\ude80 **Ready to dominate today? Let's make it count!**\\n\""
+  },
+  {
+    "file": "proactive_assistant.py",
+    "line": 323,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "days_behind = max(0, int((expected_progress - deadline.progress) * total_time.days))"
+  },
+  {
+    "file": "proactive_assistant.py",
+    "line": 474,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "overview = f\"\ud83d\udcc5 **WEEK OVERVIEW** ({week_start.strftime('%B %d')} - {week_end.strftime('%B %d')})\\n\\n"
+  },
+  {
+    "file": "proactive_assistant.py",
+    "line": 474,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "overview = f\"\ud83d\udcc5 **WEEK OVERVIEW** ({week_start.strftime('%B %d')} - {week_end.strftime('%B %d')})\\n\\n"
+  },
+  {
+    "file": "proactive_assistant.py",
+    "line": 483,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "overview += \"\ud83d\udccb **This Week's Deadlines:**\\n\""
+  },
+  {
+    "file": "proactive_assistant.py",
+    "line": 483,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "overview += \"\ud83d\udccb **This Week's Deadlines:**\\n\""
+  },
+  {
+    "file": "proactive_assistant.py",
+    "line": 485,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "overview += f\"\u2022 **{deadline.name}**: {deadline.due_date.strftime('%A %I:%M %p')}\\n\""
+  },
+  {
+    "file": "proactive_assistant.py",
+    "line": 485,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "overview += f\"\u2022 **{deadline.name}**: {deadline.due_date.strftime('%A %I:%M %p')}\\n\""
+  },
+  {
+    "file": "proactive_assistant.py",
+    "line": 489,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "overview += \"\ud83c\udfaf **Goals Progress:**\\n\""
+  },
+  {
+    "file": "proactive_assistant.py",
+    "line": 489,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "overview += \"\ud83c\udfaf **Goals Progress:**\\n\""
+  },
+  {
+    "file": "proactive_assistant.py",
+    "line": 491,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "overview += f\"\u2022 **{goal.name}**: {goal.progress*100:.0f}% complete\\n\""
+  },
+  {
+    "file": "proactive_assistant.py",
+    "line": 491,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "overview += f\"\u2022 **{goal.name}**: {goal.progress*100:.0f}% complete\\n\""
+  },
+  {
+    "file": "proactive_assistant.py",
+    "line": 369,
+    "category": "HARDCODED_DATA",
+    "pattern": "Database exam",
+    "content": "recommendations.append(\"\ud83c\udf93 Database exam today - review normalization one more time before 2pm\")"
+  },
+  {
+    "file": "proactive_assistant.py",
+    "line": 380,
+    "category": "HARDCODED_DATA",
+    "pattern": "salary due",
+    "content": "recommendations.append(\"\ud83d\udcb0 Abayomi's salary due in 2 days - prepare payment process\")"
+  },
+  {
+    "file": "setup.py",
+    "line": 34,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "print(\"=\" * 30)"
+  },
+  {
+    "file": "setup.py",
+    "line": 86,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "print(\"=\" * 30)"
+  },
+  {
+    "file": "setup.py",
+    "line": 135,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "print(\"=\" * 50)"
+  },
+  {
+    "file": "cli.py",
+    "line": 175,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "print(\"\\n\ud83e\udd16 **AUTONOMOUS CAPABILITIES ENABLED:**\")"
+  },
+  {
+    "file": "cli.py",
+    "line": 175,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "print(\"\\n\ud83e\udd16 **AUTONOMOUS CAPABILITIES ENABLED:**\")"
+  },
+  {
+    "file": "cli.py",
+    "line": 186,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "print(\"\\n\ud83c\udf93 **ACADEMIC ASSISTANT:**\")"
+  },
+  {
+    "file": "cli.py",
+    "line": 186,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "print(\"\\n\ud83c\udf93 **ACADEMIC ASSISTANT:**\")"
+  },
+  {
+    "file": "cli.py",
+    "line": 481,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response = f\"\u2705 **Workflow Completed Successfully**\\n\\n\""
+  },
+  {
+    "file": "cli.py",
+    "line": 481,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response = f\"\u2705 **Workflow Completed Successfully**\\n\\n\""
+  },
+  {
+    "file": "cli.py",
+    "line": 482,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response += f\"**{results['workflow_name']}**\\n\""
+  },
+  {
+    "file": "cli.py",
+    "line": 482,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response += f\"**{results['workflow_name']}**\\n\""
+  },
+  {
+    "file": "cli.py",
+    "line": 488,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response += \"**Key Results:**\\n\""
+  },
+  {
+    "file": "cli.py",
+    "line": 488,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response += \"**Key Results:**\\n\""
+  },
+  {
+    "file": "cli.py",
+    "line": 492,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response = f\"\u26a0\ufe0f **Workflow Partially Completed**\\n\\n\""
+  },
+  {
+    "file": "cli.py",
+    "line": 492,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response = f\"\u26a0\ufe0f **Workflow Partially Completed**\\n\\n\""
+  },
+  {
+    "file": "cli.py",
+    "line": 531,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response = f\"\u2705 **Code Project Created**\\n\\n\""
+  },
+  {
+    "file": "cli.py",
+    "line": 531,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response = f\"\u2705 **Code Project Created**\\n\\n\""
+  },
+  {
+    "file": "cli.py",
+    "line": 584,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\u2705 **Essay Created**\\n\\n\u2022 Topic: {topic}\\n\u2022 Length: {length} words\\n\u2022 Style: {style}\\n\u2022 File"
+  },
+  {
+    "file": "cli.py",
+    "line": 584,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\u2705 **Essay Created**\\n\\n\u2022 Topic: {topic}\\n\u2022 Length: {length} words\\n\u2022 Style: {style}\\n\u2022 File"
+  },
+  {
+    "file": "cli.py",
+    "line": 605,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\u2705 **Presentation Created**\\n\\n\u2022 Topic: {topic}\\n\u2022 Slides: {slides}\\n\u2022 File: {filepath}\""
+  },
+  {
+    "file": "cli.py",
+    "line": 605,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\u2705 **Presentation Created**\\n\\n\u2022 Topic: {topic}\\n\u2022 Slides: {slides}\\n\u2022 File: {filepath}\""
+  },
+  {
+    "file": "cli.py",
+    "line": 618,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\u2705 **Report Created**\\n\\n\u2022 Subject: {subject}\\n\u2022 File: {filepath}\""
+  },
+  {
+    "file": "cli.py",
+    "line": 618,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\u2705 **Report Created**\\n\\n\u2022 Subject: {subject}\\n\u2022 File: {filepath}\""
+  },
+  {
+    "file": "cli.py",
+    "line": 648,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\u2705 **Files Organized**\\n\\n\u2022 Moved {result['organized_files']} files\\n\u2022 Created {len(result['"
+  },
+  {
+    "file": "cli.py",
+    "line": 648,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\u2705 **Files Organized**\\n\\n\u2022 Moved {result['organized_files']} files\\n\u2022 Created {len(result['"
+  },
+  {
+    "file": "cli.py",
+    "line": 657,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\u2705 **Workspace Cleaned**\\n\\n\u2022 Removed {result['cleaned_items']} items\\n\u2022 Freed {result['spac"
+  },
+  {
+    "file": "cli.py",
+    "line": 657,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\u2705 **Workspace Cleaned**\\n\\n\u2022 Removed {result['cleaned_items']} items\\n\u2022 Freed {result['spac"
+  },
+  {
+    "file": "cli.py",
+    "line": 663,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response = f\"\ud83d\udcca **Workspace Statistics**\\n\\n\""
+  },
+  {
+    "file": "cli.py",
+    "line": 663,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response = f\"\ud83d\udcca **Workspace Statistics**\\n\\n\""
+  },
+  {
+    "file": "cli.py",
+    "line": 693,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response = f\"\ud83e\udde0 **Learning Complete**\\n\\n\""
+  },
+  {
+    "file": "cli.py",
+    "line": 693,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response = f\"\ud83e\udde0 **Learning Complete**\\n\\n\""
+  },
+  {
+    "file": "cli.py",
+    "line": 697,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response += f\"**Answer:**\\n{answer}\""
+  },
+  {
+    "file": "cli.py",
+    "line": 697,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response += f\"**Answer:**\\n{answer}\""
+  },
+  {
+    "file": "cli.py",
+    "line": 703,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\ud83d\udcda **From Knowledge Base:**\\n\\n{answer}\""
+  },
+  {
+    "file": "cli.py",
+    "line": 703,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\ud83d\udcda **From Knowledge Base:**\\n\\n{answer}\""
+  },
+  {
+    "file": "cli.py",
+    "line": 719,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response = f\"\ud83d\ude80 **Update Available**\\n\\n\""
+  },
+  {
+    "file": "cli.py",
+    "line": 719,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response = f\"\ud83d\ude80 **Update Available**\\n\\n\""
+  },
+  {
+    "file": "cli.py",
+    "line": 724,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response = f\"\u2705 **Up to Date**\\n\\nNo newer models available.\""
+  },
+  {
+    "file": "cli.py",
+    "line": 724,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response = f\"\u2705 **Up to Date**\\n\\nNo newer models available.\""
+  },
+  {
+    "file": "cli.py",
+    "line": 730,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response = f\"\ud83d\udd27 **Upgrade Status**\\n\\n\""
+  },
+  {
+    "file": "cli.py",
+    "line": 730,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response = f\"\ud83d\udd27 **Upgrade Status**\\n\\n\""
+  },
+  {
+    "file": "cli.py",
+    "line": 752,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\ud83d\ude80 **Upgrade Complete!**\\n\\n\u2705 Successfully upgraded to {upgrade_result['model']}\\n\u2705 All syst"
+  },
+  {
+    "file": "cli.py",
+    "line": 752,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\ud83d\ude80 **Upgrade Complete!**\\n\\n\u2705 Successfully upgraded to {upgrade_result['model']}\\n\u2705 All syst"
+  },
+  {
+    "file": "cli.py",
+    "line": 752,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\ud83d\ude80 **Upgrade Complete!**\\n\\n\u2705 Successfully upgraded to {upgrade_result['model']}\\n\u2705 All syst"
+  },
+  {
+    "file": "cli.py",
+    "line": 754,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\u274c **Upgrade Failed**\\n\\n{upgrade_result.get('error', 'Unknown error occurred')}\""
+  },
+  {
+    "file": "cli.py",
+    "line": 754,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\u274c **Upgrade Failed**\\n\\n{upgrade_result.get('error', 'Unknown error occurred')}\""
+  },
+  {
+    "file": "cli.py",
+    "line": 757,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\u2705 **Already Up to Date**\\n\\nNo newer models available for upgrade.\""
+  },
+  {
+    "file": "cli.py",
+    "line": 757,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\u2705 **Already Up to Date**\\n\\nNo newer models available for upgrade.\""
+  },
+  {
+    "file": "cli.py",
+    "line": 767,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response = f\"\ud83d\ude80 **Update Available**\\n\\n\""
+  },
+  {
+    "file": "cli.py",
+    "line": 767,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response = f\"\ud83d\ude80 **Update Available**\\n\\n\""
+  },
+  {
+    "file": "cli.py",
+    "line": 774,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\u2705 **Up to Date**\\n\\nNo newer models available.\""
+  },
+  {
+    "file": "cli.py",
+    "line": 774,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\u2705 **Up to Date**\\n\\nNo newer models available.\""
+  },
+  {
+    "file": "cli.py",
+    "line": 788,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response = f\"\ud83e\udd16 **BOWEN Autonomous Capabilities**\\n\\n\""
+  },
+  {
+    "file": "cli.py",
+    "line": 788,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response = f\"\ud83e\udd16 **BOWEN Autonomous Capabilities**\\n\\n\""
+  },
+  {
+    "file": "cli.py",
+    "line": 789,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response += f\"**Code Generation:**\\n\""
+  },
+  {
+    "file": "cli.py",
+    "line": 789,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response += f\"**Code Generation:**\\n\""
+  },
+  {
+    "file": "cli.py",
+    "line": 795,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response += f\"**Document Creation:**\\n\""
+  },
+  {
+    "file": "cli.py",
+    "line": 795,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response += f\"**Document Creation:**\\n\""
+  },
+  {
+    "file": "cli.py",
+    "line": 801,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response += f\"**Workflow Orchestration:**\\n\""
+  },
+  {
+    "file": "cli.py",
+    "line": 801,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response += f\"**Workflow Orchestration:**\\n\""
+  },
+  {
+    "file": "cli.py",
+    "line": 807,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response += f\"**Autonomous Learning:**\\n\""
+  },
+  {
+    "file": "cli.py",
+    "line": 807,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response += f\"**Autonomous Learning:**\\n\""
+  },
+  {
+    "file": "cli.py",
+    "line": 813,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response += f\"**File Management:**\\n\""
+  },
+  {
+    "file": "cli.py",
+    "line": 813,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response += f\"**File Management:**\\n\""
+  },
+  {
+    "file": "cli.py",
+    "line": 819,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response += f\"**Self-Upgrading:**\\n\""
+  },
+  {
+    "file": "cli.py",
+    "line": 819,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response += f\"**Self-Upgrading:**\\n\""
+  },
+  {
+    "file": "cli.py",
+    "line": 832,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "'workspace_files': len(list(Path(\"/Users/yimi/Desktop\").rglob(\"*\")))"
+  },
+  {
+    "file": "cli.py",
+    "line": 835,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response = f\"\ud83d\udcca **BOWEN Status**\\n\\n\""
+  },
+  {
+    "file": "cli.py",
+    "line": 835,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response = f\"\ud83d\udcca **BOWEN Status**\\n\\n\""
+  },
+  {
+    "file": "cli.py",
+    "line": 861,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response += f\"\\n\\n\ud83e\udde0 *Learned: {', '.join(learned_concepts)}*\""
+  },
+  {
+    "file": "cli.py",
+    "line": 1778,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\u2705 **Parsed {result['course']['name']}**\\n\" \\"
+  },
+  {
+    "file": "cli.py",
+    "line": 1778,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\u2705 **Parsed {result['course']['name']}**\\n\" \\"
+  },
+  {
+    "file": "cli.py",
+    "line": 1799,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\u2705 **Saved: {result['item']}** on {result['date']}{time_str}\""
+  },
+  {
+    "file": "cli.py",
+    "line": 1799,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\u2705 **Saved: {result['item']}** on {result['date']}{time_str}\""
+  },
+  {
+    "file": "cli.py",
+    "line": 1805,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response = \"\ud83d\udcc5 **UPCOMING DEADLINES:**\\n\\n\""
+  },
+  {
+    "file": "cli.py",
+    "line": 1805,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response = \"\ud83d\udcc5 **UPCOMING DEADLINES:**\\n\\n\""
+  },
+  {
+    "file": "cli.py",
+    "line": 1810,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response += f\"{urgency} {d['date']}{time_str}: **{d['item']}** ({d['course']})\\n\""
+  },
+  {
+    "file": "cli.py",
+    "line": 1810,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response += f\"{urgency} {d['date']}{time_str}: **{d['item']}** ({d['course']})\\n\""
+  },
+  {
+    "file": "cli.py",
+    "line": 1822,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response = \"\ud83d\udcc5 **THIS WEEK'S CALENDAR:**\\n\\n\""
+  },
+  {
+    "file": "cli.py",
+    "line": 1822,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response = \"\ud83d\udcc5 **THIS WEEK'S CALENDAR:**\\n\\n\""
+  },
+  {
+    "file": "cli.py",
+    "line": 1826,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response += f\"\ud83d\udccd {start_date} at {start_time}: **{event['subject']}**\\n\""
+  },
+  {
+    "file": "cli.py",
+    "line": 1826,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response += f\"\ud83d\udccd {start_date} at {start_time}: **{event['subject']}**\\n\""
+  },
+  {
+    "file": "cli.py",
+    "line": 1836,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response = \"\ud83d\udce7 **RECENT EMAILS:**\\n\\n\""
+  },
+  {
+    "file": "cli.py",
+    "line": 1836,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response = \"\ud83d\udce7 **RECENT EMAILS:**\\n\\n\""
+  },
+  {
+    "file": "cli.py",
+    "line": 1840,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response += f\"{read_status} **{email['subject']}**\\n\""
+  },
+  {
+    "file": "cli.py",
+    "line": 1840,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response += f\"{read_status} **{email['subject']}**\\n\""
+  },
+  {
+    "file": "cli.py",
+    "line": 1855,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response = \"\ud83d\udccb **ALL DEADLINES:**\\n\\n\""
+  },
+  {
+    "file": "cli.py",
+    "line": 1855,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response = \"\ud83d\udccb **ALL DEADLINES:**\\n\\n\""
+  },
+  {
+    "file": "cli.py",
+    "line": 1858,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response += f\"\ud83d\udccc {d['date']}{time_str}: **{d['item']}** ({d['course']})\\n\""
+  },
+  {
+    "file": "cli.py",
+    "line": 1858,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response += f\"\ud83d\udccc {d['date']}{time_str}: **{d['item']}** ({d['course']})\\n\""
+  },
+  {
+    "file": "cli.py",
+    "line": 1868,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response = \"\ud83d\udcbe **BACKUP STATUS:**\\n\\n\""
+  },
+  {
+    "file": "cli.py",
+    "line": 1868,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response = \"\ud83d\udcbe **BACKUP STATUS:**\\n\\n\""
+  },
+  {
+    "file": "cli.py",
+    "line": 1883,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return \"\ud83c\udf93 **Academic Assistant Ready!**\\n\\n\" \\"
+  },
+  {
+    "file": "cli.py",
+    "line": 189,
+    "category": "HARDCODED_DATA",
+    "pattern": "Database exam",
+    "content": "print(\"\u2705 Manual Deadline Input - 'Database exam Friday'\")"
+  },
+  {
+    "file": "cli.py",
+    "line": 1885,
+    "category": "HARDCODED_DATA",
+    "pattern": "Database exam",
+    "content": "\"\ud83d\udcc5 Add deadline: 'Database exam Friday at 2pm'\\n\" \\"
+  },
+  {
+    "file": "research_engine.py",
+    "line": 227,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "def git_workflow_automation(self, action: str, **kwargs) -> str:"
+  },
+  {
+    "file": "research_engine.py",
+    "line": 368,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "**Generated by:** The Captain (BOWEN Research Engine)"
+  },
+  {
+    "file": "research_engine.py",
+    "line": 368,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "**Generated by:** The Captain (BOWEN Research Engine)"
+  },
+  {
+    "file": "research_engine.py",
+    "line": 369,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "**Timestamp:** {timestamp}"
+  },
+  {
+    "file": "research_engine.py",
+    "line": 369,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "**Timestamp:** {timestamp}"
+  },
+  {
+    "file": "research_engine.py",
+    "line": 370,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "**Directory:** {directory}"
+  },
+  {
+    "file": "research_engine.py",
+    "line": 370,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "**Directory:** {directory}"
+  },
+  {
+    "file": "research_engine.py",
+    "line": 371,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "**Research Query:** {query}"
+  },
+  {
+    "file": "research_engine.py",
+    "line": 371,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "**Research Query:** {query}"
+  },
+  {
+    "file": "research_engine.py",
+    "line": 377,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "- **Total Files:** {len(project_map['files'])}"
+  },
+  {
+    "file": "research_engine.py",
+    "line": 377,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "- **Total Files:** {len(project_map['files'])}"
+  },
+  {
+    "file": "research_engine.py",
+    "line": 378,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "- **Languages:** {', '.join(project_map['languages'])}"
+  },
+  {
+    "file": "research_engine.py",
+    "line": 378,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "- **Languages:** {', '.join(project_map['languages'])}"
+  },
+  {
+    "file": "research_engine.py",
+    "line": 379,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "- **Configuration Files:** {', '.join(project_map['config_files'])}"
+  },
+  {
+    "file": "research_engine.py",
+    "line": 379,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "- **Configuration Files:** {', '.join(project_map['config_files'])}"
+  },
+  {
+    "file": "research_engine.py",
+    "line": 390,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "1. **Architecture Review**: Consider the overall structure and organization"
+  },
+  {
+    "file": "research_engine.py",
+    "line": 390,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "1. **Architecture Review**: Consider the overall structure and organization"
+  },
+  {
+    "file": "research_engine.py",
+    "line": 391,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "2. **Dependency Management**: Review and optimize dependencies"
+  },
+  {
+    "file": "research_engine.py",
+    "line": 391,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "2. **Dependency Management**: Review and optimize dependencies"
+  },
+  {
+    "file": "research_engine.py",
+    "line": 392,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "3. **Code Quality**: Identify areas for improvement"
+  },
+  {
+    "file": "research_engine.py",
+    "line": 392,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "3. **Code Quality**: Identify areas for improvement"
+  },
+  {
+    "file": "research_engine.py",
+    "line": 393,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "4. **Security**: Check for potential security concerns"
+  },
+  {
+    "file": "research_engine.py",
+    "line": 393,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "4. **Security**: Check for potential security concerns"
+  },
+  {
+    "file": "research_engine.py",
+    "line": 396,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "*Report generated by BOWEN Research Engine - Strategic Intelligence for Praise Oyimi*"
+  },
+  {
+    "file": "research_engine.py",
+    "line": 462,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "**Report Type:** {research_type.title()}"
+  },
+  {
+    "file": "research_engine.py",
+    "line": 462,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "**Report Type:** {research_type.title()}"
+  },
+  {
+    "file": "research_engine.py",
+    "line": 463,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "**Generated by:** The Captain (BOWEN Research Engine)"
+  },
+  {
+    "file": "research_engine.py",
+    "line": 463,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "**Generated by:** The Captain (BOWEN Research Engine)"
+  },
+  {
+    "file": "research_engine.py",
+    "line": 464,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "**Date:** {timestamp}"
+  },
+  {
+    "file": "research_engine.py",
+    "line": 464,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "**Date:** {timestamp}"
+  },
+  {
+    "file": "research_engine.py",
+    "line": 465,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "**Prepared for:** Praise Oyimi"
+  },
+  {
+    "file": "research_engine.py",
+    "line": 465,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "**Prepared for:** Praise Oyimi"
+  },
+  {
+    "file": "research_engine.py",
+    "line": 477,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "*Strategic Intelligence Report by BOWEN Framework*"
+  },
+  {
+    "file": "research_engine.py",
+    "line": 503,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "**Generated:** {datetime.now().strftime(\"%Y-%m-%d %H:%M:%S\")}"
+  },
+  {
+    "file": "research_engine.py",
+    "line": 503,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "**Generated:** {datetime.now().strftime(\"%Y-%m-%d %H:%M:%S\")}"
+  },
+  {
+    "file": "research_engine.py",
+    "line": 504,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "**Analyst:** The Captain (BOWEN Research Engine)"
+  },
+  {
+    "file": "research_engine.py",
+    "line": 504,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "**Analyst:** The Captain (BOWEN Research Engine)"
+  },
+  {
+    "file": "research_engine.py",
+    "line": 509,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "*Research completed by BOWEN - Strategic Intelligence for Praise Oyimi*"
+  },
+  {
+    "file": "research_engine.py",
+    "line": 527,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "**Query:** {query}"
+  },
+  {
+    "file": "research_engine.py",
+    "line": 527,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "**Query:** {query}"
+  },
+  {
+    "file": "research_engine.py",
+    "line": 528,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "**Generated:** {datetime.now().strftime(\"%Y-%m-%d %H:%M:%S\")}"
+  },
+  {
+    "file": "research_engine.py",
+    "line": 528,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "**Generated:** {datetime.now().strftime(\"%Y-%m-%d %H:%M:%S\")}"
+  },
+  {
+    "file": "research_engine.py",
+    "line": 529,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "**Analyst:** The Captain (BOWEN Research Engine)"
+  },
+  {
+    "file": "research_engine.py",
+    "line": 529,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "**Analyst:** The Captain (BOWEN Research Engine)"
+  },
+  {
+    "file": "test_full_integration.py",
+    "line": 55,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "print(f\"\\n{BLUE}{'='*60}{RESET}\")"
+  },
+  {
+    "file": "test_full_integration.py",
+    "line": 97,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "print(f\"\\n{BLUE}{'='*60}{RESET}\")"
+  },
+  {
+    "file": "test_full_integration.py",
+    "line": 165,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "print(f\"\\n{BLUE}{'='*60}{RESET}\")"
+  },
+  {
+    "file": "test_full_integration.py",
+    "line": 233,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "print(f\"\\n{BLUE}{'='*60}{RESET}\")"
+  },
+  {
+    "file": "test_full_integration.py",
+    "line": 269,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "print(f\"\\n{BLUE}{'='*60}{RESET}\")"
+  },
+  {
+    "file": "test_full_integration.py",
+    "line": 332,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "print(f\"\\n{BLUE}{'='*60}{RESET}\")"
+  },
+  {
+    "file": "test_full_integration.py",
+    "line": 414,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "print(f\"\\n{BLUE}{'='*60}{RESET}\")"
+  },
+  {
+    "file": "test_full_integration.py",
+    "line": 478,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "print(f\"\\n{BLUE}{'='*60}{RESET}\")"
+  },
+  {
+    "file": "test_full_integration.py",
+    "line": 535,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "print(f\"\\n{BLUE}{'='*60}{RESET}\")"
+  },
+  {
+    "file": "test_full_integration.py",
+    "line": 578,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "real_percentage = (real_sources / total_facts) * 100"
+  },
+  {
+    "file": "test_full_integration.py",
+    "line": 596,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "print(f\"{BLUE}{'='*60}{RESET}\\n\")"
+  },
+  {
+    "file": "test_full_integration.py",
+    "line": 637,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "print(f\"{GREEN}{'='*60}{RESET}\")"
+  },
+  {
+    "file": "test_full_integration.py",
+    "line": 643,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "print(f\"{RED}{'='*60}{RESET}\")"
+  },
+  {
+    "file": "test_full_integration.py",
+    "line": 651,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "print(f\"\\n{BLUE}{'='*60}{RESET}\")"
+  },
+  {
+    "file": "test_full_integration.py",
+    "line": 485,
+    "category": "HARDCODED_DATA",
+    "pattern": "exam (?:in|at) \\d+(?:pm|am)",
+    "content": "('Exam at 2pm', 'Hardcoded exam time'),"
+  },
+  {
+    "file": "test_full_integration.py",
+    "line": 457,
+    "category": "HARDCODED_DATA",
+    "pattern": "Database exam",
+    "content": "'Database exam in 2 hours',"
+  },
+  {
+    "file": "test_full_integration.py",
+    "line": 483,
+    "category": "HARDCODED_DATA",
+    "pattern": "Database exam",
+    "content": "('Database exam in 2 hours', 'Fake proactive message'),"
+  },
+  {
+    "file": "test_full_integration.py",
+    "line": 484,
+    "category": "HARDCODED_DATA",
+    "pattern": "standup at \\d+",
+    "content": "('Team standup at 11am', 'Hardcoded meeting time'),"
+  },
+  {
+    "file": "test_full_integration.py",
+    "line": 486,
+    "category": "HARDCODED_DATA",
+    "pattern": "salary due",
+    "content": "('Salary due in 2 days', 'Hardcoded salary reminder'),"
+  },
+  {
+    "file": "analyze_system.py",
+    "line": 18,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "print(\"\\n\" + \"=\"*60)"
+  },
+  {
+    "file": "analyze_system.py",
+    "line": 68,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "print(\"\\n\" + \"=\"*60)"
+  },
+  {
+    "file": "analyze_system.py",
+    "line": 104,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "print(\"\\n\" + \"=\"*60)"
+  },
+  {
+    "file": "analyze_system.py",
+    "line": 156,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "print(\"\\n\" + \"=\"*60)"
+  },
+  {
+    "file": "analyze_system.py",
+    "line": 208,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "print(\"\\n\" + \"=\"*60)"
+  },
+  {
+    "file": "analyze_system.py",
+    "line": 234,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "print(\"\\n\" + \"=\"*60)"
+  },
+  {
+    "file": "analyze_system.py",
+    "line": 259,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "print(\"\\n\" + \"=\"*60)"
+  },
+  {
+    "file": "analyze_system.py",
+    "line": 300,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "print(\"\\n\" + \"=\"*60)"
+  },
+  {
+    "file": "analyze_system.py",
+    "line": 314,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "print(\"\\n\" + \"=\"*60)"
+  },
+  {
+    "file": "test_cli.py",
+    "line": 16,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "print(\"=\" * 50)"
+  },
+  {
+    "file": "test_cli.py",
+    "line": 37,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "print(\"-\" * 30)"
+  },
+  {
+    "file": "test_cli.py",
+    "line": 54,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "print(\"-\" * 30)"
+  },
+  {
+    "file": "test_cli.py",
+    "line": 75,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "print(\"=\" * 40)"
+  },
+  {
+    "file": "test_cli.py",
+    "line": 141,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "print(\"\\n\" + \"=\"*60)"
+  },
+  {
+    "file": "demo_tamara_working.py",
+    "line": 15,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "print(\"=\" * 30)"
+  },
+  {
+    "file": "demo_tamara_working.py",
+    "line": 35,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "**BOWEN Framework**: Built On Wisdom, Excellence, and Nobility"
+  },
+  {
+    "file": "vision_engine.py",
+    "line": 206,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\ud83d\udcf8 **Screenshot Analysis:**\\n\\n{analysis}\""
+  },
+  {
+    "file": "vision_engine.py",
+    "line": 206,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\ud83d\udcf8 **Screenshot Analysis:**\\n\\n{analysis}\""
+  },
+  {
+    "file": "vision_engine.py",
+    "line": 262,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\ud83d\udcc1 **Image Analysis ({Path(image_path).name}):**\\n\\n{analysis}\""
+  },
+  {
+    "file": "vision_engine.py",
+    "line": 97,
+    "category": "FAKE_CLAIMS",
+    "pattern": "screenshot (?:captured|taken|saved)",
+    "content": "logger.info(f\"Screenshot saved: {filepath}\")"
+  },
+  {
+    "file": "engines/manual_academic.py",
+    "line": 44,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "r'\\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]* \\d{1,2}(?:, \\d{4})?\\b',"
+  },
+  {
+    "file": "engines/manual_academic.py",
+    "line": 24,
+    "category": "HARDCODED_DATA",
+    "pattern": "Database exam",
+    "content": "- \"Database exam Friday\""
+  },
+  {
+    "file": "engines/manual_academic.py",
+    "line": 212,
+    "category": "HARDCODED_DATA",
+    "pattern": "Database exam",
+    "content": "print(\"Usage: python manual_academic.py 'Database exam Friday at 2pm'\")"
+  },
+  {
+    "file": "engines/workflow_orchestrator.py",
+    "line": 157,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "max_iterations = len(steps) * 2  # Prevent infinite loops"
+  },
+  {
+    "file": "engines/advanced_documents.py",
+    "line": 217,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "Word count: ~{int(requirements.get('length', 1500) * 0.1)} words"
+  },
+  {
+    "file": "engines/advanced_documents.py",
+    "line": 265,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "Word count: ~{int(requirements.get('length', 1500) * 0.1)} words"
+  },
+  {
+    "file": "engines/outlook_connector.py",
+    "line": 50,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "print(\"\\n\" + \"=\"*60)"
+  },
+  {
+    "file": "engines/autonomous_learner.py",
+    "line": 332,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "f\"**{k.get('concept', 'Unknown')}**: {k.get('definition', 'No definition')}\\n\""
+  },
+  {
+    "file": "engines/autonomous_learner.py",
+    "line": 332,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "f\"**{k.get('concept', 'Unknown')}**: {k.get('definition', 'No definition')}\\n\""
+  },
+  {
+    "file": "engines/autonomous_learner.py",
+    "line": 443,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "report = \"\ud83e\udde0 **AUTONOMOUS LEARNING REPORT**\\n\""
+  },
+  {
+    "file": "engines/autonomous_learner.py",
+    "line": 443,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "report = \"\ud83e\udde0 **AUTONOMOUS LEARNING REPORT**\\n\""
+  },
+  {
+    "file": "engines/autonomous_learner.py",
+    "line": 446,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "report += f\"\ud83d\udcda **Total Concepts Learned:** {stats.get('total_concepts', 0)}\\n\""
+  },
+  {
+    "file": "engines/autonomous_learner.py",
+    "line": 446,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "report += f\"\ud83d\udcda **Total Concepts Learned:** {stats.get('total_concepts', 0)}\\n\""
+  },
+  {
+    "file": "engines/autonomous_learner.py",
+    "line": 447,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "report += f\"\ud83d\udd17 **Concept Connections:** {stats.get('connections', 0)}\\n\""
+  },
+  {
+    "file": "engines/autonomous_learner.py",
+    "line": 447,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "report += f\"\ud83d\udd17 **Concept Connections:** {stats.get('connections', 0)}\\n\""
+  },
+  {
+    "file": "engines/autonomous_learner.py",
+    "line": 448,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "report += f\"\ud83d\udcd6 **Research Sources:** {stats.get('sources', 0)}\\n\\n\""
+  },
+  {
+    "file": "engines/autonomous_learner.py",
+    "line": 448,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "report += f\"\ud83d\udcd6 **Research Sources:** {stats.get('sources', 0)}\\n\\n\""
+  },
+  {
+    "file": "engines/autonomous_learner.py",
+    "line": 453,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "report += \"**\ud83d\udcc2 Knowledge by Category:**\\n\""
+  },
+  {
+    "file": "engines/autonomous_learner.py",
+    "line": 453,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "report += \"**\ud83d\udcc2 Knowledge by Category:**\\n\""
+  },
+  {
+    "file": "engines/autonomous_learner.py",
+    "line": 461,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "report += \"**\ud83c\udd95 Recently Learned (Last 7 Days):**\\n\""
+  },
+  {
+    "file": "engines/autonomous_learner.py",
+    "line": 461,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "report += \"**\ud83c\udd95 Recently Learned (Last 7 Days):**\\n\""
+  },
+  {
+    "file": "engines/autonomous_learner.py",
+    "line": 466,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "report += f\"  {relevance_emoji} **{item['concept']}** - {day_text}\\n\""
+  },
+  {
+    "file": "engines/autonomous_learner.py",
+    "line": 466,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "report += f\"  {relevance_emoji} **{item['concept']}** - {day_text}\\n\""
+  },
+  {
+    "file": "engines/autonomous_learner.py",
+    "line": 475,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "report += f\"**\ud83c\udfaf High-Relevance Concepts:** {high_relevance} ({high_percentage:.1f}%)\\n\""
+  },
+  {
+    "file": "engines/autonomous_learner.py",
+    "line": 475,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "report += f\"**\ud83c\udfaf High-Relevance Concepts:** {high_relevance} ({high_percentage:.1f}%)\\n\""
+  },
+  {
+    "file": "engines/autonomous_learner.py",
+    "line": 478,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "report += \"**\ud83d\udca1 Learning Status:** Autonomous learning is active and growing the knowledge base!\""
+  },
+  {
+    "file": "engines/code_agent.py",
+    "line": 168,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "allow_origins=[\"*\"],"
+  },
+  {
+    "file": "engines/code_agent.py",
+    "line": 171,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "allow_headers=[\"*\"],"
+  },
+  {
+    "file": "engines/code_agent.py",
+    "line": 507,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "tailwind_config = '''/** @type {import('tailwindcss').Config} */"
+  },
+  {
+    "file": "engines/code_agent.py",
+    "line": 510,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "\"./src/**/*.{js,jsx,ts,tsx}\","
+  },
+  {
+    "file": "engines/syllabus_parser.py",
+    "line": 24,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "r'\\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]* \\d{1,2}(?:st|nd|rd|th)?,? \\d{4}\\b',"
+  },
+  {
+    "file": "engines/syllabus_parser.py",
+    "line": 62,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "course_pattern = r'([A-Z]{2,4}\\s*\\d{3,4})[:\\s-]+([^\\n]+)'"
+  },
+  {
+    "file": "engines/file_manager.py",
+    "line": 130,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "for file_path in target_path.rglob(\"*\"):"
+  },
+  {
+    "file": "engines/file_manager.py",
+    "line": 194,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "\"temp_files\": [\"*.tmp\", \"*.temp\", \"*~\", \"*.bak\", \"*.swp\"],"
+  },
+  {
+    "file": "engines/file_manager.py",
+    "line": 194,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "\"temp_files\": [\"*.tmp\", \"*.temp\", \"*~\", \"*.bak\", \"*.swp\"],"
+  },
+  {
+    "file": "engines/file_manager.py",
+    "line": 196,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "\"build_artifacts\": [\"dist\", \"build\", \"*.pyc\", \"*.pyo\", \"*.class\"],"
+  },
+  {
+    "file": "engines/file_manager.py",
+    "line": 196,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "\"build_artifacts\": [\"dist\", \"build\", \"*.pyc\", \"*.pyo\", \"*.class\"],"
+  },
+  {
+    "file": "engines/file_manager.py",
+    "line": 197,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "\"log_files\": [\"*.log\", \"*.log.*\"],"
+  },
+  {
+    "file": "engines/file_manager.py",
+    "line": 203,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "\"backup_files\": [\"*.backup\", \"*.old\", \"*_backup\", \"*_old\"],"
+  },
+  {
+    "file": "engines/file_manager.py",
+    "line": 203,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "\"backup_files\": [\"*.backup\", \"*.old\", \"*_backup\", \"*_old\"],"
+  },
+  {
+    "file": "engines/file_manager.py",
+    "line": 234,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "\"space_freed_mb\": round(space_freed / (1024 * 1024), 2),"
+  },
+  {
+    "file": "engines/file_manager.py",
+    "line": 457,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "if (path / indicator).exists() or list(path.glob(f\"*{indicator}\")):"
+  },
+  {
+    "file": "engines/file_manager.py",
+    "line": 506,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "for dir_path in path.rglob('*'):"
+  },
+  {
+    "file": "engines/file_manager.py",
+    "line": 537,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "\".gitignore\": \"__pycache__/\\n*.pyc\\n*.pyo\\n\""
+  },
+  {
+    "file": "engines/file_manager.py",
+    "line": 560,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "\".gitignore\": \"*.log\\n*.tmp\\n\""
+  },
+  {
+    "file": "engines/file_manager.py",
+    "line": 590,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "for file_path in self.workspace.rglob(\"*\"):"
+  },
+  {
+    "file": "engines/file_manager.py",
+    "line": 604,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "if size > 10 * 1024 * 1024:"
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 328,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return recent_memories[-max_items*2:]  # Last N exchanges"
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 666,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "structure = self.execute_bash(f\"find {directory} -type f -name '*.py' -o -name '*.js' -o -name '*.md"
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 666,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "structure = self.execute_bash(f\"find {directory} -type f -name '*.py' -o -name '*.js' -o -name '*.md"
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 729,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "{\"user_input\": input_text, **context}"
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 808,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\ud83d\udcc1 **Directory Analysis:**\\n{result}\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 808,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\ud83d\udcc1 **Directory Analysis:**\\n{result}\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 814,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\ud83d\udd0d **Codebase Analysis:**\\n{result}\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 814,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\ud83d\udd0d **Codebase Analysis:**\\n{result}\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 817,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\ud83d\udd0d **Codebase Analysis:**\\n{result}\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 817,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\ud83d\udd0d **Codebase Analysis:**\\n{result}\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 820,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\ud83d\udd0d **Codebase Analysis:**\\n{result}\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 820,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\ud83d\udd0d **Codebase Analysis:**\\n{result}\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 833,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\ud83d\udcdd **File Created:**\\n{result}\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 833,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\ud83d\udcdd **File Created:**\\n{result}\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 842,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\ud83d\udce6 **Package Installation:**\\n{result}\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 842,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\ud83d\udce6 **Package Installation:**\\n{result}\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 849,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\ud83d\udcbb **Command Execution:**\\n{result}\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 849,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\ud83d\udcbb **Command Execution:**\\n{result}\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 957,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "result = self.tamara_tools.execute_tool(tool_name, **parameters)"
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 964,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "ai_response = ai_response.replace(tool_block, f\"\\n\\n\ud83d\udd27 **Tool Execution:**\\n{formatted_result}\")"
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 964,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "ai_response = ai_response.replace(tool_block, f\"\\n\\n\ud83d\udd27 **Tool Execution:**\\n{formatted_result}\")"
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 988,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "doc_pattern = r'DOCUMENT_CREATE:\\s*\\{([^}]+(?:\\{[^}]*\\}[^}]*)*)\\}'"
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 988,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "doc_pattern = r'DOCUMENT_CREATE:\\s*\\{([^}]+(?:\\{[^}]*\\}[^}]*)*)\\}'"
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 1009,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "result_text = f\"\u2705 **Strategic Document Created:**\\n{emoji} {doc_type.title()}: {filepath}\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 1009,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "result_text = f\"\u2705 **Strategic Document Created:**\\n{emoji} {doc_type.title()}: {filepath}\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 1023,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "result_text = f\"\u2705 **Professional Document Created:**\\n{emoji} {doc_type.title()}: {filepath}\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 1023,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "result_text = f\"\u2705 **Professional Document Created:**\\n{emoji} {doc_type.title()}: {filepath}\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 1032,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "ai_response = ai_response.replace(doc_block, f\"\\n\\n\ud83d\udccb **Document Creation:**\\n{result_text}\")"
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 1032,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "ai_response = ai_response.replace(doc_block, f\"\\n\\n\ud83d\udccb **Document Creation:**\\n{result_text}\")"
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 1082,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "{\"user_input\": input_text, \"ai_response\": action, **context},"
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 1196,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "match = re.search(r'day\\s*(\\d+)', text.lower())"
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 1222,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "**priority,"
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 1226,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "priorities.append({**priority, \"urgency\": \"medium\"})"
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 1609,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "result = \"\ud83c\udfaf **TODAY'S PRIORITIES:**\\n\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 1609,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "result = \"\ud83c\udfaf **TODAY'S PRIORITIES:**\\n\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 1611,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "result += f\"{i}. **{p['name']}** ({p['category']})\\n\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 1611,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "result += f\"{i}. **{p['name']}** ({p['category']})\\n\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 1615,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "result = \"\u26a0\ufe0f **URGENT DEADLINES:**\\n\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 1615,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "result = \"\u26a0\ufe0f **URGENT DEADLINES:**\\n\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 1618,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "result += f\"\u2022 **{d.name}**: {days} days ({d.progress*100:.0f}% done)\\n\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 1618,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "result += f\"\u2022 **{d.name}**: {days} days ({d.progress*100:.0f}% done)\\n\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 1622,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "result = \"\ud83d\udcc8 **PROGRESS SUMMARY:**\\n\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 1622,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "result = \"\ud83d\udcc8 **PROGRESS SUMMARY:**\\n\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 1624,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "result += f\"\u2022 **{p['name']}**: {p['progress']}%\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 1624,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "result += f\"\u2022 **{p['name']}**: {p['progress']}%\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 1631,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "result = \"\ud83d\udcaa **PERSONAL GOALS:**\\n\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 1631,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "result = \"\ud83d\udcaa **PERSONAL GOALS:**\\n\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 1633,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "result += f\"\u2022 **{g['name']}**: Day {g['current_day']}/{g['total_days']}\\n\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 1633,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "result += f\"\u2022 **{g['name']}**: Day {g['current_day']}/{g['total_days']}\\n\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 1647,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "result = f\"\ud83d\udcda **{summary['name'].upper()} CONTEXT:**\\n\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 1647,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "result = f\"\ud83d\udcda **{summary['name'].upper()} CONTEXT:**\\n\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 1658,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "result = \"\ud83e\udde0 **MEMORY CONTEXTS:**\\n\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 1658,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "result = \"\ud83e\udde0 **MEMORY CONTEXTS:**\\n\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 1660,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "result += f\"\u2022 **{p['name']}** ({p['category']}) - Importance: {p['importance']:.1f}\\n\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 1660,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "result += f\"\u2022 **{p['name']}** ({p['category']}) - Importance: {p['importance']:.1f}\\n\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 1676,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "help_text = \"\"\"\ud83d\ude80 **BOWEN ENHANCED COMMANDS**"
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 1676,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "help_text = \"\"\"\ud83d\ude80 **BOWEN ENHANCED COMMANDS**"
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 1678,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "**Vision & Screenshot Analysis:**"
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 1678,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "**Vision & Screenshot Analysis:**"
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 1686,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "**Proactive Intelligence:**"
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 1686,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "**Proactive Intelligence:**"
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 1694,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "**Adaptive Memory:**"
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 1694,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "**Adaptive Memory:**"
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 1699,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "**Examples:**"
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 1699,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "**Examples:**"
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/bowen_core.py",
+    "line": 1178,
+    "category": "HARDCODED_DATA",
+    "pattern": "Database exam",
+    "content": "\"task\": \"Database exam\","
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 139,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "print(\"\\n\ud83e\udd16 **AUTONOMOUS CAPABILITIES ENABLED:**\")"
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 139,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "print(\"\\n\ud83e\udd16 **AUTONOMOUS CAPABILITIES ENABLED:**\")"
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 429,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response = f\"\u2705 **Workflow Completed Successfully**\\n\\n\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 429,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response = f\"\u2705 **Workflow Completed Successfully**\\n\\n\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 430,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response += f\"**{results['workflow_name']}**\\n\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 430,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response += f\"**{results['workflow_name']}**\\n\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 436,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response += \"**Key Results:**\\n\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 436,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response += \"**Key Results:**\\n\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 440,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response = f\"\u26a0\ufe0f **Workflow Partially Completed**\\n\\n\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 440,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response = f\"\u26a0\ufe0f **Workflow Partially Completed**\\n\\n\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 479,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response = f\"\u2705 **Code Project Created**\\n\\n\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 479,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response = f\"\u2705 **Code Project Created**\\n\\n\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 532,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\u2705 **Essay Created**\\n\\n\u2022 Topic: {topic}\\n\u2022 Length: {length} words\\n\u2022 Style: {style}\\n\u2022 File"
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 532,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\u2705 **Essay Created**\\n\\n\u2022 Topic: {topic}\\n\u2022 Length: {length} words\\n\u2022 Style: {style}\\n\u2022 File"
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 553,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\u2705 **Presentation Created**\\n\\n\u2022 Topic: {topic}\\n\u2022 Slides: {slides}\\n\u2022 File: {filepath}\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 553,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\u2705 **Presentation Created**\\n\\n\u2022 Topic: {topic}\\n\u2022 Slides: {slides}\\n\u2022 File: {filepath}\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 566,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\u2705 **Report Created**\\n\\n\u2022 Subject: {subject}\\n\u2022 File: {filepath}\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 566,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\u2705 **Report Created**\\n\\n\u2022 Subject: {subject}\\n\u2022 File: {filepath}\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 596,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\u2705 **Files Organized**\\n\\n\u2022 Moved {result['organized_files']} files\\n\u2022 Created {len(result['"
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 596,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\u2705 **Files Organized**\\n\\n\u2022 Moved {result['organized_files']} files\\n\u2022 Created {len(result['"
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 605,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\u2705 **Workspace Cleaned**\\n\\n\u2022 Removed {result['cleaned_items']} items\\n\u2022 Freed {result['spac"
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 605,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\u2705 **Workspace Cleaned**\\n\\n\u2022 Removed {result['cleaned_items']} items\\n\u2022 Freed {result['spac"
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 611,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response = f\"\ud83d\udcca **Workspace Statistics**\\n\\n\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 611,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response = f\"\ud83d\udcca **Workspace Statistics**\\n\\n\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 641,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response = f\"\ud83e\udde0 **Learning Complete**\\n\\n\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 641,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response = f\"\ud83e\udde0 **Learning Complete**\\n\\n\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 645,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response += f\"**Answer:**\\n{answer}\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 645,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response += f\"**Answer:**\\n{answer}\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 651,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\ud83d\udcda **From Knowledge Base:**\\n\\n{answer}\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 651,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\ud83d\udcda **From Knowledge Base:**\\n\\n{answer}\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 667,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response = f\"\ud83d\ude80 **Update Available**\\n\\n\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 667,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response = f\"\ud83d\ude80 **Update Available**\\n\\n\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 672,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response = f\"\u2705 **Up to Date**\\n\\nNo newer models available.\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 672,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response = f\"\u2705 **Up to Date**\\n\\nNo newer models available.\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 678,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response = f\"\ud83d\udd27 **Upgrade Status**\\n\\n\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 678,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response = f\"\ud83d\udd27 **Upgrade Status**\\n\\n\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 700,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\ud83d\ude80 **Upgrade Complete!**\\n\\n\u2705 Successfully upgraded to {upgrade_result['model']}\\n\u2705 All syst"
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 700,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\ud83d\ude80 **Upgrade Complete!**\\n\\n\u2705 Successfully upgraded to {upgrade_result['model']}\\n\u2705 All syst"
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 700,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\ud83d\ude80 **Upgrade Complete!**\\n\\n\u2705 Successfully upgraded to {upgrade_result['model']}\\n\u2705 All syst"
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 702,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\u274c **Upgrade Failed**\\n\\n{upgrade_result.get('error', 'Unknown error occurred')}\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 702,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\u274c **Upgrade Failed**\\n\\n{upgrade_result.get('error', 'Unknown error occurred')}\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 705,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\u2705 **Already Up to Date**\\n\\nNo newer models available for upgrade.\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 705,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\u2705 **Already Up to Date**\\n\\nNo newer models available for upgrade.\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 715,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response = f\"\ud83d\ude80 **Update Available**\\n\\n\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 715,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response = f\"\ud83d\ude80 **Update Available**\\n\\n\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 722,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\u2705 **Up to Date**\\n\\nNo newer models available.\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 722,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "return f\"\u2705 **Up to Date**\\n\\nNo newer models available.\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 736,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response = f\"\ud83e\udd16 **BOWEN Autonomous Capabilities**\\n\\n\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 736,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response = f\"\ud83e\udd16 **BOWEN Autonomous Capabilities**\\n\\n\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 737,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response += f\"**Code Generation:**\\n\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 737,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response += f\"**Code Generation:**\\n\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 743,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response += f\"**Document Creation:**\\n\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 743,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response += f\"**Document Creation:**\\n\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 749,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response += f\"**Workflow Orchestration:**\\n\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 749,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response += f\"**Workflow Orchestration:**\\n\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 755,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response += f\"**Autonomous Learning:**\\n\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 755,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response += f\"**Autonomous Learning:**\\n\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 761,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response += f\"**File Management:**\\n\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 761,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response += f\"**File Management:**\\n\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 767,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response += f\"**Self-Upgrading:**\\n\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 767,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response += f\"**Self-Upgrading:**\\n\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 780,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "'workspace_files': len(list(Path(\"/Users/yimi/Desktop\").rglob(\"*\")))"
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 783,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response = f\"\ud83d\udcca **BOWEN Status**\\n\\n\""
+  },
+  {
+    "file": "backups/pre_upgrade_20260103_215816/cli.py",
+    "line": 783,
+    "category": "THEATRICAL_ACTIONS",
+    "pattern": "\\*[^*]+\\*",
+    "content": "response = f\"\ud83d\udcca **BOWEN Status**\\n\\n\""
+  }
+]

@@ -69,23 +69,38 @@ class AutonomousLearner:
     
     def detect_unknowns(self, conversation: str) -> List[str]:
         """
-        Scan conversation for unknown terms
-        Check against knowledge base
-        Return list of concepts to research
+        Only learn from REAL queries, not casual chat
+        Scan conversation for unknown terms that user is ASKING about
         """
         try:
+            # Ignore casual greetings and wake-up commands
+            casual_phrases = [
+                'hey', 'hi', 'hello', "what's up", 'wake up', 'good morning',
+                'wake uo', 'daddies home', 'beep', 'whir', 'system check'
+            ]
+            if any(phrase in conversation.lower() for phrase in casual_phrases):
+                return []
+            
+            # Only learn if user is ASKING about something
+            query_indicators = ['what is', 'explain', 'tell me about', 'how does', 'help with', '?']
+            if not any(indicator in conversation.lower() for indicator in query_indicators):
+                return []
+            
             # Use Claude to identify technical concepts, frameworks, tools
             detection_prompt = f"""
-            Analyze this conversation and identify technical concepts, frameworks, tools, or domain-specific terms that might need explanation:
+            Analyze this conversation and identify ONLY technical concepts that the user is actively asking about:
 
             Conversation: "{conversation}"
 
-            Look for:
-            1. Programming frameworks (React, Vue, Django, etc.)
-            2. Technical concepts (database normalization, BCNF, microservices, etc.)
-            3. Tools and technologies (Vercel, Docker, Kubernetes, etc.)
-            4. Business concepts (MVP, SaaS, A/B testing, etc.)
-            5. Academic concepts (machine learning algorithms, statistical methods, etc.)
+            Only include concepts if the user is:
+            - Asking "what is X?" or "explain X" 
+            - Seeking help with a specific technology/tool
+            - Learning about a new framework or concept
+
+            DO NOT include:
+            - Casual conversation topics
+            - Greetings or social interactions
+            - System actions or status updates
 
             Return ONLY a JSON list of terms to research:
             ["term1", "term2", "term3"]

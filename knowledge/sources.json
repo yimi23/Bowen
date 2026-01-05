@@ -49,5 +49,14 @@
   ],
   "command explanation definition examples best practices": [
     "command"
+  ],
+  "screenshot explanation definition examples best practices": [
+    "screenshot"
+  ],
+  "system check explanation definition examples best practices": [
+    "system check"
+  ],
+  "alarm sound explanation definition examples best practices": [
+    "alarm sound"
   ]
 }

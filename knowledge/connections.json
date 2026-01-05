@@ -219,5 +219,8 @@
   ],
   "infrastructure as code (iac)": [
     "command"
-  ]
+  ],
+  "screenshot": [],
+  "system check": [],
+  "alarm sound": []
 }

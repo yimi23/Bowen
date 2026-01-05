@@ -417,6 +417,30 @@ CRITICAL RULES:
             # Fallback to original processing
             return self.handle_dynamic_request(user_input)
     
+    def strip_theatrical_bullshit(self, response: str) -> str:
+        """Remove fake action descriptions"""
+        # Block asterisk actions
+        if '*' in response:
+            response = re.sub(r'\*[^*]+\*', '', response)
+        
+        # Block fake action claims
+        fake_actions = [
+            'captured a screenshot',
+            'taking a screenshot', 
+            'plays alarm',
+            'performing system check',
+            'beeps and whirs',
+            'discreetly',
+            'mr. oyimi',
+            'activating all systems'
+        ]
+        
+        for fake in fake_actions:
+            if fake.lower() in response.lower():
+                return "I can't actually do that. What do you need help with?"
+        
+        return response
+
     def handle_autonomous_request(self, user_input: str) -> str:
         """
         Handle requests with full autonomous capabilities
@@ -427,7 +451,8 @@ CRITICAL RULES:
             
             # ACADEMIC INTENTS - Process first for priority
             if ACADEMIC_ENGINES_AVAILABLE and self._is_academic_request(user_input):
-                return self._handle_academic_request(user_input)
+                response = self._handle_academic_request(user_input)
+                return self.strip_theatrical_bullshit(response)
             
             # 1. WORKFLOW REQUESTS - Multi-step autonomous execution
             if any(phrase in user_lower for phrase in ['build', 'create project', 'deploy', 'workflow']):
@@ -848,6 +873,9 @@ CRITICAL RULES:
         try:
             # Get regular response
             response = self.handle_dynamic_request(user_input)
+            
+            # Strip theatrical bullshit
+            response = self.strip_theatrical_bullshit(response)
             
             # Learn from this conversation
             if self.autonomous_learner:
