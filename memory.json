@@ -1,0 +1,246 @@
+{
+  "facts": {
+    "manual_database_exam_202601090000": {
+      "type": "deadline",
+      "item": "Database Exam",
+      "course": "General",
+      "date": "2026-01-09",
+      "time": null,
+      "expires": "2026-01-09T23:59:59",
+      "source": "manual_input",
+      "confidence": 1.0,
+      "told_on": "2026-01-05T01:21:31.200848"
+    }
+  },
+  "events": [
+    {
+      "timestamp": "2026-01-02T14:47:54.431227",
+      "user_input": "Database exam tomorrow at 2pm",
+      "response": "I can help you prepare for your database exam. What specific topics do you want to focus on?",
+      "type": "conversation"
+    },
+    {
+      "timestamp": "2026-01-02T14:48:34.109942",
+      "user_input": "Abayomi working on whiteboard feature today",
+      "response": "Good to know. How is the whiteboard feature coming along?",
+      "type": "conversation"
+    },
+    {
+      "timestamp": "2026-01-03T12:16:22.366229",
+      "user_input": "tell me whats on my screen?",
+      "response": "This appears to be a terminal window on a macOS system. The user is working on a Python project called \"BOWEN\" - likely a framework or application they are developing. \n\nThe main observations I can ma...",
+      "type": "conversation"
+    },
+    {
+      "timestamp": "2026-01-03T12:19:25.117237",
+      "user_input": "hey i need you to do research for me pls it a research on the new venture challenge in central michigan univeristy",
+      "response": "Certainly! I'll provide a comprehensive research on the New Venture Challenge at Central Michigan University.\n\n1. Key Concepts and Background:\n   - The New Venture Challenge is a business plan competi...",
+      "type": "conversation"
+    },
+    {
+      "timestamp": "2026-01-03T21:27:15.794810",
+      "user_input": "check for updates",
+      "response": "\ud83d\ude80 **Update Available**\n\n\u2022 New model: claude-sonnet-5-20260115\n\u2022 Improvements: New capability: vision, New capability: tool_use, New capability: enhanced_reasoning, New capability: long_context\n\u2022 Shoul...",
+      "type": "conversation"
+    },
+    {
+      "timestamp": "2026-01-03T21:28:04.728235",
+      "user_input": "upgrade now",
+      "response": "I can check for updates or show upgrade status. What would you like to know?",
+      "type": "conversation"
+    },
+    {
+      "timestamp": "2026-01-03T21:29:16.791678",
+      "user_input": "what commands do you have",
+      "response": "I am Captain, Praise Oyimi's personal assistant. I have a wide range of capabilities to assist Praise, including:\n\n- Screen capture: I can take screenshots of the user's screen on demand.\n- File creat...",
+      "type": "conversation"
+    },
+    {
+      "timestamp": "2026-01-03T21:31:52.596239",
+      "user_input": "upgrade to claude-sonnet-5-20260115",
+      "response": "I can check for updates or show upgrade status. What would you like to know?",
+      "type": "conversation"
+    },
+    {
+      "timestamp": "2026-01-03T21:33:55.932805",
+      "user_input": "what is BCNF in database normalization",
+      "response": "Certainly! Here's a comprehensive overview of BCNF (Boyce-Codd Normal Form) in database normalization:\n\n1. Key Concepts and Background:\n   - BCNF is an advanced level of database normalization, which ...",
+      "type": "conversation"
+    },
+    {
+      "timestamp": "2026-01-03T21:35:12.737387",
+      "user_input": "what is a candidate key",
+      "response": "Certainly! Here's a comprehensive overview of the topic \"What is a Candidate Key\":\n\n1. Key Concepts and Background:\n   - A candidate key, in the context of relational database design, is a minimal sup...",
+      "type": "conversation"
+    },
+    {
+      "timestamp": "2026-01-03T21:36:17.500032",
+      "user_input": "you detected an update to claude-sonnet-5-20260115 earlier. upgrade yourself to that model now.",
+      "response": "I can check for updates or show upgrade status. What would you like to know?",
+      "type": "conversation"
+    },
+    {
+      "timestamp": "2026-01-03T21:56:27.500242",
+      "user_input": "hey update urself",
+      "response": "I can upgrade my model or check for updates. Say 'upgrade now' or 'check for updates'.",
+      "type": "conversation"
+    },
+    {
+      "timestamp": "2026-01-03T21:56:35.993643",
+      "user_input": "upgrade now",
+      "response": "\u274c **Upgrade Failed**\n\nname 'shutil' is not defined",
+      "type": "conversation"
+    },
+    {
+      "timestamp": "2026-01-03T21:58:16.378953",
+      "user_input": "upgrade now",
+      "response": "\u274c **Upgrade Failed**\n\nCore functionality test failed",
+      "type": "conversation"
+    },
+    {
+      "timestamp": "2026-01-03T21:58:48.956776",
+      "user_input": "upgrade to claude-sonnet-4-20250514",
+      "response": "I can upgrade my model or check for updates. Say 'upgrade now' or 'check for updates'.",
+      "type": "conversation"
+    },
+    {
+      "timestamp": "2026-01-03T21:59:03.702820",
+      "user_input": "check for update",
+      "response": "\ud83d\ude80 **Update Available**\n\n\u2022 New model: claude-sonnet-5-20260115\n\u2022 Improvements: New capability: vision, New capability: tool_use, New capability: enhanced_reasoning, New capability: long_context\n\u2022 Shoul...",
+      "type": "conversation"
+    },
+    {
+      "timestamp": "2026-01-05T00:20:37.013124",
+      "user_input": "update urself now",
+      "response": "I can upgrade my model or check for updates. Say 'upgrade now' or 'check for updates'.",
+      "type": "conversation"
+    },
+    {
+      "timestamp": "2026-01-05T00:21:07.363181",
+      "user_input": "upograde now",
+      "response": "What command would you like me to execute?\n\n\ud83e\udde0 *Learned: upgrade, command*",
+      "type": "conversation"
+    },
+    {
+      "timestamp": "2026-01-05T00:21:55.205616",
+      "user_input": "upgrade now",
+      "response": "\u2705 **Already Up to Date**\n\nNo newer models available for upgrade.",
+      "type": "conversation"
+    }
+  ],
+  "patterns": {},
+  "temporal_tracking": {},
+  "last_updated": "2026-01-05T00:21:55.205616",
+  "learned_facts": {
+    "deadlines": [
+      {
+        "task": "Database exam",
+        "date": "2026-01-02T14:00:00",
+        "notes": "",
+        "expires": "2026-01-03T14:00:00",
+        "learned_at": "2026-01-02T14:47:54.431227"
+      },
+      {
+        "task": "New capability: vision",
+        "date": "2026-01-02T14:00:00",
+        "notes": "",
+        "expires": "2026-01-03T14:00:00",
+        "learned_at": "2026-01-03T21:27:15.794810"
+      },
+      {
+        "task": "New capability: tool_use",
+        "date": "2026-01-02T14:00:00",
+        "notes": "",
+        "expires": "2026-01-03T14:00:00",
+        "learned_at": "2026-01-03T21:27:15.794810"
+      },
+      {
+        "task": "New capability: enhanced_reasoning",
+        "date": "2026-01-02T14:00:00",
+        "notes": "",
+        "expires": "2026-01-03T14:00:00",
+        "learned_at": "2026-01-03T21:27:15.794810"
+      },
+      {
+        "task": "New capability: long_context",
+        "date": "2026-01-02T14:00:00",
+        "notes": "",
+        "expires": "2026-01-03T14:00:00",
+        "learned_at": "2026-01-03T21:27:15.794810"
+      },
+      {
+        "task": "task name",
+        "date": "2026-01-02T14:00:00",
+        "notes": "any notes",
+        "expires": "2026-01-03T14:00:00",
+        "learned_at": "2026-01-03T21:29:16.791678"
+      },
+      {
+        "task": "task name",
+        "date": "2026-01-02T14:00:00",
+        "notes": "any notes",
+        "expires": "2026-01-03T14:00:00",
+        "learned_at": "2026-01-03T21:36:17.500032"
+      },
+      {
+        "task": "upgrade now",
+        "date": "2026-01-02T14:00:00",
+        "notes": "",
+        "expires": "2026-01-03T14:00:00",
+        "learned_at": "2026-01-05T00:20:37.013124"
+      }
+    ],
+    "team_updates": [
+      {
+        "person": "Abayomi",
+        "status": "working on whiteboard feature today",
+        "deadline": "2026-01-02T14:00:00",
+        "learned_at": "2026-01-02T14:48:34.109942"
+      },
+      {
+        "person": "Praise Oyimi",
+        "status": "New model: claude-sonnet-5-20260115",
+        "deadline": "2026-01-15T00:00:00",
+        "learned_at": "2026-01-03T21:27:15.794810"
+      },
+      {
+        "person": "person name",
+        "status": "what they're doing",
+        "deadline": "2026-01-15T00:00:00",
+        "learned_at": "2026-01-03T21:29:16.791678"
+      },
+      {
+        "person": "person name",
+        "status": "what they're doing",
+        "deadline": "2026-01-15T00:00:00",
+        "learned_at": "2026-01-03T21:36:17.500032"
+      }
+    ],
+    "personal_updates": [
+      {
+        "info": "update info",
+        "date": "2026-01-02T10:00:00",
+        "learned_at": "2026-01-03T21:29:16.791678"
+      },
+      {
+        "info": "update info",
+        "date": "2026-01-02T10:00:00",
+        "learned_at": "2026-01-03T21:36:17.500032"
+      }
+    ],
+    "project_progress": [
+      {
+        "project": "project name",
+        "status": "current status",
+        "last_updated": "2026-01-02T10:00:00",
+        "learned_at": "2026-01-03T21:29:16.791678"
+      },
+      {
+        "project": "project name",
+        "status": "current status",
+        "last_updated": "2026-01-02T10:00:00",
+        "learned_at": "2026-01-03T21:36:17.500032"
+      }
+    ]
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "React documentation": [
+    "react",
+    "jsx",
+    "hooks"
+  ],
+  "Vercel documentation": [
+    "vercel",
+    "deployment"
+  ],
+  "MDN Web Docs": [
+    "javascript",
+    "web apis"
+  ],
+  "Next.js documentation": [
+    "next.js",
+    "ssr",
+    "routing"
+  ],
+  "screen capture explanation definition examples best practices": [
+    "screen capture"
+  ],
+  "file creation explanation definition examples best practices": [
+    "file creation"
+  ],
+  "code analysis explanation definition examples best practices": [
+    "code analysis"
+  ],
+  "database normalization explanation definition examples best practices": [
+    "database normalization"
+  ],
+  "candidate key explanation definition examples best practices": [
+    "candidate key"
+  ],
+  "partial dependencies explanation definition examples best practices": [
+    "partial dependencies"
+  ],
+  "superkey explanation definition examples best practices": [
+    "superkey"
+  ],
+  "relation (table) explanation definition examples best practices": [
+    "relation (table)"
+  ],
+  "primary key explanation definition examples best practices": [
+    "primary key"
+  ],
+  "upgrade explanation definition examples best practices": [
+    "upgrade"
+  ],
+  "command explanation definition examples best practices": [
+    "command"
+  ]
+}

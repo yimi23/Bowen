@@ -1,0 +1,466 @@
+{
+  "react": {
+    "concept": "React",
+    "definition": "A JavaScript library for building user interfaces, particularly web applications with component-based architecture",
+    "category": "programming",
+    "use_cases": [
+      "Single Page Applications",
+      "Component-based UI",
+      "Interactive websites"
+    ],
+    "examples": [
+      "Facebook",
+      "Netflix",
+      "Instagram"
+    ],
+    "code_samples": [
+      "const App = () => <div>Hello React</div>;"
+    ],
+    "best_practices": [
+      "Use functional components with hooks",
+      "Keep components small and focused",
+      "Use proper state management"
+    ],
+    "related_concepts": [
+      "jsx",
+      "virtual dom",
+      "hooks",
+      "components"
+    ],
+    "difficulty_level": "intermediate",
+    "user_relevance": "high",
+    "learned_at": "2026-01-04T00:00:00",
+    "confidence": 0.9,
+    "sources": [
+      "React documentation"
+    ]
+  },
+  "vercel": {
+    "concept": "Vercel",
+    "definition": "A cloud platform for static sites and serverless deployment, optimized for frontend frameworks",
+    "category": "tool",
+    "use_cases": [
+      "Frontend deployment",
+      "Static site hosting",
+      "Serverless functions"
+    ],
+    "examples": [
+      "Next.js deployment",
+      "React app hosting",
+      "JAMstack sites"
+    ],
+    "code_samples": [
+      "vercel --prod"
+    ],
+    "best_practices": [
+      "Use environment variables",
+      "Configure custom domains",
+      "Optimize build settings"
+    ],
+    "related_concepts": [
+      "deployment",
+      "serverless",
+      "cdn",
+      "hosting"
+    ],
+    "difficulty_level": "beginner",
+    "user_relevance": "high",
+    "learned_at": "2026-01-04T00:00:00",
+    "confidence": 0.8,
+    "sources": [
+      "Vercel documentation"
+    ]
+  },
+  "screen capture": {
+    "concept": "screen capture",
+    "definition": "Screen capture, also known as screenshot or screen grabbing, refers to the process of recording or taking a digital image of the visible area on a computer screen or mobile device.",
+    "category": "programming/business/academic/tool",
+    "use_cases": [
+      "Software demonstrations and tutorials",
+      "Technical support and troubleshooting",
+      "Presentations and reports",
+      "Collaboration and documentation",
+      "Marketing and advertising"
+    ],
+    "examples": [
+      "Software companies using screen captures in product documentation and marketing",
+      "Technical support teams leveraging screen captures to troubleshoot user issues",
+      "Educational institutions and online learning platforms utilizing screen captures in interactive tutorials and course materials",
+      "Bloggers and content creators using screen captures to illustrate points and provide step-by-step guides"
+    ],
+    "best_practices": [
+      "Choosing the appropriate resolution and file format for the intended use",
+      "Ensuring the captured content is well-organized and easy to understand",
+      "Considering the privacy and security implications of capturing sensitive information",
+      "Optimizing the screen capture for different viewing platforms and devices"
+    ],
+    "related_concepts": [
+      "Video recording",
+      "Image annotation",
+      "Visual communication",
+      "Remote collaboration"
+    ],
+    "difficulty_level": "intermediate",
+    "user_relevance": "high",
+    "learned_at": "2026-01-03T21:28:59.254611",
+    "sources": [
+      "screen capture explanation definition examples best practices"
+    ],
+    "confidence": 0.8,
+    "last_accessed": "2026-01-03T21:28:59.254631"
+  },
+  "file creation": {
+    "concept": "File Creation",
+    "definition": "File creation refers to the process of generating a new file on a computer or storage device, allocating storage space, and initializing the file with a unique identifier, metadata, and content.",
+    "category": "programming/business/academic",
+    "use_cases": [
+      "Storing and organizing digital data in software applications",
+      "Creating and managing files in operating systems",
+      "Enabling remote file access and collaboration in cloud storage services",
+      "Automating file creation and management processes in enterprise systems"
+    ],
+    "examples": [
+      "Creating a new text document to store written content",
+      "Generating a spreadsheet file to store and analyze financial data",
+      "Uploading a photo to a cloud storage service for remote access and sharing"
+    ],
+    "best_practices": [
+      "Adhering to file naming conventions for better organization and retrieval",
+      "Properly managing file permissions and access control for data security",
+      "Integrating file creation with cloud storage and synchronization for cross-device accessibility"
+    ],
+    "related_concepts": [
+      "File management",
+      "File systems",
+      "Data storage",
+      "Cloud computing",
+      "Enterprise content management"
+    ],
+    "difficulty_level": "intermediate",
+    "user_relevance": "high",
+    "learned_at": "2026-01-03T21:29:08.176929",
+    "sources": [
+      "file creation explanation definition examples best practices"
+    ],
+    "confidence": 0.8,
+    "last_accessed": "2026-01-03T21:29:08.176947"
+  },
+  "code analysis": {
+    "concept": "Code Analysis",
+    "definition": "Code analysis, also known as static code analysis, is the process of evaluating source code to identify potential issues, detect defects, and ensure adherence to coding standards and best practices. The primary goal of code analysis is to improve the quality, maintainability, and security of software by identifying and addressing issues early in the development lifecycle.",
+    "category": "programming",
+    "use_cases": [
+      "Improving code quality and security",
+      "Detecting defects and code smells",
+      "Ensuring adherence to coding standards and best practices",
+      "Identifying performance bottlenecks",
+      "Guiding code refactoring and architecture decisions"
+    ],
+    "examples": [
+      "SonarQube, a popular open-source platform for continuous inspection of code quality",
+      "ESLint, a widely used linter for JavaScript code",
+      "Pylint, a code analysis tool for Python projects"
+    ],
+    "best_practices": [
+      "Integrating code analysis into the development workflow, such as through pre-commit hooks or CI/CD pipelines",
+      "Combining static and dynamic analysis techniques for a comprehensive understanding of the codebase",
+      "Regularly reviewing and addressing issues identified by code analysis tools",
+      "Customizing code analysis rules and settings to fit the specific needs of the project"
+    ],
+    "related_concepts": [
+      "Software quality assurance",
+      "DevSecOps",
+      "Technical debt",
+      "Refactoring"
+    ],
+    "difficulty_level": "intermediate",
+    "user_relevance": "high",
+    "learned_at": "2026-01-03T21:29:16.789069",
+    "sources": [
+      "code analysis explanation definition examples best practices"
+    ],
+    "confidence": 0.8,
+    "last_accessed": "2026-01-03T21:29:16.789087"
+  },
+  "database normalization": {
+    "concept": "Database Normalization",
+    "definition": "Database normalization is a process of structuring a database to reduce data redundancy and improve data integrity. It involves organizing data in a database to reduce duplication and ensure data dependencies are logically structured.",
+    "category": "programming/database/business/academic/tool",
+    "use_cases": [
+      "Enterprise resource planning (ERP) systems",
+      "Customer relationship management (CRM) systems",
+      "Financial and accounting systems",
+      "e-Commerce platforms",
+      "Healthcare information systems"
+    ],
+    "examples": [
+      "Normalizing a student database by separating the Course and CourseGrade into a separate table, ensuring non-key attributes are fully dependent on the primary key, and ensuring non-key attributes are not transitively dependent on the primary key.",
+      "A leading e-commerce company implementing database normalization to improve data integrity and reduce data duplication, which helped them better manage their growing product catalog, customer information, and order history."
+    ],
+    "best_practices": [
+      "Eliminate redundant data",
+      "Minimize data modification anomalies",
+      "Ensure data dependencies are logically structured",
+      "Balance normalization with performance and scalability requirements"
+    ],
+    "related_concepts": [
+      "Relational database design",
+      "Data integrity",
+      "Data consistency",
+      "NoSQL databases",
+      "Big data"
+    ],
+    "difficulty_level": "intermediate",
+    "user_relevance": "high",
+    "learned_at": "2026-01-03T21:33:34.484546",
+    "sources": [
+      "database normalization explanation definition examples best practices"
+    ],
+    "confidence": 0.8,
+    "last_accessed": "2026-01-03T21:33:34.484564"
+  },
+  "candidate key": {
+    "concept": "candidate key",
+    "definition": "A candidate key is a minimal superkey in a relational database. It is a set of one or more attributes (columns) that uniquely identifies each row or tuple in a table.",
+    "category": "programming/database/business/academic",
+    "use_cases": [
+      "Ensuring data integrity and reliability in relational databases",
+      "Facilitating efficient data retrieval and manipulation",
+      "Maintaining referential integrity in relationships between tables",
+      "Enabling accurate data analysis and reporting in data warehousing and business intelligence applications",
+      "Supporting data integration and data quality management processes"
+    ],
+    "examples": [
+      "In a customer table, the combination of 'first_name', 'last_name', and 'email' could be a candidate key, as it uniquely identifies each customer.",
+      "In an employee table, the 'employee_id' attribute could be a candidate key, as it uniquely identifies each employee."
+    ],
+    "best_practices": [
+      "Carefully analyze the data and business requirements to identify potential candidate keys",
+      "Choose candidate keys that are minimal, stable, and efficient for the specific use case",
+      "Implement appropriate database constraints, such as unique and not null constraints, to enforce the candidate key rules",
+      "Regularly review and maintain candidate keys to ensure they remain effective"
+    ],
+    "related_concepts": [
+      "superkey",
+      "primary key",
+      "alternate key",
+      "data integrity",
+      "data management",
+      "database design"
+    ],
+    "difficulty_level": "intermediate",
+    "user_relevance": "high",
+    "learned_at": "2026-01-03T21:33:44.862291",
+    "sources": [
+      "candidate key explanation definition examples best practices"
+    ],
+    "confidence": 0.8,
+    "last_accessed": "2026-01-03T21:33:44.862303"
+  },
+  "partial dependencies": {
+    "concept": "partial dependencies",
+    "definition": "Research completed for partial dependencies",
+    "category": "general",
+    "learned_at": "2026-01-03T21:33:55.928212",
+    "sources": [
+      "partial dependencies explanation definition examples best practices"
+    ],
+    "confidence": 0.5,
+    "user_relevance": "medium"
+  },
+  "superkey": {
+    "concept": "superkey",
+    "definition": "A superkey is a set of one or more attributes (columns) in a database table that can uniquely identify each row or tuple in that table.",
+    "category": "programming/database",
+    "use_cases": [
+      "Defining the primary key of a database table",
+      "Enforcing data integrity through unique constraints",
+      "Improving query performance through indexing",
+      "Enabling efficient data retrieval and modification"
+    ],
+    "examples": [
+      "In a 'Students' table, the combination of 'FirstName', 'LastName', and 'StudentID' could be a superkey.",
+      "In an 'Employees' table, the 'EmployeeID' attribute could be the primary key, and the combination of 'FirstName', 'LastName', and 'EmployeeID' would be a superkey."
+    ],
+    "best_practices": [
+      "Carefully consider the choice of superkey and primary key, as they have significant implications for the database's performance, data integrity, and overall design.",
+      "Leverage database management system features and tools to automate primary key generation, manage composite keys, and optimize indexing and storage for superkeys."
+    ],
+    "related_concepts": [
+      "Primary key",
+      "Candidate key",
+      "Relational database management system (RDBMS)",
+      "Data integrity"
+    ],
+    "difficulty_level": "intermediate",
+    "user_relevance": "high",
+    "learned_at": "2026-01-03T21:34:46.724210",
+    "sources": [
+      "superkey explanation definition examples best practices"
+    ],
+    "confidence": 0.8,
+    "last_accessed": "2026-01-03T21:34:46.724229"
+  },
+  "relation (table)": {
+    "concept": "relation (table)",
+    "definition": "A relation, in the context of database management systems, is a two-dimensional table that stores data. It consists of rows (also called tuples or records) and columns (also called attributes or fields).",
+    "category": "programming/database/business/academic/tool",
+    "use_cases": [
+      "Enterprise resource planning (ERP) systems",
+      "Customer relationship management (CRM) software",
+      "E-commerce platforms",
+      "Financial management systems",
+      "Human resource management systems"
+    ],
+    "examples": [
+      "A table representing customer information with columns for CustomerID, FirstName, LastName, Email, and PhoneNumber",
+      "An e-commerce platform using tables for Products, Customers, and Orders"
+    ],
+    "best_practices": [
+      "Clearly define the purpose and structure of each relation",
+      "Normalize the data to minimize redundancy and ensure data integrity",
+      "Use appropriate data types for each column",
+      "Establish primary keys and foreign keys",
+      "Implement indexing strategies to optimize query performance",
+      "Regularly review and maintain the database schema",
+      "Implement proper security measures",
+      "Regularly back up the database"
+    ],
+    "related_concepts": [
+      "Relational database",
+      "Data modeling",
+      "Normalization",
+      "Primary key",
+      "Foreign key",
+      "Indexing"
+    ],
+    "difficulty_level": "intermediate",
+    "user_relevance": "high",
+    "learned_at": "2026-01-03T21:34:57.269268",
+    "sources": [
+      "relation (table) explanation definition examples best practices"
+    ],
+    "confidence": 0.8,
+    "last_accessed": "2026-01-03T21:34:57.269285"
+  },
+  "primary key": {
+    "concept": "primary key",
+    "definition": "A primary key is a unique identifier for a record or row in a database table. It is a column or a set of columns that uniquely identifies each row in a table, ensuring the uniqueness and integrity of the data.",
+    "category": "programming/database/business/academic",
+    "use_cases": [
+      "Customer management",
+      "Order processing",
+      "Inventory tracking",
+      "Student information systems",
+      "Banking systems"
+    ],
+    "examples": [
+      "Customer ID in a customer management system",
+      "Order number in an e-commerce order management system",
+      "Student ID in a student information system",
+      "Account number in a banking system"
+    ],
+    "best_practices": [
+      "Choose primary keys that are simple, meaningful, and easy to understand",
+      "Avoid using composite primary keys unless necessary to ensure uniqueness",
+      "Ensure that primary key values are unique, non-null, and immutable",
+      "Use surrogate keys (such as auto-incrementing integers) when the natural key characteristics are complex or likely to change",
+      "Properly index primary key columns to improve query performance",
+      "Implement data validation and constraint rules to maintain the integrity of primary key values",
+      "Document the primary key design and usage in the database schema and application documentation",
+      "Regularly review and optimize the primary key structure as the data model evolves"
+    ],
+    "related_concepts": [
+      "Database design",
+      "Relational database management systems (RDBMS)",
+      "Data integrity",
+      "Indexing",
+      "Referential integrity"
+    ],
+    "difficulty_level": "intermediate",
+    "user_relevance": "high",
+    "learned_at": "2026-01-03T21:35:12.733052",
+    "sources": [
+      "primary key explanation definition examples best practices"
+    ],
+    "confidence": 0.8,
+    "last_accessed": "2026-01-03T21:35:12.733070"
+  },
+  "upgrade": {
+    "concept": "upgrade",
+    "definition": "An upgrade can be defined as the act of replacing an older or less capable version of a product or system with a newer, more advanced one, often with improved features, performance, or functionality.",
+    "category": "programming/database/business/academic/tool",
+    "use_cases": [
+      "Software Upgrades",
+      "Hardware Upgrades",
+      "Enterprise-level Upgrades"
+    ],
+    "examples": [
+      "Microsoft Windows Upgrades",
+      "Apple iOS Upgrades",
+      "Salesforce Platform Upgrades",
+      "Automobile Upgrades"
+    ],
+    "best_practices": [
+      "Upgrade Considerations",
+      "Upgrade Communication",
+      "Upgrade Testing",
+      "Upgrade Rollout Strategies"
+    ],
+    "related_concepts": [
+      "Continuous Improvement",
+      "Agile Development",
+      "Cloud-based Upgrades"
+    ],
+    "difficulty_level": "intermediate",
+    "user_relevance": "high",
+    "confidence": 0.8,
+    "source_quality": "high",
+    "learned_at": "2026-01-05T00:20:57.116905",
+    "sources": [
+      "upgrade explanation definition examples best practices"
+    ],
+    "last_accessed": "2026-01-05T00:20:57.116924"
+  },
+  "command": {
+    "concept": "command",
+    "definition": "A command is a directive or instruction given to a computer, device, or software application to perform a specific action or task.",
+    "category": "programming/database/business/academic/tool",
+    "use_cases": [
+      "System administration and DevOps",
+      "Programming and development",
+      "Data analysis and manipulation",
+      "Cybersecurity and penetration testing",
+      "Scripting and automation"
+    ],
+    "examples": [
+      "ls (list directory contents)",
+      "cd (change directory)",
+      "mkdir (create a new directory)",
+      "git push (upload local repository changes to a remote server)",
+      "aws ec2 describe-instances (retrieve information about EC2 instances)"
+    ],
+    "code_samples": [],
+    "best_practices": [
+      "Understanding command syntax, structure, and functionality",
+      "Efficient command usage, including command-line completion, command history, and shell scripting capabilities"
+    ],
+    "related_concepts": [
+      "Command-line interfaces (CLI)",
+      "Graphical user interfaces (GUI)",
+      "Voice commands",
+      "Automation",
+      "Scripting",
+      "Infrastructure as Code (IaC)"
+    ],
+    "difficulty_level": "intermediate",
+    "user_relevance": "high",
+    "confidence": 0.8,
+    "source_quality": "high",
+    "learned_at": "2026-01-05T00:21:07.359470",
+    "sources": [
+      "command explanation definition examples best practices"
+    ],
+    "last_accessed": "2026-01-05T00:21:07.359488"
+  }
+}

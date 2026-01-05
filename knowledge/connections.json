@@ -1,0 +1,223 @@
+{
+  "react": [
+    "jsx",
+    "virtual dom",
+    "hooks",
+    "components",
+    "next.js"
+  ],
+  "vercel": [
+    "deployment",
+    "serverless",
+    "cdn",
+    "hosting",
+    "next.js"
+  ],
+  "next.js": [
+    "react",
+    "vercel",
+    "ssr",
+    "routing"
+  ],
+  "jsx": [
+    "react",
+    "javascript",
+    "components"
+  ],
+  "hooks": [
+    "react",
+    "state management",
+    "functional components"
+  ],
+  "screen capture": [
+    "video recording",
+    "image annotation",
+    "visual communication",
+    "remote collaboration"
+  ],
+  "video recording": [
+    "screen capture"
+  ],
+  "image annotation": [
+    "screen capture"
+  ],
+  "visual communication": [
+    "screen capture"
+  ],
+  "remote collaboration": [
+    "screen capture"
+  ],
+  "file creation": [
+    "file management",
+    "file systems",
+    "data storage",
+    "cloud computing",
+    "enterprise content management"
+  ],
+  "file management": [
+    "file creation"
+  ],
+  "file systems": [
+    "file creation"
+  ],
+  "data storage": [
+    "file creation"
+  ],
+  "cloud computing": [
+    "file creation"
+  ],
+  "enterprise content management": [
+    "file creation"
+  ],
+  "code analysis": [
+    "software quality assurance",
+    "devsecops",
+    "technical debt",
+    "refactoring"
+  ],
+  "software quality assurance": [
+    "code analysis"
+  ],
+  "devsecops": [
+    "code analysis"
+  ],
+  "technical debt": [
+    "code analysis"
+  ],
+  "refactoring": [
+    "code analysis"
+  ],
+  "database normalization": [
+    "relational database design",
+    "data integrity",
+    "data consistency",
+    "nosql databases",
+    "big data"
+  ],
+  "relational database design": [
+    "database normalization"
+  ],
+  "data integrity": [
+    "database normalization",
+    "candidate key",
+    "superkey",
+    "primary key"
+  ],
+  "data consistency": [
+    "database normalization"
+  ],
+  "nosql databases": [
+    "database normalization"
+  ],
+  "big data": [
+    "database normalization"
+  ],
+  "candidate key": [
+    "superkey",
+    "primary key",
+    "alternate key",
+    "data integrity",
+    "data management",
+    "database design"
+  ],
+  "superkey": [
+    "candidate key",
+    "primary key",
+    "relational database management system (rdbms)",
+    "data integrity"
+  ],
+  "primary key": [
+    "candidate key",
+    "superkey",
+    "relation (table)",
+    "database design",
+    "relational database management systems (rdbms)",
+    "data integrity",
+    "indexing",
+    "referential integrity"
+  ],
+  "alternate key": [
+    "candidate key"
+  ],
+  "data management": [
+    "candidate key"
+  ],
+  "database design": [
+    "candidate key",
+    "primary key"
+  ],
+  "partial dependencies": [],
+  "relational database management system (rdbms)": [
+    "superkey"
+  ],
+  "relation (table)": [
+    "relational database",
+    "data modeling",
+    "normalization",
+    "primary key",
+    "foreign key",
+    "indexing"
+  ],
+  "relational database": [
+    "relation (table)"
+  ],
+  "data modeling": [
+    "relation (table)"
+  ],
+  "normalization": [
+    "relation (table)"
+  ],
+  "foreign key": [
+    "relation (table)"
+  ],
+  "indexing": [
+    "relation (table)",
+    "primary key"
+  ],
+  "relational database management systems (rdbms)": [
+    "primary key"
+  ],
+  "referential integrity": [
+    "primary key"
+  ],
+  "upgrade": [
+    "continuous improvement",
+    "agile development",
+    "cloud-based upgrades"
+  ],
+  "continuous improvement": [
+    "upgrade"
+  ],
+  "agile development": [
+    "upgrade"
+  ],
+  "cloud-based upgrades": [
+    "upgrade"
+  ],
+  "command": [
+    "command-line interfaces (cli)",
+    "graphical user interfaces (gui)",
+    "voice commands",
+    "automation",
+    "scripting",
+    "infrastructure as code (iac)"
+  ],
+  "command-line interfaces (cli)": [
+    "command"
+  ],
+  "graphical user interfaces (gui)": [
+    "command"
+  ],
+  "voice commands": [
+    "command"
+  ],
+  "automation": [
+    "command"
+  ],
+  "scripting": [
+    "command"
+  ],
+  "infrastructure as code (iac)": [
+    "command"
+  ]
+}
