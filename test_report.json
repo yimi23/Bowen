@@ -1,0 +1,774 @@
+{
+  "timestamp": "2026-01-05T01:33:26.321728",
+  "summary": {
+    "total_checks": 127,
+    "passed": 118,
+    "failed": 0,
+    "warnings": 0,
+    "score": 100.0
+  },
+  "results": [
+    {
+      "status": "INFO",
+      "test": "Checking Core files...",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:24.895858"
+    },
+    {
+      "status": "PASS",
+      "test": "cli.py exists",
+      "details": "Size: 88064 bytes",
+      "timestamp": "2026-01-05T01:33:24.895907"
+    },
+    {
+      "status": "PASS",
+      "test": "bowen_core.py exists",
+      "details": "Size: 73340 bytes",
+      "timestamp": "2026-01-05T01:33:24.895926"
+    },
+    {
+      "status": "PASS",
+      "test": "config.py exists",
+      "details": "Size: 10876 bytes",
+      "timestamp": "2026-01-05T01:33:24.895938"
+    },
+    {
+      "status": "PASS",
+      "test": "memory.json exists",
+      "details": "Size: 11178 bytes",
+      "timestamp": "2026-01-05T01:33:24.895949"
+    },
+    {
+      "status": "PASS",
+      "test": "user_context.yaml exists",
+      "details": "Size: 4046 bytes",
+      "timestamp": "2026-01-05T01:33:24.895959"
+    },
+    {
+      "status": "INFO",
+      "test": "Checking Engines files...",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:24.895962"
+    },
+    {
+      "status": "PASS",
+      "test": "engines/autonomous_learner.py exists",
+      "details": "Size: 20599 bytes",
+      "timestamp": "2026-01-05T01:33:24.895972"
+    },
+    {
+      "status": "PASS",
+      "test": "engines/code_agent.py exists",
+      "details": "Size: 29045 bytes",
+      "timestamp": "2026-01-05T01:33:24.895981"
+    },
+    {
+      "status": "PASS",
+      "test": "engines/syllabus_parser.py exists",
+      "details": "Size: 9263 bytes",
+      "timestamp": "2026-01-05T01:33:24.895991"
+    },
+    {
+      "status": "PASS",
+      "test": "engines/manual_academic.py exists",
+      "details": "Size: 8021 bytes",
+      "timestamp": "2026-01-05T01:33:24.896000"
+    },
+    {
+      "status": "PASS",
+      "test": "engines/backup_manager.py exists",
+      "details": "Size: 5037 bytes",
+      "timestamp": "2026-01-05T01:33:24.896009"
+    },
+    {
+      "status": "PASS",
+      "test": "engines/outlook_connector.py exists",
+      "details": "Size: 5802 bytes",
+      "timestamp": "2026-01-05T01:33:24.896018"
+    },
+    {
+      "status": "PASS",
+      "test": "engines/self_upgrader.py exists",
+      "details": "Size: 37362 bytes",
+      "timestamp": "2026-01-05T01:33:24.896028"
+    },
+    {
+      "status": "PASS",
+      "test": "engines/advanced_documents.py exists",
+      "details": "Size: 25647 bytes",
+      "timestamp": "2026-01-05T01:33:24.896040"
+    },
+    {
+      "status": "PASS",
+      "test": "engines/workflow_orchestrator.py exists",
+      "details": "Size: 24007 bytes",
+      "timestamp": "2026-01-05T01:33:24.896049"
+    },
+    {
+      "status": "PASS",
+      "test": "engines/file_manager.py exists",
+      "details": "Size: 25540 bytes",
+      "timestamp": "2026-01-05T01:33:24.896058"
+    },
+    {
+      "status": "INFO",
+      "test": "Checking Knowledge files...",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:24.896060"
+    },
+    {
+      "status": "PASS",
+      "test": "knowledge/concepts.json exists",
+      "details": "Size: 19313 bytes",
+      "timestamp": "2026-01-05T01:33:24.896072"
+    },
+    {
+      "status": "PASS",
+      "test": "knowledge/connections.json exists",
+      "details": "Size: 3980 bytes",
+      "timestamp": "2026-01-05T01:33:24.896081"
+    },
+    {
+      "status": "PASS",
+      "test": "knowledge/sources.json exists",
+      "details": "Size: 1291 bytes",
+      "timestamp": "2026-01-05T01:33:24.896090"
+    },
+    {
+      "status": "PASS",
+      "test": "Memory has 'facts' section",
+      "details": "Contains 1 items",
+      "timestamp": "2026-01-05T01:33:24.896315"
+    },
+    {
+      "status": "PASS",
+      "test": "Memory has optional 'learned_facts' section",
+      "details": "Contains 4 items",
+      "timestamp": "2026-01-05T01:33:24.896318"
+    },
+    {
+      "status": "PASS",
+      "test": "No obvious fake/placeholder data in memory",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:24.896337"
+    },
+    {
+      "status": "PASS",
+      "test": "Valid timestamp in manual_database_exam_202601090000",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:24.896341"
+    },
+    {
+      "status": "PASS",
+      "test": "Valid source: manual_input",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:24.896343"
+    },
+    {
+      "status": "INFO",
+      "test": "Total facts in memory: 1",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:24.896345"
+    },
+    {
+      "status": "INFO",
+      "test": "Knowledge base contains 13 concepts",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:24.896652"
+    },
+    {
+      "status": "PASS",
+      "test": "Concept 'react' has all required fields",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:24.896656"
+    },
+    {
+      "status": "PASS",
+      "test": "'react' has sources",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:24.896658"
+    },
+    {
+      "status": "PASS",
+      "test": "'react' has confidence",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:24.896659"
+    },
+    {
+      "status": "PASS",
+      "test": "'react' has category",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:24.896661"
+    },
+    {
+      "status": "PASS",
+      "test": "Valid timestamp for 'react' (learned 1 days ago)",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:24.896665"
+    },
+    {
+      "status": "PASS",
+      "test": "'react' has 1 sources",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:24.896668"
+    },
+    {
+      "status": "PASS",
+      "test": "'react' has substantial definition (114 chars)",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:24.896670"
+    },
+    {
+      "status": "PASS",
+      "test": "Concept 'vercel' has all required fields",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:24.896672"
+    },
+    {
+      "status": "PASS",
+      "test": "'vercel' has sources",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:24.896674"
+    },
+    {
+      "status": "PASS",
+      "test": "'vercel' has confidence",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:24.896675"
+    },
+    {
+      "status": "PASS",
+      "test": "'vercel' has category",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:24.896677"
+    },
+    {
+      "status": "PASS",
+      "test": "Valid timestamp for 'vercel' (learned 1 days ago)",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:24.896680"
+    },
+    {
+      "status": "PASS",
+      "test": "'vercel' has 1 sources",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:24.896682"
+    },
+    {
+      "status": "PASS",
+      "test": "'vercel' has substantial definition (94 chars)",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:24.896684"
+    },
+    {
+      "status": "PASS",
+      "test": "Concept 'screen capture' has all required fields",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:24.896686"
+    },
+    {
+      "status": "PASS",
+      "test": "'screen capture' has sources",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:24.896688"
+    },
+    {
+      "status": "PASS",
+      "test": "'screen capture' has confidence",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:24.896689"
+    },
+    {
+      "status": "PASS",
+      "test": "'screen capture' has category",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:24.896691"
+    },
+    {
+      "status": "PASS",
+      "test": "Valid timestamp for 'screen capture' (learned 1 days ago)",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:24.896693"
+    },
+    {
+      "status": "PASS",
+      "test": "'screen capture' has 1 sources",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:24.896695"
+    },
+    {
+      "status": "PASS",
+      "test": "'screen capture' has substantial definition (180 chars)",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:24.896697"
+    },
+    {
+      "status": "PASS",
+      "test": "Concept 'file creation' has all required fields",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:24.896699"
+    },
+    {
+      "status": "PASS",
+      "test": "'file creation' has sources",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:24.896700"
+    },
+    {
+      "status": "PASS",
+      "test": "'file creation' has confidence",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:24.896702"
+    },
+    {
+      "status": "PASS",
+      "test": "'file creation' has category",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:24.896703"
+    },
+    {
+      "status": "PASS",
+      "test": "Valid timestamp for 'file creation' (learned 1 days ago)",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:24.896707"
+    },
+    {
+      "status": "PASS",
+      "test": "'file creation' has 1 sources",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:24.896709"
+    },
+    {
+      "status": "PASS",
+      "test": "'file creation' has substantial definition (194 chars)",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:24.896710"
+    },
+    {
+      "status": "PASS",
+      "test": "Concept 'code analysis' has all required fields",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:24.896712"
+    },
+    {
+      "status": "PASS",
+      "test": "'code analysis' has sources",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:24.896714"
+    },
+    {
+      "status": "PASS",
+      "test": "'code analysis' has confidence",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:24.896715"
+    },
+    {
+      "status": "PASS",
+      "test": "'code analysis' has category",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:24.896717"
+    },
+    {
+      "status": "PASS",
+      "test": "Valid timestamp for 'code analysis' (learned 1 days ago)",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:24.896719"
+    },
+    {
+      "status": "PASS",
+      "test": "'code analysis' has 1 sources",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:24.896721"
+    },
+    {
+      "status": "PASS",
+      "test": "'code analysis' has substantial definition (374 chars)",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:24.896723"
+    },
+    {
+      "status": "PASS",
+      "test": "Successfully imported engines.autonomous_learner.AutonomousLearner",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:25.279874"
+    },
+    {
+      "status": "PASS",
+      "test": "AutonomousLearner has __init__ method",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:25.279886"
+    },
+    {
+      "status": "PASS",
+      "test": "Successfully imported engines.code_agent.CodeAgent",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:25.280297"
+    },
+    {
+      "status": "PASS",
+      "test": "CodeAgent has __init__ method",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:25.280300"
+    },
+    {
+      "status": "PASS",
+      "test": "Successfully imported engines.syllabus_parser.SyllabusParser",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:25.393314"
+    },
+    {
+      "status": "PASS",
+      "test": "SyllabusParser has __init__ method",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:25.393319"
+    },
+    {
+      "status": "PASS",
+      "test": "Successfully imported engines.manual_academic.ManualAcademic",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:25.393580"
+    },
+    {
+      "status": "PASS",
+      "test": "ManualAcademic has __init__ method",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:25.393583"
+    },
+    {
+      "status": "PASS",
+      "test": "Successfully imported engines.backup_manager.BackupManager",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:25.393786"
+    },
+    {
+      "status": "PASS",
+      "test": "BackupManager has __init__ method",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:25.393788"
+    },
+    {
+      "status": "PASS",
+      "test": "Successfully imported engines.outlook_connector.OutlookConnector",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:25.443067"
+    },
+    {
+      "status": "PASS",
+      "test": "OutlookConnector has __init__ method",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:25.443077"
+    },
+    {
+      "status": "PASS",
+      "test": "Successfully imported engines.self_upgrader.SelfUpgrader",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:25.443951"
+    },
+    {
+      "status": "PASS",
+      "test": "SelfUpgrader has __init__ method",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:25.443954"
+    },
+    {
+      "status": "PASS",
+      "test": "Successfully imported engines.advanced_documents.AdvancedDocumentEngine",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:25.444373"
+    },
+    {
+      "status": "PASS",
+      "test": "AdvancedDocumentEngine has __init__ method",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:25.444376"
+    },
+    {
+      "status": "PASS",
+      "test": "Successfully imported engines.workflow_orchestrator.WorkflowOrchestrator",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:25.444803"
+    },
+    {
+      "status": "PASS",
+      "test": "WorkflowOrchestrator has __init__ method",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:25.444806"
+    },
+    {
+      "status": "PASS",
+      "test": "Successfully imported engines.file_manager.IntelligentFileManager",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:25.445156"
+    },
+    {
+      "status": "PASS",
+      "test": "IntelligentFileManager has __init__ method",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:25.445159"
+    },
+    {
+      "status": "INFO",
+      "test": "Memory has 1 facts before test",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:25.445263"
+    },
+    {
+      "status": "PASS",
+      "test": "Successfully added test deadline to memory",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:26.290927"
+    },
+    {
+      "status": "PASS",
+      "test": "Memory increased from 1 to 2 facts",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:26.291007"
+    },
+    {
+      "status": "PASS",
+      "test": "Test deadline persisted correctly",
+      "details": "Key: manual_test_item_013325_tomorrow_202601060133, Item: Test Item 013325 Tomorrow",
+      "timestamp": "2026-01-05T01:33:26.291012"
+    },
+    {
+      "status": "PASS",
+      "test": "Test fact has type: deadline",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:26.291015"
+    },
+    {
+      "status": "PASS",
+      "test": "Test fact has date: 2026-01-06",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:26.291017"
+    },
+    {
+      "status": "PASS",
+      "test": "Test fact has source: manual_input",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:26.291018"
+    },
+    {
+      "status": "PASS",
+      "test": "Test fact has told_on: 2026-01-05T01:33:26.290321",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:26.291020"
+    },
+    {
+      "status": "INFO",
+      "test": "Knowledge base has 13 concepts",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:26.317227"
+    },
+    {
+      "status": "PASS",
+      "test": "Concept 'react' has substantial definition",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:26.317238"
+    },
+    {
+      "status": "PASS",
+      "test": "'react' learned recently (1 days ago)",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:26.317243"
+    },
+    {
+      "status": "PASS",
+      "test": "'react' has valid confidence: 0.9",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:26.317249"
+    },
+    {
+      "status": "PASS",
+      "test": "Concept 'vercel' has substantial definition",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:26.317251"
+    },
+    {
+      "status": "PASS",
+      "test": "'vercel' learned recently (1 days ago)",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:26.317254"
+    },
+    {
+      "status": "PASS",
+      "test": "'vercel' has valid confidence: 0.8",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:26.317257"
+    },
+    {
+      "status": "PASS",
+      "test": "Concept 'screen capture' has substantial definition",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:26.317259"
+    },
+    {
+      "status": "PASS",
+      "test": "'screen capture' learned recently (1 days ago)",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:26.317261"
+    },
+    {
+      "status": "PASS",
+      "test": "'screen capture' has valid confidence: 0.8",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:26.317263"
+    },
+    {
+      "status": "PASS",
+      "test": "Learning stats method works",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:26.317286"
+    },
+    {
+      "status": "PASS",
+      "test": "Stats show 13 total concepts",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:26.317288"
+    },
+    {
+      "status": "PASS",
+      "test": "CLI imports autonomous_learner",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:26.318510"
+    },
+    {
+      "status": "PASS",
+      "test": "CLI imports code_agent",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:26.318514"
+    },
+    {
+      "status": "PASS",
+      "test": "CLI imports syllabus_parser",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:26.318517"
+    },
+    {
+      "status": "PASS",
+      "test": "CLI imports manual_academic",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:26.318519"
+    },
+    {
+      "status": "PASS",
+      "test": "CLI imports backup_manager",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:26.318521"
+    },
+    {
+      "status": "PASS",
+      "test": "CLI imports outlook_connector",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:26.318524"
+    },
+    {
+      "status": "PASS",
+      "test": "CLI has academic pattern: _is_academic_request",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:26.318541"
+    },
+    {
+      "status": "PASS",
+      "test": "CLI has academic pattern: _handle_academic_request",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:26.318548"
+    },
+    {
+      "status": "PASS",
+      "test": "CLI has academic pattern: syllabus",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:26.318550"
+    },
+    {
+      "status": "PASS",
+      "test": "CLI has academic pattern: deadline",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:26.318556"
+    },
+    {
+      "status": "PASS",
+      "test": "CLI has academic pattern: calendar",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:26.318602"
+    },
+    {
+      "status": "PASS",
+      "test": "No obvious hardcoded responses in CLI",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:26.318703"
+    },
+    {
+      "status": "PASS",
+      "test": "CLI integration structure appears correct",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:26.318704"
+    },
+    {
+      "status": "PASS",
+      "test": "cli.py has no obvious hardcoded fake data",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:26.319313"
+    },
+    {
+      "status": "PASS",
+      "test": "bowen_core.py has no obvious hardcoded fake data",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:26.320161"
+    },
+    {
+      "status": "PASS",
+      "test": "engines/autonomous_learner.py has no obvious hardcoded fake data",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:26.320511"
+    },
+    {
+      "status": "PASS",
+      "test": "engines/manual_academic.py has no obvious hardcoded fake data",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:26.320709"
+    },
+    {
+      "status": "PASS",
+      "test": "engines/code_agent.py has no obvious hardcoded fake data",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:26.321032"
+    },
+    {
+      "status": "PASS",
+      "test": "engines/self_upgrader.py has no obvious hardcoded fake data",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:26.321521"
+    },
+    {
+      "status": "PASS",
+      "test": "Recent user data: manual_database_exam_202601090000 (0 days old)",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:26.321595"
+    },
+    {
+      "status": "PASS",
+      "test": "Recent user data: manual_test_item_013325_tomorrow_202601060133 (0 days old)",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:26.321600"
+    },
+    {
+      "status": "INFO",
+      "test": "Data source breakdown: {'manual_input': 2}",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:26.321604"
+    },
+    {
+      "status": "INFO",
+      "test": "100.0% of facts from real sources (2/2)",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:26.321607"
+    },
+    {
+      "status": "PASS",
+      "test": "Majority of data from real sources",
+      "details": "",
+      "timestamp": "2026-01-05T01:33:26.321609"
+    }
+  ]
+}

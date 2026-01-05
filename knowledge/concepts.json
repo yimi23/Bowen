@@ -33,7 +33,8 @@
     "confidence": 0.9,
     "sources": [
       "React documentation"
-    ]
+    ],
+    "note": "Learned during system testing"
   },
   "vercel": {
     "concept": "Vercel",
@@ -69,7 +70,8 @@
     "confidence": 0.8,
     "sources": [
       "Vercel documentation"
-    ]
+    ],
+    "note": "Learned during system testing"
   },
   "screen capture": {
     "concept": "screen capture",
@@ -107,7 +109,8 @@
       "screen capture explanation definition examples best practices"
     ],
     "confidence": 0.8,
-    "last_accessed": "2026-01-03T21:28:59.254631"
+    "last_accessed": "2026-01-03T21:28:59.254631",
+    "note": "Learned during system testing"
   },
   "file creation": {
     "concept": "File Creation",
@@ -143,7 +146,8 @@
       "file creation explanation definition examples best practices"
     ],
     "confidence": 0.8,
-    "last_accessed": "2026-01-03T21:29:08.176947"
+    "last_accessed": "2026-01-03T21:29:08.176947",
+    "note": "Learned during system testing"
   },
   "code analysis": {
     "concept": "Code Analysis",
@@ -180,7 +184,8 @@
       "code analysis explanation definition examples best practices"
     ],
     "confidence": 0.8,
-    "last_accessed": "2026-01-03T21:29:16.789087"
+    "last_accessed": "2026-01-03T21:29:16.789087",
+    "note": "Learned during system testing"
   },
   "database normalization": {
     "concept": "Database Normalization",
@@ -217,7 +222,8 @@
       "database normalization explanation definition examples best practices"
     ],
     "confidence": 0.8,
-    "last_accessed": "2026-01-03T21:33:34.484564"
+    "last_accessed": "2026-01-03T21:33:34.484564",
+    "note": "Learned during system testing"
   },
   "candidate key": {
     "concept": "candidate key",
@@ -255,7 +261,8 @@
       "candidate key explanation definition examples best practices"
     ],
     "confidence": 0.8,
-    "last_accessed": "2026-01-03T21:33:44.862303"
+    "last_accessed": "2026-01-03T21:33:44.862303",
+    "note": "Learned during system testing"
   },
   "partial dependencies": {
     "concept": "partial dependencies",
@@ -266,7 +273,8 @@
       "partial dependencies explanation definition examples best practices"
     ],
     "confidence": 0.5,
-    "user_relevance": "medium"
+    "user_relevance": "medium",
+    "note": "Learned during system testing"
   },
   "superkey": {
     "concept": "superkey",
@@ -299,7 +307,8 @@
       "superkey explanation definition examples best practices"
     ],
     "confidence": 0.8,
-    "last_accessed": "2026-01-03T21:34:46.724229"
+    "last_accessed": "2026-01-03T21:34:46.724229",
+    "note": "Learned during system testing"
   },
   "relation (table)": {
     "concept": "relation (table)",
@@ -341,7 +350,8 @@
       "relation (table) explanation definition examples best practices"
     ],
     "confidence": 0.8,
-    "last_accessed": "2026-01-03T21:34:57.269285"
+    "last_accessed": "2026-01-03T21:34:57.269285",
+    "note": "Learned during system testing"
   },
   "primary key": {
     "concept": "primary key",
@@ -384,7 +394,8 @@
       "primary key explanation definition examples best practices"
     ],
     "confidence": 0.8,
-    "last_accessed": "2026-01-03T21:35:12.733070"
+    "last_accessed": "2026-01-03T21:35:12.733070",
+    "note": "Learned during system testing"
   },
   "upgrade": {
     "concept": "upgrade",
@@ -420,7 +431,8 @@
     "sources": [
       "upgrade explanation definition examples best practices"
     ],
-    "last_accessed": "2026-01-05T00:20:57.116924"
+    "last_accessed": "2026-01-05T00:20:57.116924",
+    "note": "Learned during system testing"
   },
   "command": {
     "concept": "command",
@@ -461,6 +473,7 @@
     "sources": [
       "command explanation definition examples best practices"
     ],
-    "last_accessed": "2026-01-05T00:21:07.359488"
+    "last_accessed": "2026-01-05T00:21:07.359488",
+    "note": "Learned during system testing"
   }
 }
