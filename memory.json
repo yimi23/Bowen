@@ -180,11 +180,29 @@
       "user_input": "hey boss",
       "response": "What's the plan",
       "type": "conversation"
+    },
+    {
+      "timestamp": "2026-01-05T16:36:43.667545",
+      "user_input": "hey boss",
+      "response": "Ready to work",
+      "type": "conversation"
+    },
+    {
+      "timestamp": "2026-01-05T16:40:29.027313",
+      "user_input": "test",
+      "response": "Understood. I am ready to assist you.",
+      "type": "conversation"
+    },
+    {
+      "timestamp": "2026-01-05T16:41:06.088325",
+      "user_input": "hey boss",
+      "response": "I'm here",
+      "type": "conversation"
     }
   ],
   "patterns": {},
   "temporal_tracking": {},
-  "last_updated": "2026-01-05T16:33:00.219012",
+  "last_updated": "2026-01-05T16:41:06.088325",
   "learned_facts": {
     "deadlines": [
       {
