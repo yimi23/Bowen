@@ -212,7 +212,8 @@
     "command"
   ],
   "automation": [
-    "command"
+    "command",
+    "python"
   ],
   "scripting": [
     "command"
@@ -222,5 +223,38 @@
   ],
   "screenshot": [],
   "system check": [],
-  "alarm sound": []
+  "alarm sound": [],
+  "python": [
+    "data science",
+    "machine learning",
+    "web development",
+    "automation",
+    "scientific computing"
+  ],
+  "data science": [
+    "python"
+  ],
+  "machine learning": [
+    "python"
+  ],
+  "web development": [
+    "python"
+  ],
+  "scientific computing": [
+    "python"
+  ],
+  "cli.py": [
+    "command-line interfaces",
+    "python libraries",
+    "user experience"
+  ],
+  "command-line interfaces": [
+    "cli.py"
+  ],
+  "python libraries": [
+    "cli.py"
+  ],
+  "user experience": [
+    "cli.py"
+  ]
 }

@@ -58,5 +58,11 @@
   ],
   "alarm sound explanation definition examples best practices": [
     "alarm sound"
+  ],
+  "python explanation definition examples best practices": [
+    "python"
+  ],
+  "cli.py explanation definition examples best practices": [
+    "cli.py"
   ]
 }
