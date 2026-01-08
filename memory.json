@@ -1,5 +1,17 @@
 {
-  "facts": {},
+  "facts": {
+    "manual_i_have_an_essay_202601090000": {
+      "type": "deadline",
+      "item": "I Have An Essay",
+      "course": "General",
+      "date": "2026-01-09",
+      "time": null,
+      "expires": "2026-01-09T23:59:59",
+      "source": "manual_input",
+      "confidence": 1.0,
+      "told_on": "2026-01-08T18:52:08.938610"
+    }
+  },
   "events": [
     {
       "timestamp": "2026-01-02T14:47:54.431227",
@@ -198,11 +210,35 @@
       "user_input": "hey boss",
       "response": "I'm here",
       "type": "conversation"
+    },
+    {
+      "timestamp": "2026-01-05T16:42:33.269524",
+      "user_input": "hey boss",
+      "response": "What's up",
+      "type": "conversation"
+    },
+    {
+      "timestamp": "2026-01-08T18:50:51.597697",
+      "user_input": "I'm studying normalization, quiz me on BCNF",
+      "response": "\ud83c\udf93 **\n\n\ud83d\udcc4 Upload syllabus: 'upload syllabus'\n\ud83d\udcc5 Add deadline: 'Database exam Friday at 2pm'\n\ud83d\udd0d Check deadlines: 'what's due this week'\n\ud83d\udce7 Check email: 'check email'\n\ud83d\udcc6 Check calendar: 'show calendar'",
+      "type": "conversation"
+    },
+    {
+      "timestamp": "2026-01-08T18:51:20.015907",
+      "user_input": "I'm studying normalization, quiz me on BCNF",
+      "response": "\ud83c\udf93 **\n\n\ud83d\udcc4 Upload syllabus: 'upload syllabus'\n\ud83d\udcc5 Add deadline: 'Database exam Friday at 2pm'\n\ud83d\udd0d Check deadlines: 'what's due this week'\n\ud83d\udce7 Check email: 'check email'\n\ud83d\udcc6 Check calendar: 'show calendar'",
+      "type": "conversation"
+    },
+    {
+      "timestamp": "2026-01-08T18:51:49.616551",
+      "user_input": "hey boss, I need help with a SQL query for my database class",
+      "response": "\ud83c\udf93 **\n\n\ud83d\udcc4 Upload syllabus: 'upload syllabus'\n\ud83d\udcc5 Add deadline: 'Database exam Friday at 2pm'\n\ud83d\udd0d Check deadlines: 'what's due this week'\n\ud83d\udce7 Check email: 'check email'\n\ud83d\udcc6 Check calendar: 'show calendar'",
+      "type": "conversation"
     }
   ],
   "patterns": {},
   "temporal_tracking": {},
-  "last_updated": "2026-01-05T16:41:06.088325",
+  "last_updated": "2026-01-08T18:51:49.616551",
   "learned_facts": {
     "deadlines": [
       {
@@ -288,6 +324,25 @@
         "notes": "General",
         "expires": "2026-01-10T00:00:00",
         "learned_at": "2026-01-05T01:27:17.474678"
+      },
+      {
+        "task": "Database exam",
+        "date": "2026-01-02T14:00:00",
+        "expires": "2026-01-03T14:00:00",
+        "learned_at": "2026-01-08T18:50:51.597697"
+      },
+      {
+        "task": "Database exam",
+        "date": "2026-01-02T14:00:00",
+        "expires": "2026-01-03T14:00:00",
+        "learned_at": "2026-01-08T18:51:20.015907"
+      },
+      {
+        "task": "Database exam",
+        "date": "2026-01-02T14:00:00",
+        "notes": "",
+        "expires": "2026-01-03T14:00:00",
+        "learned_at": "2026-01-08T18:51:49.616551"
       }
     ],
     "team_updates": [
