@@ -27,6 +27,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from core.logging import setup_logging
 from config import Config
 from memory.store import MemoryStore
 from bus.message_bus import MessageBus
@@ -36,6 +37,7 @@ from agents.scout import ScoutAgent
 from agents.tamara import TamaraAgent
 from agents.helen import HelenAgent
 from scheduler.jobs import build_scheduler, wire_helen_jobs
+from services.keep_alive import keep_alive
 import tools.registry as registry
 
 # Routers
@@ -43,6 +45,9 @@ from api.gateway import router as ws_router
 from api.health import router as health_router
 from api.memory import router as memory_router
 from api.topics import router as topics_router
+
+# Initialize logging immediately — before anything else logs
+setup_logging(log_level="INFO", log_file="logs/bowen.log")
 
 
 # ── App-wide state (populated in lifespan) ────────────────────────────────────
@@ -91,13 +96,22 @@ async def lifespan(app: FastAPI):
     wire_helen_jobs(scheduler, agents["HELEN"], config)
     scheduler.start()
 
+    # Keep-alive: background pings Anthropic, ChromaDB, Groq every 60s
+    keep_alive.start(config, memory)
+
     # Store on app.state for router access
     app.state.config = config
     app.state.memory = memory
     app.state.bus = bus
     app.state.agents = agents
     app.state.scheduler = scheduler
+    app.state.keep_alive = keep_alive
 
+    import logging
+    logging.getLogger(__name__).info("BOWEN server online", extra={
+        "ws": "ws://localhost:8000/ws/chat",
+        "health": "http://localhost:8000/api/health",
+    })
     print("\n\033[1mBOWEN FastAPI server online.\033[0m")
     print(f"  WebSocket: ws://localhost:8000/ws/chat")
     print(f"  Health:    http://localhost:8000/api/health\n")
@@ -105,8 +119,10 @@ async def lifespan(app: FastAPI):
     yield  # Server runs here
 
     # Shutdown
+    keep_alive.stop()
     scheduler.shutdown(wait=False)
     await memory.close()
+    logging.getLogger(__name__).info("BOWEN server shut down cleanly")
     print("\n[BOWEN] Server shut down cleanly.")
 
 

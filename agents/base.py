@@ -17,8 +17,12 @@ from __future__ import annotations
 
 import json
 import uuid
+import time
 import asyncio
+import logging
+import hashlib
 from abc import ABC, abstractmethod
+from collections import OrderedDict
 from typing import Optional, Callable, Awaitable, Any
 
 import anthropic
@@ -28,11 +32,47 @@ from memory.store import MemoryStore
 from bus.message_bus import MessageBus
 from bus.schema import AgentMessage, TextPayload
 from utils.rate_limiter import anthropic_limiter
+from utils.retry import with_retry
+
+logger = logging.getLogger(__name__)
 
 # Type alias for the streaming callback
 SendFn = Optional[Callable[[dict], Awaitable[None]]]
 
 AGENT_TIMEOUT = 120
+
+# ── In-process LRU cache for assembled system prompts ─────────────────────────
+# Key: (agent_name, session_id, query_hash)  →  (prompt_str, expiry_monotonic)
+# Single-user system — no locking needed.
+_PROMPT_CACHE: OrderedDict[tuple, tuple[str, float]] = OrderedDict()
+_PROMPT_CACHE_MAX = 32       # max entries
+_PROMPT_CACHE_TTL = 120.0    # seconds before a cached prompt is stale
+
+
+def _cache_key(agent_name: str, session_id: str, query: str) -> tuple:
+    # Hash the query so semantically similar queries don't pollute the cache
+    q_hash = hashlib.md5(query.encode(), usedforsecurity=False).hexdigest()[:8]
+    return (agent_name, session_id or "", q_hash)
+
+
+def _cache_get(key: tuple) -> Optional[str]:
+    entry = _PROMPT_CACHE.get(key)
+    if not entry:
+        return None
+    prompt, expiry = entry
+    if time.monotonic() > expiry:
+        _PROMPT_CACHE.pop(key, None)
+        return None
+    # LRU: move to end
+    _PROMPT_CACHE.move_to_end(key)
+    return prompt
+
+
+def _cache_set(key: tuple, prompt: str) -> None:
+    _PROMPT_CACHE[key] = (prompt, time.monotonic() + _PROMPT_CACHE_TTL)
+    _PROMPT_CACHE.move_to_end(key)
+    while len(_PROMPT_CACHE) > _PROMPT_CACHE_MAX:
+        _PROMPT_CACHE.popitem(last=False)
 
 
 class BaseAgent(ABC):
@@ -65,22 +105,33 @@ class BaseAgent(ABC):
     async def build_system_prompt(self, query: str = "") -> str:
         """
         Assemble system prompt: identity + user profile + relevant memories.
-        memory.search() runs in a thread to avoid blocking the event loop
-        (SentenceTransformer embedding can take 10-50ms).
-        get_core_memory() is a sync file read — fast, no await needed.
+
+        Improvements over v1:
+        - Parallel fetch: memory search + history + topic run concurrently.
+        - LRU cache: same (agent, session, query) reuses prompt for 2 min.
         """
+        cache_key = _cache_key(self.name, self._session_id or "", query)
+        cached = _cache_get(cache_key)
+        if cached:
+            logger.debug("Prompt cache hit", extra={"agent": self.name, "key": str(cache_key)})
+            return cached
+
+        # Fetch core memory (sync file read — fast, no thread needed)
         core = self.memory.get_core_memory()
-        retrieved = await asyncio.to_thread(
-            self.memory.search,
-            query,
-            self.config.MEMORY_TOP_K,
-            self.config.MEMORY_MIN_RELEVANCE,
-            True,
-            self._topic_id,
+
+        # Parallel: ChromaDB search + topic lookup run simultaneously
+        retrieved, topic = await asyncio.gather(
+            asyncio.to_thread(
+                self.memory.search,
+                query,
+                self.config.MEMORY_TOP_K,
+                self.config.MEMORY_MIN_RELEVANCE,
+                True,
+                self._topic_id,
+            ),
+            self.memory.get_topic(self._topic_id),
         )
 
-        # Append per-topic instructions if set
-        topic = await self.memory.get_topic(self._topic_id)
         topic_instructions = (topic or {}).get("instructions", "")
 
         parts = [self.base_identity]
@@ -90,7 +141,14 @@ class BaseAgent(ABC):
             parts.append(f"## User Profile\n{core}")
         if retrieved:
             parts.append(f"## Relevant Memory\n{retrieved}")
-        return "\n\n".join(parts)
+
+        prompt = "\n\n".join(parts)
+        _cache_set(cache_key, prompt)
+        logger.debug(
+            "Prompt built",
+            extra={"agent": self.name, "prompt_len": len(prompt), "from_cache": False},
+        )
+        return prompt
 
     async def _get_system(self, query: str = "") -> list[dict]:
         """Build the Anthropic cached system prompt block."""
@@ -134,26 +192,40 @@ class BaseAgent(ABC):
         if print_output and not send:
             print(f"\n\033[1m[{self.name}]\033[0m ", end="", flush=True)
 
+        t0 = time.monotonic()
         try:
             async with asyncio.timeout(AGENT_TIMEOUT):
                 await anthropic_limiter.acquire()
-                async with self.client.messages.stream(
-                    model=self._model,
-                    max_tokens=2048,
-                    system=system,
-                    messages=messages,
-                ) as stream:
-                    async for text in stream.text_stream:
-                        full_response += text
-                        if send:
-                            await send({"type": "chunk", "agent": self.name, "content": text})
-                        elif print_output:
-                            print(text, end="", flush=True)
+
+                async def _do_stream():
+                    nonlocal full_response
+                    async with self.client.messages.stream(
+                        model=self._model,
+                        max_tokens=2048,
+                        system=system,
+                        messages=messages,
+                    ) as stream:
+                        async for text in stream.text_stream:
+                            full_response += text
+                            if send:
+                                await send({"type": "chunk", "agent": self.name, "content": text})
+                            elif print_output:
+                                print(text, end="", flush=True)
+
+                await with_retry(_do_stream, context=f"{self.name}.stream_response")
+
         except asyncio.TimeoutError:
             msg = f"[{self.name}] timed out after {AGENT_TIMEOUT}s"
+            logger.error("Agent timeout", extra={"agent": self.name, "method": "stream_response"})
             if send:
                 await send({"type": "error", "agent": self.name, "content": msg})
             raise
+
+        elapsed = round((time.monotonic() - t0) * 1000)
+        logger.info(
+            "Agent responded",
+            extra={"agent": self.name, "method": "stream_response", "duration_ms": elapsed},
+        )
 
         if print_output and not send:
             print()
@@ -187,16 +259,20 @@ class BaseAgent(ABC):
         if print_output and not send:
             print(f"\n\033[1m[{self.name}]\033[0m ", end="", flush=True)
 
+        t0 = time.monotonic()
         try:
             async with asyncio.timeout(AGENT_TIMEOUT):
                 for iteration in range(max_iterations):
                     await anthropic_limiter.acquire()
-                    response = await self.client.messages.create(
+
+                    response = await with_retry(
+                        self.client.messages.create,
                         model=self._model,
                         max_tokens=4096,
                         system=system,
                         messages=messages,
                         tools=tools,
+                        context=f"{self.name}.tool_use_loop iter={iteration}",
                     )
 
                     turn_text = ""
@@ -222,7 +298,6 @@ class BaseAgent(ABC):
 
                     tool_results = []
                     for tc in tool_calls:
-                        # Announce the tool call
                         if send:
                             await send({
                                 "type": "tool_call",
@@ -233,6 +308,8 @@ class BaseAgent(ABC):
                         elif print_output:
                             print(f"  \033[90m[tool] {tc.name}({_fmt_args(tc.input)})\033[0m")
 
+                        # ── Execute + time the tool call ──────────────────────
+                        tool_t0 = time.monotonic()
                         try:
                             result = await asyncio.to_thread(tool_executor, tc.name, **tc.input)
                             result_text = json.dumps(result) if isinstance(result, dict) else str(result)
@@ -240,6 +317,25 @@ class BaseAgent(ABC):
                         except Exception as tool_err:
                             result_text = json.dumps({"success": False, "error": str(tool_err)})
                             status = "ERR"
+                            logger.error(
+                                "Tool execution failed",
+                                extra={
+                                    "agent": self.name,
+                                    "tool": tc.name,
+                                    "err": str(tool_err)[:200],
+                                },
+                            )
+
+                        tool_elapsed = round((time.monotonic() - tool_t0) * 1000)
+                        logger.info(
+                            "Tool executed",
+                            extra={
+                                "agent": self.name,
+                                "tool": tc.name,
+                                "status": status,
+                                "duration_ms": tool_elapsed,
+                            },
+                        )
 
                         preview = result_text[:120].replace("\n", " ")
 
@@ -268,16 +364,27 @@ class BaseAgent(ABC):
 
         except asyncio.TimeoutError:
             msg = f"[{self.name}] timed out after {AGENT_TIMEOUT}s"
+            logger.error("Agent timeout", extra={"agent": self.name, "method": "tool_use_loop"})
             if send:
                 await send({"type": "error", "agent": self.name, "content": msg})
             raise
         except Exception as e:
             msg = f"[{self.name}] error: {type(e).__name__}: {e}"
+            logger.error(
+                "Agent error",
+                extra={"agent": self.name, "exc_type": type(e).__name__, "exc": str(e)[:200]},
+            )
             if send:
                 await send({"type": "error", "agent": self.name, "content": msg})
             elif print_output:
                 print(f"\n{msg}")
             return final_text or f"Error: {msg}"
+
+        elapsed = round((time.monotonic() - t0) * 1000)
+        logger.info(
+            "Agent responded",
+            extra={"agent": self.name, "method": "tool_use_loop", "duration_ms": elapsed},
+        )
 
         if print_output and not send:
             print()
