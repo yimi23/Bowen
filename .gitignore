@@ -1,0 +1,91 @@
+# ── Secrets and credentials ───────────────────────────────────────────────────
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+credentials.json
+token.json
+google_token.json
+google_credentials.json
+service_account.json
+
+# ── Python virtual environment ────────────────────────────────────────────────
+.venv/
+venv/
+env/
+ENV/
+bowen_env/
+
+# ── Python bytecode ───────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+
+# ── Database and vector store ─────────────────────────────────────────────────
+memory/bowen.db
+memory/bowen.db-journal
+memory/chroma/
+memory/chroma_mem0/
+bowen_data/
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+
+# ── Voice model binaries (download at runtime, not version-controlled) ───────
+voice/kokoro/*.onnx
+voice/kokoro/*.bin
+voice/kokoro/*.pt
+voice/kokoro/*.pth
+voice/models/*.onnx
+voice/models/*.bin
+
+# ── Audio files ───────────────────────────────────────────────────────────────
+*.wav
+*.mp3
+*.ogg
+*.webm
+audio-cache/
+voice-uploads/
+
+# ── macOS ─────────────────────────────────────────────────────────────────────
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# ── IDE ───────────────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ── Logs and temp ─────────────────────────────────────────────────────────────
+*.log
+logs/
+tmp/
+temp/
+*.tmp
+*.bak
+*.backup
+backups/
+
+# ── Test artifacts ────────────────────────────────────────────────────────────
+.pytest_cache/
+.coverage
+htmlcov/
+coverage.xml
+
+# ── ChromaDB internal files ───────────────────────────────────────────────────
+*.parquet
+*.duckdb
+
+# ── Claude session files ──────────────────────────────────────────────────────
+.claude/
