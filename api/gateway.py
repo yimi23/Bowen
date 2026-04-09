@@ -156,12 +156,16 @@ async def chat_websocket(websocket: WebSocket):
 
             # ── Route → agent → stream ────────────────────────────────────────
 
-            # Routing (capped at 10s)
-            try:
-                async with asyncio.timeout(10):
-                    target_name = await agents["BOWEN"].route(content)
-            except (asyncio.TimeoutError, Exception):
-                target_name = "BOWEN"
+            # If client specifies a target agent (e.g. Tab key in TUI), skip routing
+            forced = msg.get("target_agent", "").upper()
+            if forced and forced in agents:
+                target_name = forced
+            else:
+                try:
+                    async with asyncio.timeout(10):
+                        target_name = await agents["BOWEN"].route(content)
+                except (asyncio.TimeoutError, Exception):
+                    target_name = "BOWEN"
 
             await send({"type": "routing", "from": "user", "to": target_name})
 

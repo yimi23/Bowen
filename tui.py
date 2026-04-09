@@ -1,11 +1,20 @@
 """
-tui.py — BOWEN Terminal Interface.
-Aesthetic: Summit Technical Partners — ultra-deep black, warm tan, cream text.
+tui.py — BOWEN Terminal Interface (WebSocket client).
+Connects to main.py FastAPI backend at ws://localhost:8000/ws/chat.
+No agent or memory imports — pure display + input layer.
+
+Start backend first:
+    uvicorn main:app --host 0.0.0.0 --port 8000
+
+Then run TUI:
+    .venv/bin/python3 tui.py
+
+Or use start.sh which handles both.
 
 Shortcuts:
   Enter       — send message
-  Tab         — cycle agent (BOWEN → CAPTAIN → SCOUT → TAMARA → HELEN)
-  Ctrl+V      — toggle voice mode (wake word + mic)
+  Tab         — cycle active agent (forces routing to that agent)
+  Ctrl+V      — toggle voice mode
   Escape      — clear input
   Ctrl+C      — quit
 """
@@ -13,28 +22,19 @@ Shortcuts:
 from __future__ import annotations
 
 import asyncio
+import json
 import uuid
 from datetime import datetime
 from typing import Optional
 
+import httpx
+import websockets
 from textual.app import App, ComposeResult
 from textual.binding import Binding
 from textual.containers import Horizontal, Vertical
 from textual.reactive import reactive
 from textual.widgets import Footer, Input, Label, RichLog, Static
 from textual import work
-
-from config import Config
-from memory.store import MemoryStore
-from memory.mem0_layer import Mem0Layer
-from bus.message_bus import MessageBus
-from agents.bowen import BOWENAgent
-from agents.captain import CaptainAgent
-from agents.scout import ScoutAgent
-from agents.tamara import TamaraAgent
-from agents.helen import HelenAgent
-import tools.registry as registry
-
 
 # ── Palette ───────────────────────────────────────────────────────────────────
 
@@ -46,7 +46,11 @@ CREAM     = "#f5f2ee"
 DIM       = "#4a4540"
 MUTED     = "#2a2520"
 ERR       = "#c0705a"
-GREEN     = "#8ab89a"    # voice active indicator
+GREEN     = "#8ab89a"
+
+BACKEND_URL  = "http://localhost:8000"
+WS_URL       = "ws://localhost:8000/ws/chat"
+HEALTH_URL   = f"{BACKEND_URL}/api/health"
 
 AGENT_ORDER = ["BOWEN", "CAPTAIN", "SCOUT", "TAMARA", "HELEN"]
 
@@ -84,7 +88,6 @@ class AgentPanel(Static):
         lines.append(f"[{MUTED}]{'─' * 16}[/{MUTED}]")
         lines.append("")
 
-        # Voice status
         if self.voice_active:
             lines.append(f"[bold {GREEN}]◉ voice on[/bold {GREEN}]")
         else:
@@ -187,14 +190,11 @@ class BOWENApp(App):
 
     def __init__(self):
         super().__init__()
-        self.config: Optional[Config] = None
-        self.memory: Optional[MemoryStore] = None
-        self.mem0: Optional[Mem0Layer] = None
-        self.bus: Optional[MessageBus] = None
-        self.agents: dict = {}
-        self.session_id = str(uuid.uuid4())
+        self._ws: Optional[websockets.WebSocketClientProtocol] = None
+        self._conversation_id: Optional[str] = None
         self._thinking = False
-        self._voice = None   # VoicePipeline, set after boot
+        self._voice = None
+        self._voice_chunks: list[str] = []  # accumulates chunks for TTS
 
     # ── Layout ────────────────────────────────────────────────────────────────
 
@@ -212,7 +212,7 @@ class BOWENApp(App):
         self.query_one("#chat-input", Input).focus()
         self._boot()
 
-    # ── Boot sequence ─────────────────────────────────────────────────────────
+    # ── Boot ──────────────────────────────────────────────────────────────────
 
     @work(exclusive=True, thread=False)
     async def _boot(self) -> None:
@@ -222,163 +222,191 @@ class BOWENApp(App):
         def s(msg: str) -> None:
             strip.status = msg
 
-        try:
-            s("loading config")
-            self.config = Config()
-            missing = self.config.validate()
-            if missing:
-                log.write(f"[{ERR}]missing env vars: {', '.join(missing)}[/{ERR}]")
-                return
+        s("checking backend")
 
-            s("initializing memory")
-            self.memory = MemoryStore(self.config.DB_PATH, self.config.CHROMA_PATH)
-            self.memory.set_profile_path(self.config.PROFILE_PATH)
-            await self.memory.initialize()
-
-            # Mem0 — local LLM-powered memory (non-blocking init, falls back if Ollama down)
-            s("connecting mem0")
-            self.mem0 = Mem0Layer(user_id="praise")
-            mem0_ok = await asyncio.to_thread(self.mem0.initialize)
-
-            s("loading tools")
-            registry.initialize(
-                brave_api_key=self.config.BRAVE_API_KEY,
-                google_credentials_path=self.config.GOOGLE_CREDENTIALS_PATH,
-                google_token_path=self.config.GOOGLE_TOKEN_PATH,
-                db_path=self.config.DB_PATH,
-                user_timezone=self.config.USER_TIMEZONE,
-                memory_store=self.memory,
-            )
-
-            self.bus = MessageBus()
-
-            s("spinning up agents")
-            self.agents = {
-                "BOWEN":   BOWENAgent(self.config, self.memory, self.bus),
-                "CAPTAIN": CaptainAgent(self.config, self.memory, self.bus),
-                "SCOUT":   ScoutAgent(self.config, self.memory, self.bus),
-                "TAMARA":  TamaraAgent(self.config, self.memory, self.bus),
-                "HELEN":   HelenAgent(self.config, self.memory, self.bus),
-            }
-            for agent in self.agents.values():
-                agent.set_session(self.session_id)
-
-            # Voice pipeline — init in background, non-blocking
-            s("initializing voice")
-            await self._init_voice()
-
-            # Tool status summary
-            tools_status = _build_tools_status(self.config)
-            mem0_note = "mem0 ✓" if mem0_ok else "mem0 offline"
-
-            s(f"ready  ·  {self.session_id[:8]}  ·  {mem0_note}")
-
+        # Check backend health
+        backend_ok = await self._check_backend()
+        if not backend_ok:
+            log.write(f"[{ERR}]backend not running[/{ERR}]")
+            log.write(f"[{DIM}]start it with:[/{DIM}]")
+            log.write(f"[{TAN}]  .venv/bin/uvicorn main:app --host 0.0.0.0 --port 8000[/{TAN}]")
             log.write("")
-            log.write(
-                f"[bold {TAN}]BOWEN[/bold {TAN}]"
-                f"[{DIM}]  ·  all systems online  ·  five agents standing by[/{DIM}]"
-            )
-            if tools_status:
-                log.write(f"[{DIM}]       {tools_status}[/{DIM}]")
-            log.write("")
+            log.write(f"[{DIM}]or use: bash start.sh[/{DIM}]")
+            s("backend offline — see instructions above")
+            return
 
-        except Exception as e:
-            import traceback
-            log.write(f"[{ERR}]boot error: {e}[/{ERR}]")
-            log.write(f"[{DIM}]{traceback.format_exc()}[/{DIM}]")
-            s(f"failed: {e}")
+        # Connect WebSocket
+        s("connecting to backend")
+        connected = await self._connect_ws()
+        if not connected:
+            log.write(f"[{ERR}]WebSocket connection failed[/{ERR}]")
+            s("connection failed")
+            return
 
-    async def _init_voice(self) -> None:
-        """Initialize voice pipeline. Non-blocking — voice works if available."""
+        # Init voice
+        s("initializing voice")
+        await self._init_voice()
+
+        # Done
+        log.write("")
+        log.write(
+            f"[bold {TAN}]BOWEN[/bold {TAN}]"
+            f"[{DIM}]  ·  connected to backend  ·  five agents standing by[/{DIM}]"
+        )
+        log.write("")
+        s(f"ready  ·  {self._conversation_id[:8] if self._conversation_id else 'connecting'}")
+
+    async def _check_backend(self) -> bool:
         try:
-            from voice.pipeline import VoicePipeline
-            self._voice = VoicePipeline(
-                config=self.config,
-                agents=self.agents,
-                on_transcript=self._on_voice_transcript,
-                on_response=self._on_voice_response,
+            async with httpx.AsyncClient(timeout=3.0) as client:
+                r = await client.get(HEALTH_URL)
+                return r.status_code == 200
+        except Exception:
+            return False
+
+    async def _connect_ws(self) -> bool:
+        try:
+            self._ws = await websockets.connect(
+                WS_URL,
+                ping_interval=20,
+                ping_timeout=10,
+                close_timeout=5,
             )
-            status = await asyncio.to_thread(self._voice.initialize)
-            if status.get("stt") or status.get("tts"):
-                log = self.query_one("#chat-log", RichLog)
-                ready_parts = [k for k, v in status.items() if v and k != "active"]
-                log.write(
-                    f"[{DIM}]       voice: {', '.join(ready_parts)} ready"
-                    f"  ·  Ctrl+V to activate[/{DIM}]"
-                )
+            # Start background receive loop
+            asyncio.create_task(self._ws_receive_loop())
+            return True
         except Exception as e:
-            pass  # voice is optional — silently skip if unavailable
+            return False
 
-    # ── Voice callbacks (called from voice pipeline thread) ───────────────────
-
-    def _on_voice_transcript(self, text: str, source: str) -> None:
-        """Called when user speech is transcribed."""
-        self.call_from_thread(self._show_voice_transcript, text)
-
-    def _on_voice_response(self, text: str, agent_name: str) -> None:
-        """Called when agent response is ready (after TTS spoke it)."""
-        self.call_from_thread(self._show_voice_response, text, agent_name)
-
-    def _show_voice_transcript(self, text: str) -> None:
+    async def _ws_receive_loop(self) -> None:
+        """
+        Background task — receives all messages from backend and routes to UI.
+        Runs until WebSocket closes.
+        """
         log = self.query_one("#chat-log", RichLog)
-        ts = datetime.now().strftime("%H:%M")
-        log.write(f"[{DIM}]{ts}[/{DIM}]  [{CREAM}]you  {text}[/{CREAM}]")
-        log.write("")
-        log.scroll_end(animate=False)
+        strip = self.query_one("#status-strip", StatusStrip)
 
-    def _show_voice_response(self, text: str, agent_name: str) -> None:
+        try:
+            async for raw in self._ws:
+                try:
+                    data = json.loads(raw)
+                except Exception:
+                    continue
+
+                t = data.get("type")
+
+                if t == "conversation_created":
+                    self._conversation_id = data.get("conversation_id", "")
+                    strip.status = f"ready  ·  {self._conversation_id[:8]}"
+
+                elif t == "routing":
+                    to = data.get("to", "")
+                    if to and to != "user":
+                        # Update active agent display to match where message routed
+                        self.active_agent = to
+
+                elif t == "chunk":
+                    content = data.get("content", "")
+                    if content:
+                        self._stream_chunk(content)
+                        self._voice_chunks.append(content)
+
+                elif t == "tool_call":
+                    self._flush_stream()
+                    log.write(f"   [{DIM}]⟳  {data.get('tool', '')}[/{DIM}]")
+                    log.scroll_end(animate=False)
+
+                elif t == "tool_result":
+                    icon = "✓" if data.get("status") == "OK" else "✗"
+                    log.write(f"   [{DIM}]{icon}  {data.get('preview', '')[:100]}[/{DIM}]")
+                    log.scroll_end(animate=False)
+
+                elif t == "error":
+                    self._flush_stream()
+                    log.write(f"   [{ERR}]{data.get('message', 'error')}[/{ERR}]")
+                    log.scroll_end(animate=False)
+
+                elif t == "done":
+                    self._flush_stream()
+                    log.write("")
+                    log.scroll_end(animate=False)
+                    self._thinking = False
+                    strip.status = f"ready  ·  {(self._conversation_id or '')[:8]}"
+
+                    # Speak full response via TTS if voice is active
+                    if self.voice_active and self._voice and self._voice_chunks:
+                        full = "".join(self._voice_chunks)
+                        if full.strip():
+                            asyncio.create_task(self._speak(full))
+                    self._voice_chunks.clear()
+
+                elif t == "pong":
+                    pass
+
+        except websockets.ConnectionClosed:
+            log.write(f"[{ERR}]backend disconnected[/{ERR}]")
+            strip.status = "disconnected — restart with: bash start.sh"
+            self._thinking = False
+        except Exception as e:
+            log.write(f"[{ERR}]ws error: {e}[/{ERR}]")
+            self._thinking = False
+
+    # ── Stream rendering ──────────────────────────────────────────────────────
+
+    _stream_buf: list[str] = []
+    _stream_agent: str = ""
+    _stream_ts: str = ""
+    _stream_header_written: bool = False
+
+    def _stream_chunk(self, content: str) -> None:
         log = self.query_one("#chat-log", RichLog)
-        ts = datetime.now().strftime("%H:%M")
-        lines = text.strip().split("\n")
-        for i, line in enumerate(lines):
-            if line.strip():
-                if i == 0:
-                    log.write(
-                        f"[{DIM}]{ts}[/{DIM}]"
-                        f"[bold {TAN}]  {agent_name.lower()}  [/bold {TAN}]"
-                        f"[{CREAM}]{line}[/{CREAM}]"
-                    )
-                else:
-                    pad = " " * (6 + 2 + len(agent_name) + 2)
-                    log.write(f"[{CREAM}]{pad}{line}[/{CREAM}]")
-        log.write("")
-        log.scroll_end(animate=False)
+        self._stream_buf.append(content)
+        full = "".join(self._stream_buf)
+        lines = full.split("\n")
+        if len(lines) > 1:
+            for line in lines[:-1]:
+                _write_agent_line(log, self._stream_agent, self._stream_ts, line, self._stream_header_written)
+                self._stream_header_written = True
+            self._stream_buf = [lines[-1]]
+            log.scroll_end(animate=False)
+
+    def _flush_stream(self) -> None:
+        if not self._stream_buf:
+            return
+        log = self.query_one("#chat-log", RichLog)
+        remaining = "".join(self._stream_buf).strip()
+        if remaining:
+            _write_agent_line(log, self._stream_agent, self._stream_ts, remaining, self._stream_header_written)
+            log.scroll_end(animate=False)
+        self._stream_buf = []
+        self._stream_header_written = False
 
     # ── Text input ────────────────────────────────────────────────────────────
 
     async def on_input_submitted(self, event: Input.Submitted) -> None:
         text = event.value.strip()
-        if not text:
+        if not text or self._thinking:
             return
         self.query_one("#chat-input", Input).clear()
-        if not self.agents:
+        if not self._ws:
             self.query_one("#chat-log", RichLog).write(
-                f"[{DIM}]still initializing...[/{DIM}]"
+                f"[{ERR}]not connected to backend[/{ERR}]"
             )
             return
-        if self._thinking:
-            return
-        self._send_message(text)
+        await self._send(text)
 
-    @work(exclusive=False, thread=False)
-    async def _send_message(self, text: str) -> None:
+    async def _send(self, text: str, target_agent: str = "") -> None:
         log = self.query_one("#chat-log", RichLog)
         strip = self.query_one("#status-strip", StatusStrip)
-        self._thinking = True
 
-        # Route
-        agent_name = self.active_agent
-        if agent_name == "BOWEN":
-            try:
-                agent_name = await self.agents["BOWEN"].route(text)
-            except Exception:
-                agent_name = "BOWEN"
-
-        agent = self.agents.get(agent_name)
-        if not agent:
-            log.write(f"[{ERR}]agent {agent_name} not found[/{ERR}]")
-            self._thinking = False
+        if not self._ws:
             return
+
+        self._thinking = True
+        self._voice_chunks.clear()
+
+        # Determine target — if user manually selected an agent via Tab, honour it
+        agent = target_agent or (self.active_agent if self.active_agent != "BOWEN" else "")
 
         ts = datetime.now().strftime("%H:%M")
         log.write(
@@ -388,79 +416,72 @@ class BOWENApp(App):
         )
         log.write("")
 
-        strip.status = f"{agent_name.lower()}  ·  thinking"
+        # Reset stream state
+        self._stream_buf = []
+        self._stream_agent = agent or "BOWEN"
+        self._stream_ts = ts
+        self._stream_header_written = False
 
-        # Streaming buffer
-        buf: list[str] = []
-        all_chunks: list[str] = []   # accumulates every chunk for Mem0
-        header_written = False
-        conversation: list[dict] = [{"role": "user", "content": text}]
+        strip.status = f"{(agent or 'bowen').lower()}  ·  thinking"
 
-        async def send_chunk(data: dict) -> None:
-            nonlocal header_written
-            t = data.get("type")
-            if t == "chunk":
-                all_chunks.append(data["content"])
-                buf.append(data["content"])
-                full = "".join(buf)
-                lines = full.split("\n")
-                if len(lines) > 1:
-                    for line in lines[:-1]:
-                        _write_agent_line(log, agent_name, ts, line, header_written)
-                        header_written = True
-                    buf.clear()
-                    buf.append(lines[-1])
-            elif t == "tool_call":
-                pending = "".join(buf).strip()
-                if pending:
-                    _write_agent_line(log, agent_name, ts, pending, header_written)
-                    header_written = True
-                buf.clear()
-                log.write(f"   [{DIM}]⟳  {data['tool']}[/{DIM}]")
-            elif t == "tool_result":
-                icon = "✓" if data["status"] == "OK" else "✗"
-                log.write(f"   [{DIM}]{icon}  {data['preview'][:100]}[/{DIM}]")
-            elif t == "error":
-                log.write(f"   [{ERR}]{data['content']}[/{ERR}]")
+        # Build payload
+        payload: dict = {"type": "message", "content": text}
+        if self._conversation_id:
+            payload["conversation_id"] = self._conversation_id
+        if agent and agent != "BOWEN":
+            payload["target_agent"] = agent
 
         try:
-            await agent.respond(text, send=send_chunk)
-            remaining = "".join(buf).strip()
-            if remaining:
-                _write_agent_line(log, agent_name, ts, remaining, header_written)
-
-            # Drain inter-agent bus messages (e.g. SCOUT → CAPTAIN chains)
-            if self.bus and self.bus.any_pending():
-                depth = 0
-                while self.bus.any_pending() and depth < 5:
-                    pending_msgs = await self.bus.drain_all()
-                    for bmsg in pending_msgs:
-                        target = self.agents.get(bmsg.recipient)
-                        if not target:
-                            continue
-                        log.write(f"   [{DIM}]⟳  {bmsg.sender} → {bmsg.recipient}[/{DIM}]")
-                        try:
-                            await target.handle(bmsg, send=send_chunk)
-                        except Exception:
-                            pass
-                    depth += 1
-
-            # Feed full response to Mem0 in background (non-blocking)
-            full_response = "".join(all_chunks)
-            if self.mem0 and self.mem0.ready and full_response:
-                conversation.append({"role": "assistant", "content": full_response})
-                asyncio.create_task(
-                    asyncio.to_thread(self.mem0.add_conversation, conversation)
-                )
-
-            log.write("")
-            log.scroll_end(animate=False)
-            strip.status = f"ready  ·  {self.session_id[:8]}"
+            await self._ws.send(json.dumps(payload))
         except Exception as e:
-            log.write(f"   [{ERR}]{e}[/{ERR}]")
-            strip.status = f"error: {e}"
-        finally:
+            log.write(f"   [{ERR}]send failed: {e}[/{ERR}]")
             self._thinking = False
+
+    # ── Voice ─────────────────────────────────────────────────────────────────
+
+    async def _init_voice(self) -> None:
+        try:
+            from config import Config
+            from voice.pipeline import VoicePipeline
+            config = Config()
+            self._voice = VoicePipeline(
+                config=config,
+                agents={},  # voice routes through WebSocket, not direct agent calls
+                on_transcript=self._on_voice_transcript,
+                on_response=None,  # response comes back via WS chunks
+            )
+            # Override pipeline's agent routing to go through WebSocket
+            self._voice._ws_send = self._send_voice_transcript
+
+            status = await asyncio.to_thread(self._voice.initialize)
+            log = self.query_one("#chat-log", RichLog)
+            if status.get("stt") or status.get("tts"):
+                ready_parts = [k for k, v in status.items() if v and k != "active"]
+                log.write(
+                    f"[{DIM}]       voice: {', '.join(ready_parts)} ready"
+                    f"  ·  Ctrl+V to activate[/{DIM}]"
+                )
+        except Exception:
+            pass
+
+    async def _speak(self, text: str) -> None:
+        if self._voice and self._voice.tts.ready:
+            await self._voice.tts.speak_streaming(text)
+
+    def _on_voice_transcript(self, text: str, source: str) -> None:
+        self.call_from_thread(self._show_voice_transcript, text)
+
+    def _show_voice_transcript(self, text: str) -> None:
+        log = self.query_one("#chat-log", RichLog)
+        ts = datetime.now().strftime("%H:%M")
+        log.write(f"[{DIM}]{ts}[/{DIM}]  [{CREAM}]you  {text}[/{CREAM}]")
+        log.write("")
+        log.scroll_end(animate=False)
+        # Route transcript through WebSocket
+        asyncio.create_task(self._send(text))
+
+    async def _send_voice_transcript(self, text: str) -> None:
+        await self._send(text)
 
     # ── Actions ───────────────────────────────────────────────────────────────
 
@@ -480,30 +501,29 @@ class BOWENApp(App):
 
     @work(exclusive=False, thread=False)
     async def action_toggle_voice(self) -> None:
-        """Toggle voice pipeline on/off."""
         if not self._voice:
             log = self.query_one("#chat-log", RichLog)
-            log.write(f"   [{DIM}]voice not available — check mic permissions and model files[/{DIM}]")
+            log.write(f"   [{DIM}]voice not available[/{DIM}]")
             return
 
         if self.voice_active:
             await self._voice.stop()
             self.voice_active = False
             self.query_one("#status-strip", StatusStrip).status = (
-                f"voice off  ·  ready  ·  {self.session_id[:8]}"
+                f"voice off  ·  ready  ·  {(self._conversation_id or '')[:8]}"
             )
         else:
             await self._voice.start()
             self.voice_active = True
             self.query_one("#status-strip", StatusStrip).status = (
-                f"◉ listening for wake word  ·  {self.session_id[:8]}"
+                f"◉ listening  ·  {(self._conversation_id or '')[:8]}"
             )
 
     async def action_quit(self) -> None:
         if self._voice and self.voice_active:
             await self._voice.stop()
-        if self.memory:
-            await self.memory.close()
+        if self._ws:
+            await self._ws.close()
         self.exit()
 
 
@@ -516,6 +536,8 @@ def _write_agent_line(
     line: str,
     continuation: bool,
 ) -> None:
+    if not line.strip():
+        return
     if not continuation:
         log.write(
             f"[{DIM}]{ts}[/{DIM}]"
@@ -525,20 +547,6 @@ def _write_agent_line(
     else:
         pad = " " * (6 + 2 + len(agent_name) + 2)
         log.write(f"[{CREAM}]{pad}{line}[/{CREAM}]")
-
-
-def _build_tools_status(config: Config) -> str:
-    """Show which tool integrations are active."""
-    parts = []
-    if config.BRAVE_API_KEY:
-        parts.append("search ✓")
-    if config.GOOGLE_CREDENTIALS_PATH.exists():
-        parts.append("google ✓")
-    else:
-        parts.append("google ✗ (run: python tools/google_auth.py)")
-    if config.GROQ_API_KEY:
-        parts.append("stt ✓")
-    return "  ·  ".join(parts) if parts else ""
 
 
 if __name__ == "__main__":
