@@ -26,10 +26,14 @@ import uuid
 import json
 from typing import Optional
 
+import logging
+
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 
 from agents.base import SendFn
+from memory.pipeline import run_sleep_pipeline
 
+logger = logging.getLogger(__name__)
 router = APIRouter()
 
 # Maximum seconds to wait for an agent response (tool chains can be long)
@@ -188,3 +192,18 @@ async def chat_websocket(websocket: WebSocket):
         # Clean up conversation on disconnect
         if active_conversation_id:
             await memory.end_conversation(active_conversation_id)
+            # Run sleep-time extraction in background — Haiku extracts facts from the session.
+            # Non-blocking: fires and forgets. Fails silently if session had no messages.
+            asyncio.create_task(
+                run_sleep_pipeline(
+                    memory,
+                    active_conversation_id,
+                    config.ANTHROPIC_API_KEY,
+                    config.HAIKU_MODEL,
+                ),
+                name=f"sleep_pipeline_{active_conversation_id[:8]}",
+            )
+            logger.info(
+                "Session ended — sleep pipeline queued",
+                extra={"conversation_id": active_conversation_id},
+            )

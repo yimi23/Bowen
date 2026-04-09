@@ -145,7 +145,18 @@ class VoicePipeline:
         if self.on_transcript:
             self.on_transcript(text, "voice")
 
-        # 4. Route to agent (same routing as text input)
+        # 4a. WebSocket mode (TUI is a WS client — agents live in backend process)
+        #     _ws_send is set by tui.py: self._voice._ws_send = self._send_voice_transcript
+        #     The transcript goes through the WebSocket → backend routes + streams chunks back →
+        #     tui._ws_receive_loop collects _voice_chunks → speaks on "done" event.
+        ws_send = getattr(self, "_ws_send", None)
+        if ws_send is not None:
+            await ws_send(text)
+            # TTS speaking is handled by tui.py on the "done" WebSocket event.
+            # Nothing more to do here — pipeline returns to listening.
+            return
+
+        # 4b. Direct mode (clawdbot.py or legacy — agents in same process)
         agent_name = "BOWEN"
         bowen = self.agents.get("BOWEN")
         if bowen and hasattr(bowen, "route"):
@@ -156,9 +167,10 @@ class VoicePipeline:
 
         agent = self.agents.get(agent_name, self.agents.get("BOWEN"))
         if not agent:
+            logger.warning("Voice: no agent available and no WebSocket — dropping transcript")
             return
 
-        # 5. Get response, stream to TTS sentence by sentence
+        # 5. Get response
         response_parts: list[str] = []
 
         async def collect_chunk(data: dict) -> None:
