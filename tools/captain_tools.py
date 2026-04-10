@@ -4,28 +4,46 @@ execute_code, read_file, write_file, run_shell, web_fetch.
 All destructive operations require approval=True on the AgentMessage.
 """
 
+import logging
 import os
 import subprocess
 import sys
 import tempfile
-import textwrap
 from pathlib import Path
 from typing import Any
 
 import requests
 from bs4 import BeautifulSoup
 
-# Safety: restrict shell/file ops to these root dirs
-ALLOWED_ROOTS = [
-    Path.home() / "Desktop",
-    Path.home() / "Documents",
-    Path("/tmp"),
+logger = logging.getLogger(__name__)
+
+# Paths that are NEVER accessible regardless of user or context.
+# read_file and write_file reject any path under these trees.
+BLOCKED_ROOTS: list[Path] = [
+    Path("/System"),
+    Path("/etc"),
+    Path("/Library"),
+    Path("/usr"),
+    Path("/sbin"),
+    Path("/bin"),
+    Path("/private/etc"),
 ]
 
 SHELL_BLOCKLIST = [
     "rm -rf /", "rm -rf ~", ":(){:|:&};:", "dd if=",
     "mkfs", "fdisk", "shutdown", "reboot", "halt",
 ]
+
+
+def _check_path_blocked(p: Path) -> str | None:
+    """Return an error string if the resolved path is inside a blocked root, else None."""
+    for root in BLOCKED_ROOTS:
+        try:
+            p.relative_to(root)
+            return f"Access denied: '{p}' is inside a protected system directory ({root})."
+        except ValueError:
+            continue
+    return None
 
 
 # ── Anthropic tool schemas ────────────────────────────────────────────────────
@@ -104,6 +122,42 @@ CAPTAIN_TOOL_SCHEMAS = [
             "required": ["url"],
         },
     },
+    {
+        "name": "dispatch_create",
+        "description": "Log a new task dispatch for tracking. Use to record work being started or delegated.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "title": {"type": "string", "description": "Short title of the dispatch"},
+                "description": {"type": "string", "description": "What is being done and why"},
+            },
+            "required": ["title"],
+        },
+    },
+    {
+        "name": "dispatch_update",
+        "description": "Update the status of an existing dispatch. Status values: pending, in_progress, done, failed.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "dispatch_id": {"type": "string", "description": "ID of the dispatch to update"},
+                "status": {"type": "string", "description": "New status: pending, in_progress, done, failed"},
+                "result": {"type": "string", "description": "Result or outcome summary (optional)"},
+            },
+            "required": ["dispatch_id", "status"],
+        },
+    },
+    {
+        "name": "dispatch_list",
+        "description": "List recent task dispatches and their statuses. Use to check what's in flight.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "limit": {"type": "integer", "description": "Max dispatches to return (default: 10)"},
+            },
+            "required": [],
+        },
+    },
 ]
 
 
@@ -140,6 +194,9 @@ def read_file(path: str, lines: int | None = None) -> dict[str, Any]:
     """Read a file. Returns content or error."""
     try:
         p = Path(path).expanduser().resolve()
+        blocked = _check_path_blocked(p)
+        if blocked:
+            return {"success": False, "error": blocked}
         if not p.exists():
             return {"success": False, "error": f"File not found: {path}"}
         content = p.read_text(errors="replace")
@@ -156,6 +213,9 @@ def write_file(path: str, content: str, description: str = "") -> dict[str, Any]
     """Write content to a file."""
     try:
         p = Path(path).expanduser().resolve()
+        blocked = _check_path_blocked(p)
+        if blocked:
+            return {"success": False, "error": blocked}
         p.parent.mkdir(parents=True, exist_ok=True)
         existed = p.exists()
         p.write_text(content)
@@ -229,3 +289,69 @@ CAPTAIN_TOOL_MAP = {
     "run_shell": run_shell,
     "web_fetch": web_fetch,
 }
+
+
+def make_captain_dispatch_map(db_path) -> dict:
+    """
+    Sync dispatch tools for CAPTAIN. Uses sqlite3 directly — safe since
+    these run in asyncio.to_thread (off the event loop) inside base.py.
+    """
+    _db = str(db_path)
+
+    def dispatch_create(title: str, description: str = "") -> dict:
+        import sqlite3, uuid as _uuid
+        from datetime import datetime, timezone
+        now = datetime.now(timezone.utc).isoformat()
+        dispatch_id = str(_uuid.uuid4())
+        conn = sqlite3.connect(_db)
+        try:
+            conn.execute(
+                "INSERT INTO dispatches (id, title, agent, description, topic_id, created_at, updated_at) "
+                "VALUES (?,?,?,?,?,?,?)",
+                (dispatch_id, title, "CAPTAIN", description, "default", now, now),
+            )
+            conn.commit()
+            return {"success": True, "dispatch_id": dispatch_id, "title": title}
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+        finally:
+            conn.close()
+
+    def dispatch_update(dispatch_id: str, status: str, result: str = "") -> dict:
+        import sqlite3
+        from datetime import datetime, timezone
+        now = datetime.now(timezone.utc).isoformat()
+        conn = sqlite3.connect(_db)
+        try:
+            conn.execute(
+                "UPDATE dispatches SET status = ?, result = ?, updated_at = ? WHERE id = ?",
+                (status, result, now, dispatch_id),
+            )
+            conn.commit()
+            return {"success": True, "dispatch_id": dispatch_id, "status": status}
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+        finally:
+            conn.close()
+
+    def dispatch_list(limit: int = 10) -> dict:
+        import sqlite3
+        conn = sqlite3.connect(_db)
+        try:
+            conn.row_factory = sqlite3.Row
+            rows = conn.execute(
+                "SELECT id, title, agent, status, description, result, created_at "
+                "FROM dispatches ORDER BY created_at DESC LIMIT ?",
+                (limit,),
+            ).fetchall()
+            return {"success": True, "dispatches": [dict(r) for r in rows], "count": len(rows)}
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+        finally:
+            conn.close()
+
+    return {
+        "dispatch_create": dispatch_create,
+        "dispatch_update": dispatch_update,
+        "dispatch_list": dispatch_list,
+    }

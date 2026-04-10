@@ -6,7 +6,6 @@ RULE: Never sends without explicit user approval.
       gmail_send enforces this at the tool level (prompts before API call).
 """
 
-import tools.registry as registry
 from agents.base import BaseAgent, SendFn
 from config import Config
 from memory.store import MemoryStore
@@ -17,8 +16,8 @@ class TamaraAgent(BaseAgent):
     name = "TAMARA"
     voice_style = "Warm but efficient. Gets to the point fast."
 
-    def __init__(self, config: Config, memory: MemoryStore, bus: MessageBus) -> None:
-        super().__init__(config, memory, bus)
+    def __init__(self, config: Config, memory: MemoryStore, bus: MessageBus, user_registry=None) -> None:
+        super().__init__(config, memory, bus, user_registry)
         self._model = config.SONNET_MODEL
 
     @property
@@ -48,13 +47,13 @@ class TamaraAgent(BaseAgent):
             await self.memory.get_recent_history(self._session_id, n=6)
             if self._session_id else []
         )
-        schemas = registry.get_schemas("TAMARA")
+        schemas = self._get_schemas("TAMARA")
 
         if schemas:
             return await self.tool_use_loop(
                 user_text=user_text,
                 tools=schemas,
-                tool_executor=lambda name, **kw: registry.call_tool("TAMARA", name, **kw),
+                tool_executor=lambda name, **kw: self._call_tool("TAMARA", name, **kw),
                 history=history,
                 send=send,
             )

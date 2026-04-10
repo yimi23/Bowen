@@ -49,14 +49,23 @@ ERR       = "#c0705a"
 GREEN     = "#8ab89a"
 
 BACKEND_URL  = "http://localhost:8000"
-WS_URL       = "ws://localhost:8000/ws/chat"
 HEALTH_URL   = f"{BACKEND_URL}/api/health"
 
-AGENT_ORDER = ["BOWEN", "CAPTAIN", "SCOUT", "TAMARA", "HELEN"]
+def _ws_url() -> str:
+    """Build WebSocket URL with API key from environment."""
+    import os
+    from dotenv import load_dotenv
+    load_dotenv()
+    key = os.getenv("ADMIN_API_KEY", "")
+    base = "ws://localhost:8000/ws/chat"
+    return f"{base}?key={key}" if key else base
+
+AGENT_ORDER = ["BOWEN", "CAPTAIN", "DEVOPS", "SCOUT", "TAMARA", "HELEN"]
 
 AGENT_ROLE = {
     "BOWEN":   "Orchestrator",
     "CAPTAIN": "Code & Builds",
+    "DEVOPS":  "Review & Audit",
     "SCOUT":   "Research",
     "TAMARA":  "Communications",
     "HELEN":   "Calendar & Tasks",
@@ -267,7 +276,7 @@ class BOWENApp(App):
     async def _connect_ws(self) -> bool:
         try:
             self._ws = await websockets.connect(
-                WS_URL,
+                _ws_url(),
                 ping_interval=20,
                 ping_timeout=10,
                 close_timeout=5,
@@ -295,7 +304,10 @@ class BOWENApp(App):
 
                 t = data.get("type")
 
-                if t == "conversation_created":
+                if t == "auth_ok":
+                    pass  # connection established — boot() already handles the welcome message
+
+                elif t == "conversation_created":
                     self._conversation_id = data.get("conversation_id", "")
                     strip.status = f"ready  ·  {self._conversation_id[:8]}"
 
@@ -477,8 +489,7 @@ class BOWENApp(App):
         log.write(f"[{DIM}]{ts}[/{DIM}]  [{CREAM}]you  {text}[/{CREAM}]")
         log.write("")
         log.scroll_end(animate=False)
-        # Route transcript through WebSocket
-        asyncio.create_task(self._send(text))
+        # WS send is handled by pipeline._ws_send — do not duplicate here
 
     async def _send_voice_transcript(self, text: str) -> None:
         await self._send(text)

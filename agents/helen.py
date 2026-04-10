@@ -3,7 +3,6 @@ agents/helen.py — HELEN: Personal Life Agent.
 Phase 4+: Google Calendar + Bible tracking. Phase 5+: send callback for WebSocket streaming.
 """
 
-import tools.registry as registry
 from agents.base import BaseAgent, SendFn
 from config import Config
 from memory.store import MemoryStore
@@ -14,8 +13,8 @@ class HelenAgent(BaseAgent):
     name = "HELEN"
     voice_style = "Gentle, grounding. Firm when she needs to be."
 
-    def __init__(self, config: Config, memory: MemoryStore, bus: MessageBus) -> None:
-        super().__init__(config, memory, bus)
+    def __init__(self, config: Config, memory: MemoryStore, bus: MessageBus, user_registry=None) -> None:
+        super().__init__(config, memory, bus, user_registry)
         self._model = config.HAIKU_MODEL  # briefings are short — Haiku is fast enough
 
     @property
@@ -50,13 +49,13 @@ class HelenAgent(BaseAgent):
             await self.memory.get_recent_history(self._session_id, n=6)
             if self._session_id else []
         )
-        schemas = registry.get_schemas("HELEN")
+        schemas = self._get_schemas("HELEN")
 
         if schemas:
             return await self.tool_use_loop(
                 user_text=user_text,
                 tools=schemas,
-                tool_executor=lambda name, **kw: registry.call_tool("HELEN", name, **kw),
+                tool_executor=lambda name, **kw: self._call_tool("HELEN", name, **kw),
                 history=history,
                 send=send,
             )

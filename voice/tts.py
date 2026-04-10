@@ -38,7 +38,13 @@ class TTSEngine:
         voices_path: Path = VOICES_PATH,
         voice: str = DEFAULT_VOICE,
         speed: float = DEFAULT_SPEED,
+        config=None,
     ) -> None:
+        if config is not None:
+            voice = config.KOKORO_VOICE
+            speed = config.KOKORO_SPEED
+            model_path = config.KOKORO_MODEL_DIR / "kokoro-v0_19.onnx"
+            voices_path = config.KOKORO_MODEL_DIR / "voices.bin"
         self.voice = voice
         self.speed = speed
         self._kokoro = None

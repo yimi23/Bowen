@@ -20,6 +20,48 @@ from typing import Optional
 
 logger = logging.getLogger(__name__)
 
+# ── STT Corrections ───────────────────────────────────────────────────────────
+# Whisper common mishears for BOWEN-specific vocabulary.
+# Applied after every transcription before returning to caller.
+
+import re
+
+_CORRECTIONS: list[tuple[str, str]] = [
+    # Agent names
+    (r"\bbowman\b",          "BOWEN"),
+    (r"\bbowing\b",          "BOWEN"),
+    (r"\bbo\s+win\b",        "BOWEN"),
+    (r"\bbo\s+when\b",       "BOWEN"),
+    # Claude / Anthropic
+    (r"\bcloud\s+code\b",    "Claude Code"),
+    (r"\bclawed\s+code\b",   "Claude Code"),
+    (r"\bclaude\s+code\b",   "Claude Code"),   # already correct — normalise casing
+    (r"\banthropick\b",      "Anthropic"),
+    (r"\banthrophic\b",      "Anthropic"),
+    # Groq
+    (r"\bgrok\b",            "Groq"),
+    (r"\bgroak\b",           "Groq"),
+    (r"\bcroak\b",           "Groq"),
+    # BOWEN projects / vocabulary
+    (r"\btwine\s+campus\b",  "Twine Campus"),
+    (r"\btwine\s+camps\b",   "Twine Campus"),
+    (r"\bremi\s+guardian\b", "Remi Guardian"),
+    (r"\bsfb\s+holdings\b",  "SFB Holdings"),
+    (r"\btamara\b",          "TAMARA"),
+    # Slash commands often misheard
+    (r"\bslash\s+code\b",    "/code"),
+    (r"\bslash\s+email\b",   "/email"),
+    (r"\bslash\s+search\b",  "/search"),
+]
+
+
+def _apply_corrections(text: str) -> str:
+    """Fix common Whisper mishears for BOWEN vocabulary."""
+    for pattern, replacement in _CORRECTIONS:
+        text = re.sub(pattern, replacement, text, flags=re.IGNORECASE)
+    return text
+
+
 # Recording config
 SAMPLE_RATE = 16000     # Whisper optimal sample rate
 CHANNELS = 1            # mono
@@ -130,6 +172,7 @@ class STTEngine:
                 response_format="text",
             )
             text = result.strip() if isinstance(result, str) else result.text.strip()
+            text = _apply_corrections(text)
             logger.debug(f"STT: transcribed: {text[:80]}")
             return text if text else None
         except Exception as e:

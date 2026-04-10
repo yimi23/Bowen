@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BOWEN</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='14' fill='%230a0a0a' stroke='%23c8b89a' stroke-width='2'/><text x='16' y='21' text-anchor='middle' font-size='14' fill='%23c8b89a' font-family='serif'>B</text></svg>" />
+</head>
+<body>
+  <div id="app">
+    <!-- Orb canvas -->
+    <canvas id="orb-canvas"></canvas>
+
+    <!-- Left panel: orb label + agent state -->
+    <aside id="left-panel">
+      <div id="bowen-wordmark">BOWEN</div>
+      <div id="agent-state-label">READY</div>
+      <div id="agent-selector">
+        <button class="agent-btn active" data-agent="BOWEN">BOWEN</button>
+        <button class="agent-btn" data-agent="CAPTAIN">CAPTAIN</button>
+        <button class="agent-btn" data-agent="DEVOPS">DEVOPS</button>
+        <button class="agent-btn" data-agent="SCOUT">SCOUT</button>
+        <button class="agent-btn" data-agent="TAMARA">TAMARA</button>
+        <button class="agent-btn" data-agent="HELEN">HELEN</button>
+      </div>
+    </aside>
+
+    <!-- Right panel: chat + input -->
+    <main id="right-panel">
+      <header id="chat-header">
+        <span id="active-agent-label">BOWEN</span>
+        <span id="connection-dot" class="dot disconnected" title="Connecting..."></span>
+      </header>
+
+      <div id="chat-messages"></div>
+
+      <!-- Tool activity panel -->
+      <div id="tool-activity" class="hidden"></div>
+
+      <!-- Planning modal -->
+      <div id="planning-modal" class="hidden">
+        <div id="planning-questions"></div>
+        <div id="planning-actions">
+          <button id="planning-skip">Skip</button>
+          <button id="planning-submit">Send answers</button>
+        </div>
+      </div>
+
+      <!-- Approval modal -->
+      <div id="approval-modal" class="hidden">
+        <div id="approval-content"></div>
+        <div id="approval-actions">
+          <button id="approval-deny">Deny</button>
+          <button id="approval-approve">Approve</button>
+        </div>
+      </div>
+
+      <footer id="input-area">
+        <button id="voice-btn" title="Voice input (Web Speech API)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+            <line x1="12" y1="19" x2="12" y2="23"/>
+            <line x1="8" y1="23" x2="16" y2="23"/>
+          </svg>
+        </button>
+        <textarea
+          id="chat-input"
+          placeholder="Talk to BOWEN..."
+          rows="1"
+          autocomplete="off"
+          spellcheck="false"
+        ></textarea>
+        <button id="send-btn" title="Send (Enter)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="22" y1="2" x2="11" y2="13"/>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+          </svg>
+        </button>
+      </footer>
+    </main>
+  </div>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

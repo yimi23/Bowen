@@ -1,7 +1,7 @@
 # BOWEN — Master Knowledge File
-**Last Updated:** 2026-04-08
-**Location:** `/Volumes/S1/BOWEN/`
-**Status:** Active development. Personal use only. Not for release until perfect.
+**Last Updated:** 2026-04-10
+**Location:** `/Volumes/S1/bowen/`
+**Status:** Active development. Multi-user capable. Praise's instance is primary.
 
 ---
 
@@ -120,37 +120,87 @@ Tables: topics, conversations, messages, memories, tasks, decisions, bible_log, 
 
 ## Current Phase Status
 
+**Last verified:** 2026-04-10
+
 | Phase | Description | Status |
 |-------|-------------|--------|
 | 1 | Multi-agent foundation, routing, message bus | ✅ Complete |
 | 2 | Memory architecture (ChromaDB + SQLite + user_profile.md) | ✅ Complete |
 | 3 | CAPTAIN tools (code, files, shell) + SCOUT tools (search, fetch, parse) | ✅ Complete |
-| 4 | TAMARA tools (Gmail) + HELEN tools (Calendar, Bible, briefing) | ✅ Complete |
-| 5 | Voice pipeline (LiveKit + Groq Whisper STT + ElevenLabs TTS) | 🔲 Not built |
-| 6 | Tauri desktop UI | 🔲 Not built |
+| 4 | TAMARA tools (Gmail) + HELEN tools (Calendar, Bible, briefing) + DEVOPS agent | ✅ Complete |
+| 5 | Voice pipeline (Groq Whisper STT + Kokoro ONNX TTS + openWakeWord) | ✅ Complete |
+| 6 | Tauri desktop UI | 🔲 Not built — TUI (tui.py) is the current interface |
 
 ---
 
-## Known Issues to Fix Before Phase 5
+## Phase 5 Voice Pipeline — Built and Working
 
-1. **AGENT_TIMEOUT not enforced** — defined as 120s but `asyncio.timeout()` never wraps API calls
-2. **Tool executor blocks event loop** — sync Google API calls need `asyncio.to_thread()`
-3. **ChromaDB search blocks event loop** — `memory.search()` needs `asyncio.to_thread()`
-4. **No error boundary in tool_use_loop** — unhandled tool exception crashes the loop
-5. **BOWEN has no tools** — should have `memory_search`, `task_create`, `task_list`, `get_status`
+Architecture changed from original plan. No LiveKit, no ElevenLabs. Fully local.
+
+- **STT:** Groq Whisper (`whisper-large-v3-turbo`) — 98% cheaper than OpenAI, ~200ms latency
+- **TTS:** Kokoro ONNX local model (`am_adam` voice) — Apache 2.0, zero API cost, runs offline
+- **Wake word:** openWakeWord ONNX (`hey_jarvis` as "hey BOWEN" proxy) — <5% CPU at idle
+- **Transport:** Direct sounddevice — half-duplex (mic muted while TTS plays)
+- **Integration:** Voice routes through WebSocket to backend, same path as text input
+
+**Cost:** ~$0/hour for TTS (local). STT costs ~$0.0003/minute via Groq.
+
+**Activate:** `Ctrl+V` in TUI to toggle wake word listening.
+
+**Critical notes:**
+- NEVER use faster-whisper on CPU — 18+ seconds per utterance. Groq Whisper only.
+- Kokoro model files must exist at `voice/kokoro/kokoro-v0_19.onnx` and `voice/kokoro/voices.bin`
+- Cold start takes ~90s due to SentenceTransformer loading from S1 drive
 
 ---
 
-## Phase 5 Voice Pipeline (Designed, Not Built)
+## Sixth Agent: DEVOPS
 
-- **STT:** Groq Whisper (`whisper-large-v3-turbo`) — 98% cheaper than OpenAI Whisper
-- **TTS:** ElevenLabs WebSocket — each agent has a distinct voice ID
-- **VAD:** Silero
-- **Transport:** LiveKit
-- **Half-duplex echo gate:** `is_speaking` boolean prevents agent responding to its own TTS
-- **Critical notes:**
-  - NEVER use faster-whisper on CPU — 18+ seconds per utterance
-  - ElevenLabs WebSocket auto-closes after 20s idle — send `' '` keep-alive every 15s
+Added post-Phase 4. Undocumented until now.
+
+- **Role:** Code review, static analysis, security audit, architecture, pre-deploy checks
+- **Tools:** execute_code, read_file, run_shell, web_fetch (read-only subset of CAPTAIN)
+- **Format:** `[SEVERITY] file:line — issue — fix`. Verdict: `SHIP / NEEDS WORK / DO NOT SHIP`
+- **Route keywords:** review, audit, lint, security scan, pre-deploy check
+
+---
+
+## Multi-User Architecture
+
+BOWEN now supports multiple users. Each user gets isolated memory; all users share the same agent code, tools, and shared knowledge.
+
+**How it works:**
+
+- **Auth:** Each user has an API key (`bwn_<40chars>`). Sent as `?key=<key>` in WebSocket URL. SHA-256 hashed, never stored in plaintext.
+- **User accounts:** `memory/users.db` — managed by `UserManager`. Admin = Praise (bootstrapped from `ADMIN_API_KEY` in `.env`).
+- **Per-user memory:** `memory/users/{user_id}/` — separate `bowen.db`, `chroma/`, `profile.md` per user.
+- **Per-connection agents:** Every WebSocket connection creates fresh agent instances bound to that user's memory. The `MessageBus` is also per-connection.
+- **UserRegistry:** Each connection gets a `UserRegistry` that routes DB-sensitive tools (memory search, task management, calendar) to the correct user's data. Stateless tools (SCOUT web search, DEVOPS analysis) use the global registry.
+- **Shared knowledge:** `memory/shared_knowledge.md` is git-tracked and loaded into ALL users' agent prompts. Grows via `POST /api/admin/knowledge`. This IS the shared brain.
+
+**Admin endpoints** (`X-Admin-Key: <ADMIN_API_KEY>` header required):
+- `POST /api/admin/users` — create user, get API key once
+- `GET /api/admin/users` — list all users
+- `POST /api/admin/users/{id}/regen` — regenerate key
+- `GET /api/admin/users/active` — currently connected users
+- `POST /api/admin/knowledge` — add entry to shared_knowledge.md
+- `GET /api/admin/knowledge` — read current shared knowledge
+
+**Legacy migration:** Praise's existing data at `memory/bowen.db` is automatically copied to `memory/users/usr_admin/` on first start.
+
+**Shared brain model:** Improving the agent code, tools, or prompts benefits ALL users. Adding to `shared_knowledge.md` shares insights across all users. Git tracks it all.
+
+---
+
+## Known Issues — All Resolved
+
+All five pre-Phase 5 issues have been fixed in the current codebase:
+
+1. ~~AGENT_TIMEOUT not enforced~~ — fixed: `asyncio.timeout()` wraps both stream_response and tool_use_loop
+2. ~~Tool executor blocks event loop~~ — fixed: `asyncio.to_thread()` in base.py tool_use_loop
+3. ~~ChromaDB search blocks event loop~~ — fixed: `asyncio.to_thread()` in build_system_prompt
+4. ~~No error boundary in tool_use_loop~~ — fixed: per-tool try/except + outer error boundary
+5. ~~BOWEN has no tools~~ — fixed: memory_search, task_create, task_list in bowen_tools.py
 
 ---
 

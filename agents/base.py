@@ -23,6 +23,7 @@ import logging
 import hashlib
 from abc import ABC, abstractmethod
 from collections import OrderedDict
+from pathlib import Path
 from typing import Optional, Callable, Awaitable, Any
 
 import anthropic
@@ -75,12 +76,28 @@ def _cache_set(key: tuple, prompt: str) -> None:
         _PROMPT_CACHE.popitem(last=False)
 
 
+_SHARED_KNOWLEDGE_PATH = Path(__file__).parent.parent / "memory" / "shared_knowledge.md"
+
+
+def _load_shared_knowledge() -> str:
+    """Load shared_knowledge.md if it exists. Cached after first read per process."""
+    if not _SHARED_KNOWLEDGE_PATH.exists():
+        return ""
+    return _SHARED_KNOWLEDGE_PATH.read_text(errors="replace").strip()
+
+
 class BaseAgent(ABC):
     name: str
     voice_style: str
     model_override: Optional[str] = None
 
-    def __init__(self, config: Config, memory: MemoryStore, bus: MessageBus) -> None:
+    def __init__(
+        self,
+        config: Config,
+        memory: MemoryStore,
+        bus: MessageBus,
+        user_registry=None,
+    ) -> None:
         self.config = config
         self.memory = memory
         self.bus = bus
@@ -89,6 +106,23 @@ class BaseAgent(ABC):
         self._session_id: Optional[str] = None
         self._topic_id: str = "default"
         self._turn: int = 0
+        self._user_registry = user_registry  # UserRegistry | None
+
+    # ── Tool helpers ──────────────────────────────────────────────────────────
+
+    def _call_tool(self, agent_name: str, tool_name: str, **kwargs):
+        """Call a tool, preferring user-specific registry over global."""
+        if self._user_registry is not None:
+            return self._user_registry.call_tool(agent_name, tool_name, **kwargs)
+        import tools.registry as _reg
+        return _reg.call_tool(agent_name, tool_name, **kwargs)
+
+    def _get_schemas(self, agent_name: str) -> list[dict]:
+        """Get tool schemas, preferring user-specific registry over global."""
+        if self._user_registry is not None:
+            return self._user_registry.get_schemas(agent_name)
+        import tools.registry as _reg
+        return _reg.get_schemas(agent_name)
 
     # ── Identity ──────────────────────────────────────────────────────────────
 
@@ -134,9 +168,13 @@ class BaseAgent(ABC):
 
         topic_instructions = (topic or {}).get("instructions", "")
 
+        shared = _load_shared_knowledge()
+
         parts = [self.base_identity]
         if topic_instructions:
             parts.append(f"## Topic Context\n{topic_instructions}")
+        if shared:
+            parts.append(f"## Shared Knowledge\n{shared}")
         if core:
             parts.append(f"## User Profile\n{core}")
         if retrieved:

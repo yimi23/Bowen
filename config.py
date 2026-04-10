@@ -27,21 +27,12 @@ class Config:
     BRAVE_API_KEY: str = os.getenv("BRAVE_API_KEY", "")    # Phase 6 optional backup
 
     # ── Voice (Phase 5) ───────────────────────────────────────────────────────
-    ELEVENLABS_API_KEY: str = os.getenv("ELEVENLABS_API_KEY", "")
-    DEEPGRAM_API_KEY: str = os.getenv("DEEPGRAM_API_KEY", "")
-    VOICE_IDS: dict[str, str] = {
-        # Each agent has a distinct ElevenLabs voice for personality
-        "BOWEN":   os.getenv("ELEVENLABS_VOICE_BOWEN", ""),
-        "CAPTAIN": os.getenv("ELEVENLABS_VOICE_CAPTAIN", ""),
-        "SCOUT":   os.getenv("ELEVENLABS_VOICE_SCOUT", ""),
-        "TAMARA":  os.getenv("ELEVENLABS_VOICE_TAMARA", ""),
-        "HELEN":   os.getenv("ELEVENLABS_VOICE_HELEN", ""),
-    }
-
-    # ── LiveKit (Phase 5) ─────────────────────────────────────────────────────
-    LIVEKIT_URL: str = os.getenv("LIVEKIT_URL", "")
-    LIVEKIT_API_KEY: str = os.getenv("LIVEKIT_API_KEY", "")
-    LIVEKIT_API_SECRET: str = os.getenv("LIVEKIT_API_SECRET", "")
+    # TTS: Kokoro ONNX local model (Apache 2.0, zero API cost)
+    # STT: Groq Whisper (uses GROQ_API_KEY above)
+    # Wake word: openWakeWord ONNX (fully local, <5% CPU)
+    KOKORO_VOICE: str = os.getenv("KOKORO_VOICE", "am_adam")      # deep male voice
+    KOKORO_SPEED: float = float(os.getenv("KOKORO_SPEED", "0.95"))
+    KOKORO_MODEL_DIR: Path = BASE_DIR / "voice" / "kokoro"
 
     # ── Storage (future) ──────────────────────────────────────────────────────
     SUPABASE_URL: str = os.getenv("SUPABASE_URL", "")
@@ -75,6 +66,15 @@ class Config:
     USER_NAME: str = os.getenv("USER_NAME", "Praise Oyimi")
     USER_TIMEZONE: str = os.getenv("USER_TIMEZONE", "America/Detroit")
 
+    # ── Multi-user ────────────────────────────────────────────────────────────
+    # ADMIN_API_KEY: Praise's personal API key — also used to bootstrap the admin account.
+    # Set this in .env. All other users get keys via POST /api/admin/users.
+    ADMIN_API_KEY: str = os.getenv("ADMIN_API_KEY", "")
+    # USERS_BASE_DIR: where per-user memory directories live
+    USERS_BASE_DIR: Path = BASE_DIR / "memory" / "users"
+    # USERS_DB_PATH: user account registry (separate from personal memory)
+    USERS_DB_PATH: Path = BASE_DIR / "memory" / "users.db"
+
     # ── Routing ───────────────────────────────────────────────────────────────
     # If Groq misroutes > 10% of inputs, add semantic-router as Tier 1.5
     MISROUTE_THRESHOLD: float = 0.10
@@ -104,13 +104,16 @@ class Config:
 
     def status(self) -> dict[str, bool]:
         """Show which optional services are configured. Useful for diagnostics."""
+        kokoro_ready = (
+            (self.KOKORO_MODEL_DIR / "kokoro-v0_19.onnx").exists()
+            and (self.KOKORO_MODEL_DIR / "voices.bin").exists()
+        )
         return {
-            "anthropic":  bool(self.ANTHROPIC_API_KEY),
-            "groq":       bool(self.GROQ_API_KEY),
-            "tavily":     bool(self.TAVILY_API_KEY),
-            "elevenlabs": bool(self.ELEVENLABS_API_KEY),
-            "voice_ids":  all(self.VOICE_IDS.values()),
-            "livekit":    bool(self.LIVEKIT_URL and self.LIVEKIT_API_KEY),
-            "supabase":   bool(self.SUPABASE_URL),
-            "google":     self.GOOGLE_CREDENTIALS_PATH.exists(),
+            "anthropic": bool(self.ANTHROPIC_API_KEY),
+            "groq":      bool(self.GROQ_API_KEY),
+            "tavily":    bool(self.TAVILY_API_KEY),
+            "tts_kokoro": kokoro_ready,
+            "stt_groq":  bool(self.GROQ_API_KEY),
+            "supabase":  bool(self.SUPABASE_URL),
+            "google":    self.GOOGLE_CREDENTIALS_PATH.exists(),
         }

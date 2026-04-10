@@ -14,11 +14,13 @@ from memory.store import MemoryStore
 from bus.message_bus import MessageBus
 from agents.bowen import BOWENAgent
 from agents.captain import CaptainAgent
+from agents.devops import DevOpsAgent
 from agents.scout import ScoutAgent
 from agents.tamara import TamaraAgent
 from agents.helen import HelenAgent
 from scheduler.jobs import build_scheduler, wire_helen_jobs
 from memory.pipeline import run_sleep_pipeline
+from agents.planner import Planner, build_enriched_prompt
 import tools.registry as registry
 
 
@@ -134,6 +136,7 @@ async def main() -> None:
     agents = {
         "BOWEN":   BOWENAgent(config, memory, bus),
         "CAPTAIN": CaptainAgent(config, memory, bus),
+        "DEVOPS":  DevOpsAgent(config, memory, bus),
         "SCOUT":   ScoutAgent(config, memory, bus),
         "TAMARA":  TamaraAgent(config, memory, bus),
         "HELEN":   HelenAgent(config, memory, bus),
@@ -205,10 +208,30 @@ async def main() -> None:
             print(f"  [router] Routing error: {e}. Defaulting to BOWEN.")
             target_name = "BOWEN"
 
+        # ── Planning layer (CAPTAIN + SCOUT only) ─────────────────────────────
+        enriched_input = user_input
+        if target_name in {"CAPTAIN", "SCOUT"}:
+            planner_obj = Planner(config.ANTHROPIC_API_KEY, config.HAIKU_MODEL)
+            clarity = await planner_obj.classify(user_input)
+            if clarity == "vague":
+                questions = await planner_obj.get_questions(user_input)
+                if questions:
+                    print("\n\033[33m[BOWEN] A few questions before I start:\033[0m")
+                    qa_pairs = []
+                    for q in questions:
+                        print(f"\n  {q}")
+                        try:
+                            answer = input("  → ").strip()
+                        except (EOFError, KeyboardInterrupt):
+                            answer = ""
+                        qa_pairs.append((q, answer))
+                    context = Planner.gather_context()
+                    enriched_input = build_enriched_prompt(user_input, qa_pairs, context)
+
         # Agent responds — capped at 120s for long tool-use chains (e.g. CAPTAIN building a feature)
         try:
             async with asyncio.timeout(120):
-                await agents[target_name].respond(user_input)
+                await agents[target_name].respond(enriched_input)
         except asyncio.TimeoutError:
             print(f"\n  [{target_name}] Response timed out after 120s.")
         except Exception as e:

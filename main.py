@@ -30,9 +30,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from core.logging import setup_logging
 from config import Config
 from memory.store import MemoryStore
+from memory.users import UserManager
+from memory.multi_store import MultiUserStore
 from bus.message_bus import MessageBus
 from agents.bowen import BOWENAgent
 from agents.captain import CaptainAgent
+from agents.constants import AgentName
+from agents.devops import DevOpsAgent
 from agents.scout import ScoutAgent
 from agents.tamara import TamaraAgent
 from agents.helen import HelenAgent
@@ -45,6 +49,7 @@ from api.gateway import router as ws_router
 from api.health import router as health_router
 from api.memory import router as memory_router
 from api.topics import router as topics_router
+from api.admin import router as admin_router
 
 # Initialize logging immediately — before anything else logs
 setup_logging(log_level="INFO", log_file="logs/bowen.log")
@@ -66,46 +71,69 @@ async def lifespan(app: FastAPI):
     if missing:
         raise RuntimeError(f"Missing required env vars: {', '.join(missing)}")
 
-    # Memory layer — must open before agents (agents read profile on first respond)
-    memory = MemoryStore(config.DB_PATH, config.CHROMA_PATH)
-    memory.set_profile_path(config.PROFILE_PATH)
-    await memory.initialize()
+    # User manager — user accounts + API key auth
+    user_manager = UserManager(config.USERS_DB_PATH)
+    await user_manager.initialize()
 
-    # Tool registry — binds API keys into closures, must precede agent instantiation
+    # Bootstrap admin user (Praise) from .env key — idempotent
+    if config.ADMIN_API_KEY:
+        await user_manager.create_admin(
+            username="praise",
+            display_name="Praise Oyimi",
+            api_key=config.ADMIN_API_KEY,
+        )
+
+    # Per-user memory store factory
+    multi_store = MultiUserStore(config.USERS_BASE_DIR, config)
+
+    # Pre-warm admin user's memory (Praise's session — migration happens here if needed)
+    if config.ADMIN_API_KEY:
+        await multi_store.get_or_create("usr_admin", "praise", "Praise Oyimi")
+
+    # Shared global tool registry (stateless tools: SCOUT web search, DEVOPS analysis)
     registry.initialize(
         brave_api_key=config.BRAVE_API_KEY,
         google_credentials_path=config.GOOGLE_CREDENTIALS_PATH,
         google_token_path=config.GOOGLE_TOKEN_PATH,
-        db_path=config.DB_PATH,
+        db_path=config.DB_PATH,       # fallback DB for legacy single-user mode
         user_timezone=config.USER_TIMEZONE,
-        memory_store=memory,
+        memory_store=None,            # per-user memory bound at connection time
     )
+
+    # Admin memory + agents used by scheduler jobs (HELEN briefing, etc.)
+    admin_memory = multi_store.get_cached("usr_admin")
+    if admin_memory is None:
+        admin_memory = MemoryStore(config.DB_PATH, config.CHROMA_PATH)
+        admin_memory.set_profile_path(config.PROFILE_PATH)
+        await admin_memory.initialize()
 
     bus = MessageBus()
 
-    agents = {
-        "BOWEN":   BOWENAgent(config, memory, bus),
-        "CAPTAIN": CaptainAgent(config, memory, bus),
-        "SCOUT":   ScoutAgent(config, memory, bus),
-        "TAMARA":  TamaraAgent(config, memory, bus),
-        "HELEN":   HelenAgent(config, memory, bus),
+    # Scheduler agents use admin memory (Praise's calendar, Bible, etc.)
+    scheduler_agents = {
+        "HELEN": HelenAgent(config, admin_memory, bus),
     }
 
     # Scheduler: nightly consolidation (no agents) + HELEN jobs (agent-dependent)
-    scheduler = build_scheduler(config, memory)
-    wire_helen_jobs(scheduler, agents["HELEN"], config)
+    scheduler = build_scheduler(config, admin_memory)
+    wire_helen_jobs(scheduler, scheduler_agents["HELEN"], config)
     scheduler.start()
 
     # Keep-alive: background pings Anthropic, ChromaDB, Groq every 60s
-    keep_alive.start(config, memory)
+    keep_alive.start(config, admin_memory)
 
     # Store on app.state for router access
     app.state.config = config
-    app.state.memory = memory
+    app.state.user_manager = user_manager
+    app.state.multi_store = multi_store
+    app.state.admin_memory = admin_memory
     app.state.bus = bus
-    app.state.agents = agents
     app.state.scheduler = scheduler
     app.state.keep_alive = keep_alive
+
+    # Expose a synthetic agents dict for health endpoint compatibility
+    app.state.agents = {name: None for name in AgentName.ALL}
+    app.state.memory = admin_memory  # health endpoint compat
 
     import logging
     logging.getLogger(__name__).info("BOWEN server online", extra={
@@ -121,7 +149,8 @@ async def lifespan(app: FastAPI):
     # Shutdown
     keep_alive.stop()
     scheduler.shutdown(wait=False)
-    await memory.close()
+    await multi_store.close_all()
+    await user_manager.close()
     logging.getLogger(__name__).info("BOWEN server shut down cleanly")
     print("\n[BOWEN] Server shut down cleanly.")
 
@@ -149,3 +178,4 @@ app.include_router(health_router)
 app.include_router(ws_router)
 app.include_router(memory_router)
 app.include_router(topics_router)
+app.include_router(admin_router)

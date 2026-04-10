@@ -6,6 +6,7 @@ Google API calls are synchronous. They're executed inside tool_use_loop (also sy
 For Phase 5 async contexts outside tool_use_loop, wrap with asyncio.to_thread().
 """
 
+import logging
 import sqlite3
 from datetime import datetime, date, timedelta, timezone
 from pathlib import Path
@@ -13,6 +14,8 @@ from typing import Any
 from zoneinfo import ZoneInfo
 
 from tools.google_auth import build_calendar, google_configured
+
+logger = logging.getLogger(__name__)
 
 
 HELEN_TOOL_SCHEMAS = [
@@ -375,8 +378,13 @@ def daily_briefing(
                 "WHERE status != 'done' ORDER BY created_at DESC LIMIT 10"
             ).fetchall()
             open_tasks = [{"title": r[0], "agent": r[1], "status": r[2]} for r in rows]
-    except Exception:
-        pass
+    except sqlite3.Error as e:
+        logger.warning("daily_briefing: failed to fetch open tasks: %s", e)
+    except Exception as e:
+        logger.error(
+            "daily_briefing: unexpected error fetching tasks: %s: %s",
+            type(e).__name__, e,
+        )
 
     return {
         "success": True,

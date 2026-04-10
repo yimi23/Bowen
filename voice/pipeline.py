@@ -64,7 +64,7 @@ class VoicePipeline:
         self.on_transcript = on_transcript
         self.on_response = on_response
 
-        self.tts = TTSEngine(voice="am_adam", speed=0.95)
+        self.tts = TTSEngine(config=config)
         self.stt = STTEngine(api_key=config.GROQ_API_KEY)
         self.wake = WakeWordDetector(callback=self._on_wake)
 

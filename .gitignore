@@ -17,6 +17,11 @@ env/
 ENV/
 bowen_env/
 
+# ── Node / frontend ───────────────────────────────────────────────────────────
+node_modules/
+frontend/dist/
+frontend/src/*.js
+
 # ── Python bytecode ───────────────────────────────────────────────────────────
 __pycache__/
 *.py[cod]
@@ -31,8 +36,11 @@ memory/bowen.db
 memory/bowen.db-journal
 memory/chroma/
 memory/chroma_mem0/
+memory/users/
 bowen_data/
 *.db
+*.db-shm
+*.db-wal
 *.db-journal
 *.sqlite
 *.sqlite3

@@ -6,11 +6,13 @@ routing/tier1.py — Tier 1 Regex Router.
 import re
 from typing import Optional
 
+from agents.constants import AgentName
+
 
 # Patterns ordered by specificity. First match wins.
 # BOWEN direct-address must come FIRST — prevents sub-agent misroute on "hey BOWEN..."
 ROUTING_PATTERNS: list[tuple[str, re.Pattern]] = [
-    ("BOWEN", re.compile(
+    (AgentName.BOWEN, re.compile(
         r"""
         (^/bowen\b)             |
         (^@bowen\b)             |
@@ -19,7 +21,7 @@ ROUTING_PATTERNS: list[tuple[str, re.Pattern]] = [
         """,
         re.IGNORECASE | re.VERBOSE
     )),
-    ("CAPTAIN", re.compile(
+    (AgentName.CAPTAIN, re.compile(
         r"""
         (^/code\b)              |   # slash command
         (^@captain\b)           |   # mention
@@ -29,7 +31,7 @@ ROUTING_PATTERNS: list[tuple[str, re.Pattern]] = [
         """,
         re.IGNORECASE | re.VERBOSE
     )),
-    ("HELEN", re.compile(
+    (AgentName.HELEN, re.compile(
         r"""
         (^/calendar\b)          |
         (^@helen\b)             |
@@ -40,7 +42,7 @@ ROUTING_PATTERNS: list[tuple[str, re.Pattern]] = [
         """,
         re.IGNORECASE | re.VERBOSE
     )),
-    ("SCOUT", re.compile(
+    (AgentName.SCOUT, re.compile(
         r"""
         (^/search\b)            |
         (^@scout\b)             |
@@ -50,12 +52,27 @@ ROUTING_PATTERNS: list[tuple[str, re.Pattern]] = [
         """,
         re.IGNORECASE | re.VERBOSE
     )),
-    ("TAMARA", re.compile(
+    (AgentName.TAMARA, re.compile(
         r"""
         (^/email\b)             |
         (^@tamara\b)            |
         \b(email|gmail|inbox|send\s+a\s+message|draft|
            check\s+my\s+(email|mail)|whatsapp|message\s+\w+)
+        """,
+        re.IGNORECASE | re.VERBOSE
+    )),
+    (AgentName.DEVOPS, re.compile(
+        r"""
+        (^/review\b)            |   # slash command
+        (^/audit\b)             |
+        (^@devops\b)            |   # mention
+        \b(code\s+review|review\s+(the\s+)?(code|pr|pull\s+request)|
+           audit|lint|run\s+(ruff|mypy|eslint|tsc)|type\s+check|
+           security\s+(scan|audit|check)|static\s+analysis|
+           check\s+(for\s+)?(bugs|vulnerabilities|issues)|
+           performance\s+(review|audit|check)|
+           pre.?deploy\s+check|dockerfile|ci\s+pipeline|
+           is\s+(this\s+)?safe\s+to\s+(ship|deploy|merge))
         """,
         re.IGNORECASE | re.VERBOSE
     )),

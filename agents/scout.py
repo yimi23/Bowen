@@ -11,7 +11,6 @@ from config import Config
 from memory.store import MemoryStore
 from bus.message_bus import MessageBus
 from bus.schema import AgentMessage, ChainPayload, ResearchResponsePayload
-import tools.registry as registry
 
 
 CHAIN_TRIGGER_PHRASES = [
@@ -25,8 +24,8 @@ class ScoutAgent(BaseAgent):
     name = "SCOUT"
     voice_style = "Clear, neutral. Analytical cadence. Speaks in findings."
 
-    def __init__(self, config: Config, memory: MemoryStore, bus: MessageBus) -> None:
-        super().__init__(config, memory, bus)
+    def __init__(self, config: Config, memory: MemoryStore, bus: MessageBus, user_registry=None) -> None:
+        super().__init__(config, memory, bus, user_registry)
         self._model = config.SONNET_MODEL
 
     @property
@@ -54,15 +53,16 @@ class ScoutAgent(BaseAgent):
 
     @property
     def allowed_tools(self) -> list[str]:
-        return registry.TOOL_REGISTRY["SCOUT"]
+        from tools.registry import TOOL_REGISTRY
+        return TOOL_REGISTRY["SCOUT"]
 
     def _execute_tool(self, tool_name: str, **kwargs) -> dict:
-        return registry.call_tool("SCOUT", tool_name, **kwargs)
+        return self._call_tool("SCOUT", tool_name, **kwargs)
 
     async def respond(self, user_text: str, send: SendFn = None) -> str:
         """Tool-use loop for SCOUT — searches, fetches, chains to CAPTAIN if needed."""
         history = await self.memory.get_recent_history(self._session_id, n=10) if self._session_id else []
-        schemas = registry.get_schemas("SCOUT")
+        schemas = self._get_schemas("SCOUT")
 
         response = await self.tool_use_loop(
             user_text=user_text,

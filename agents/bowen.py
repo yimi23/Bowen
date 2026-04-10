@@ -14,7 +14,6 @@ from memory.store import MemoryStore
 from bus.message_bus import MessageBus
 from bus.schema import AgentMessage, TextPayload, ApprovalRequestPayload
 from routing import tier1_route, tier2_route
-import tools.registry as registry
 
 
 class BOWENAgent(BaseAgent):
@@ -68,13 +67,13 @@ class BOWENAgent(BaseAgent):
             await self.memory.get_recent_history(self._session_id, n=10)
             if self._session_id else []
         )
-        bowen_tools = registry.get_schemas("BOWEN")
+        bowen_tools = self._get_schemas("BOWEN")
         if not bowen_tools:
             # Tools not initialized (no db_path / memory_store at startup) — fall back to plain streaming
             return await self.stream_response(user_text, history=history, send=send)
 
         def executor(tool_name: str, **kwargs):
-            return registry.call_tool("BOWEN", tool_name, **kwargs)
+            return self._call_tool("BOWEN", tool_name, **kwargs)
 
         return await self.tool_use_loop(
             user_text,

@@ -121,6 +121,18 @@ CREATE TABLE IF NOT EXISTS bible_log (
     passage     TEXT DEFAULT '',
     logged_at   TEXT
 );
+
+CREATE TABLE IF NOT EXISTS dispatches (
+    id          TEXT PRIMARY KEY,
+    title       TEXT NOT NULL,
+    agent       TEXT NOT NULL,
+    status      TEXT DEFAULT 'pending',
+    description TEXT DEFAULT '',
+    result      TEXT DEFAULT '',
+    topic_id    TEXT DEFAULT 'default',
+    created_at  TEXT NOT NULL,
+    updated_at  TEXT NOT NULL
+);
 """
 
 SEED_DATA = """
@@ -464,13 +476,14 @@ class MemoryStore:
         """Sync — called from consolidator which runs in async job context."""
         import sqlite3 as _sqlite3
         conn = _sqlite3.connect(self._db_path)
-        conn.row_factory = _sqlite3.Row
-        cursor = conn.execute(
-            "SELECT chroma_id, content, importance, created_at, last_accessed, access_count, topic_id FROM memories"
-        )
-        rows = [dict(r) for r in cursor.fetchall()]
-        conn.close()
-        return rows
+        try:
+            conn.row_factory = _sqlite3.Row
+            cursor = conn.execute(
+                "SELECT chroma_id, content, importance, created_at, last_accessed, access_count, topic_id FROM memories"
+            )
+            return [dict(r) for r in cursor.fetchall()]
+        finally:
+            conn.close()
 
     async def delete_memory(self, chroma_id: str) -> None:
         self._collection.delete(ids=[chroma_id])
@@ -628,6 +641,35 @@ class MemoryStore:
             "conversations": convs[0]["n"] if convs else 0,
             "files_generated": files[0]["n"] if files else 0,
         }
+
+    # ── Dispatches ────────────────────────────────────────────────────────────
+
+    async def create_dispatch(
+        self,
+        title: str,
+        agent: str,
+        description: str = "",
+        topic_id: str = "default",
+    ) -> str:
+        """Create a tracked dispatch. Returns dispatch_id (UUID)."""
+        dispatch_id = str(uuid.uuid4())
+        await self._exec(
+            "INSERT INTO dispatches (id, title, agent, description, topic_id, created_at, updated_at) VALUES (?,?,?,?,?,?,?)",
+            (dispatch_id, title, agent, description, topic_id, _now(), _now()),
+        )
+        return dispatch_id
+
+    async def update_dispatch_status(self, dispatch_id: str, status: str, result: str = "") -> None:
+        await self._exec(
+            "UPDATE dispatches SET status = ?, result = ?, updated_at = ? WHERE id = ?",
+            (status, result, _now(), dispatch_id),
+        )
+
+    async def get_recent_dispatches(self, limit: int = 20) -> list[dict]:
+        return await self._query(
+            "SELECT * FROM dispatches ORDER BY created_at DESC LIMIT ?",
+            (limit,),
+        )
 
     async def close(self) -> None:
         if self._db:

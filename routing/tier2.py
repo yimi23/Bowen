@@ -8,9 +8,13 @@ This avoids parsing free-text responses — we always get a clean agent name.
 """
 
 import json
+import logging
 from groq import AsyncGroq
 import anthropic
 from utils.rate_limiter import groq_limiter, anthropic_limiter
+from agents.constants import AgentName
+
+logger = logging.getLogger(__name__)
 
 # ── Tool schemas for Groq (OpenAI function-calling format) ────────────────────
 # Each "function" represents routing to one agent.
@@ -91,6 +95,24 @@ AGENT_TOOLS_GROQ = [
     {
         "type": "function",
         "function": {
+            "name": "route_to_DEVOPS",
+            "description": (
+                "Route to DEVOPS when the user wants: code reviewed for bugs, security, or performance; "
+                "linting or static analysis run; architecture audited; pre-deploy checks; "
+                "Dockerfile or CI pipeline reviewed; vulnerability scan."
+            ),
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "reason": {"type": "string", "description": "Why DEVOPS is the right agent"}
+                },
+                "required": ["reason"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
             "name": "route_to_BOWEN",
             "description": (
                 "Route to BOWEN when the task requires orchestration across multiple agents, "
@@ -141,19 +163,25 @@ AGENT_TOOLS_ANTHROPIC = [
         "input_schema": {"type": "object", "properties": {"reason": {"type": "string"}}, "required": ["reason"]}
     },
     {
+        "name": "route_to_DEVOPS",
+        "description": "Route to DEVOPS for code review, security audit, linting, static analysis, pre-deploy checks.",
+        "input_schema": {"type": "object", "properties": {"reason": {"type": "string"}}, "required": ["reason"]}
+    },
+    {
         "name": "route_to_BOWEN",
         "description": "Route to BOWEN for orchestration, strategy, general conversation, or no clear fit.",
         "input_schema": {"type": "object", "properties": {"reason": {"type": "string"}}, "required": ["reason"]}
     },
 ]
 
-# Maps function name → agent name
+# Maps function name → agent name (using constants — no magic strings)
 TOOL_TO_AGENT = {
-    "route_to_CAPTAIN": "CAPTAIN",
-    "route_to_SCOUT":   "SCOUT",
-    "route_to_TAMARA":  "TAMARA",
-    "route_to_HELEN":   "HELEN",
-    "route_to_BOWEN":   "BOWEN",
+    "route_to_CAPTAIN": AgentName.CAPTAIN,
+    "route_to_SCOUT":   AgentName.SCOUT,
+    "route_to_TAMARA":  AgentName.TAMARA,
+    "route_to_HELEN":   AgentName.HELEN,
+    "route_to_DEVOPS":  AgentName.DEVOPS,
+    "route_to_BOWEN":   AgentName.BOWEN,
 }
 
 ROUTING_SYSTEM = (
@@ -175,11 +203,18 @@ async def route(
     """
     if groq_api_key:
         try:
-            return await _route_groq(text, groq_api_key)
-        except Exception:
-            pass  # Groq failed (quota, network, etc.) — fall through to Anthropic
+            result = await _route_groq(text, groq_api_key)
+            logger.debug("Routed via Groq", extra={"agent": result[0], "reason": result[1][:60]})
+            return result
+        except Exception as exc:
+            logger.warning(
+                "Groq routing failed — falling back to Anthropic Haiku",
+                extra={"err": f"{type(exc).__name__}: {str(exc)[:120]}"},
+            )
 
-    return await _route_anthropic(text, anthropic_client, anthropic_model)
+    result = await _route_anthropic(text, anthropic_client, anthropic_model)
+    logger.debug("Routed via Anthropic", extra={"agent": result[0], "reason": result[1][:60]})
+    return result
 
 
 async def _route_groq(text: str, api_key: str) -> tuple[str, str]:
@@ -212,8 +247,9 @@ async def _route_groq(text: str, api_key: str) -> tuple[str, str]:
             reason = ""
         return agent, reason
 
-    # Should never happen with tool_choice="required", but handle defensively
-    return "BOWEN", "groq-fallback"
+    # Should never happen with tool_choice="required"
+    logger.error("Groq returned no tool calls despite tool_choice=required — defaulting to BOWEN")
+    return AgentName.BOWEN, "groq-fallback"
 
 
 async def _route_anthropic(
@@ -240,4 +276,5 @@ async def _route_anthropic(
             reason = block.input.get("reason", "")
             return agent, reason
 
-    return "BOWEN", "anthropic-fallback"
+    logger.error("Anthropic returned no tool calls despite tool_choice=any — defaulting to BOWEN")
+    return AgentName.BOWEN, "anthropic-fallback"

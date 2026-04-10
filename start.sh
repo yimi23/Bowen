@@ -1,7 +1,8 @@
 #!/bin/bash
 # start.sh — Boot BOWEN
-# Usage: ./start.sh [--tui | --server | --cli]
+# Usage: ./start.sh [--tui | --ui | --server | --cli]
 #   ./start.sh          → FastAPI backend + Textual TUI (default)
+#   ./start.sh --ui     → FastAPI backend + Vite browser UI (http://localhost:5173)
 #   ./start.sh --server → FastAPI backend only (headless, for API use)
 #   ./start.sh --cli    → Raw terminal loop (no WebSocket, no TUI)
 
@@ -42,6 +43,43 @@ case "$MODE" in
         echo "Starting BOWEN FastAPI backend on http://localhost:8000"
         echo "WebSocket at ws://localhost:8000/ws/chat"
         .venv/bin/uvicorn main:app --host 127.0.0.1 --port 8000
+        ;;
+
+    --ui)
+        # Browser UI mode: start backend + Vite dev server
+        echo "Starting BOWEN backend (logs → /tmp/bowen_server.log)..."
+        .venv/bin/uvicorn main:app --host 127.0.0.1 --port 8000 > /tmp/bowen_server.log 2>&1 &
+        BACKEND_PID=$!
+
+        echo "Waiting for backend to be ready (cold start can take ~90s)..."
+        for i in $(seq 1 240); do
+            if curl -s http://localhost:8000/api/health > /dev/null 2>&1; then
+                echo "Backend ready."
+                break
+            fi
+            sleep 0.5
+            if [ $((i % 60)) -eq 0 ]; then
+                echo "  Still loading... ($(echo "scale=0; $i/2" | bc)s elapsed)"
+            fi
+        done
+
+        if ! curl -s http://localhost:8000/api/health > /dev/null 2>&1; then
+            echo "ERROR: Backend failed to start within 120s. Check /tmp/bowen_server.log"
+            kill $BACKEND_PID 2>/dev/null
+            exit 1
+        fi
+
+        trap "echo 'Shutting down BOWEN...'; kill $BACKEND_PID 2>/dev/null; exit 0" INT TERM
+
+        # Check if frontend node_modules exists, install if not
+        if [ ! -d "frontend/node_modules" ]; then
+            echo "Installing frontend dependencies (first run)..."
+            cd frontend && npm install && cd ..
+        fi
+
+        echo "BOWEN UI starting at http://localhost:5173"
+        cd frontend && npm run dev
+        kill $BACKEND_PID 2>/dev/null
         ;;
 
     --tui|*)

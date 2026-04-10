@@ -1,17 +1,20 @@
 """
 memory/pipeline.py — Sleep-time extraction pipeline.
-Fires 5 minutes after session ends. Uses Haiku to extract facts.
+Fires after session ends. Uses Haiku to extract facts.
 Updates ChromaDB + user_profile.md. Decouples memory quality from response latency.
 This is the Letta/MemGPT pattern.
 """
 
 import json
 import asyncio
+import logging
 from typing import Optional
 
 import anthropic
 
 from memory.store import MemoryStore
+
+logger = logging.getLogger(__name__)
 
 
 EXTRACTION_SYSTEM = """
@@ -86,7 +89,17 @@ class SleepTimeAgent:
                     tags=mem.get("tags", []),
                 )
                 stored += 1
-            except Exception:
+            except (ValueError, KeyError) as e:
+                logger.warning(
+                    "Skipping malformed memory entry: %s: %s",
+                    type(e).__name__, e,
+                )
+                continue
+            except Exception as e:
+                logger.error(
+                    "Failed to write memory to store: %s: %s",
+                    type(e).__name__, e,
+                )
                 continue
 
         # Refresh user_profile.md with high-importance memories
@@ -114,7 +127,17 @@ class SleepTimeAgent:
                 if text.startswith("json"):
                     text = text[4:]
             return json.loads(text)
-        except Exception:
+        except json.JSONDecodeError as e:
+            logger.warning("Memory extraction: invalid JSON in model response: %s", e)
+            return []
+        except anthropic.APIError as e:
+            logger.warning("Memory extraction: Anthropic API error: %s", e)
+            return []
+        except Exception as e:
+            logger.error(
+                "Memory extraction: unexpected error: %s: %s",
+                type(e).__name__, e,
+            )
             return []
 
     async def _refresh_profile(self, new_memories: list[dict]) -> None:
@@ -143,12 +166,20 @@ class SleepTimeAgent:
             updated = response.content[0].text.strip()
             if updated and len(updated) > 200:  # sanity check
                 self._memory.update_core_memory(updated)
-        except Exception:
-            pass
+        except anthropic.APIError as e:
+            logger.warning("Profile refresh: Anthropic API error: %s", e)
+        except Exception as e:
+            logger.error(
+                "Profile refresh: unexpected error: %s: %s",
+                type(e).__name__, e,
+            )
 
 
 async def run_sleep_pipeline(memory: MemoryStore, session_id: str, api_key: str, model: str) -> None:
-    """Convenience function — called by scheduler 5 min after session ends."""
+    """Convenience function — called by gateway after session ends."""
     agent = SleepTimeAgent(memory, api_key, model)
     count = await agent.run(session_id)
-    print(f"  [sleep-time] Extracted {count} memories from session {session_id[:8]}...")
+    logger.info(
+        "Sleep pipeline complete",
+        extra={"session_id": session_id[:8], "memories_extracted": count},
+    )

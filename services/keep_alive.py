@@ -95,7 +95,11 @@ class KeepAliveService:
         try:
             import anthropic
             client = anthropic.AsyncAnthropic(api_key=self._config.ANTHROPIC_API_KEY)
-            await client.models.list()
+            # count_tokens is a lightweight preflight — bills input tokens only (negligible cost)
+            await client.messages.count_tokens(
+                model=self._config.HAIKU_MODEL,
+                messages=[{"role": "user", "content": "ping"}],
+            )
             status.healthy = True
             status.last_error = ""
         except Exception as exc:
