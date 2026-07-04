@@ -74,6 +74,24 @@ export function startAssistantMessage(agent: string): string {
   return id
 }
 
+export function showThinking(agent: string): void {
+  // Remi's streaming placeholder: visible "thinking" state the moment the
+  // user sends, replaced in place by the first streamed chunk. Raw stays
+  // empty so the empty-stream rule (backfill or remove) still governs it.
+  if (currentAssistantEl) return
+  startAssistantMessage(agent)
+  if (currentAssistantEl) {
+    ;(currentAssistantEl as HTMLElement).innerHTML =
+      '<span class="thinking-dots"><span></span><span></span><span></span></span>'
+  }
+}
+
+export function retagAssistant(agent: string): void {
+  // Router picked the real specialist — update the pending bubble's label.
+  const label = currentAssistantEl?.closest('.message')?.querySelector('.msg-agent')
+  if (label && !(currentAssistantEl?.dataset['raw'] ?? '')) label.textContent = agent
+}
+
 export function ensureAssistantMessage(agent: string): void {
   // Remi's rule: the assistant bubble is created LAZILY by the stream —
   // never at send time, so the user's message always renders first.
@@ -82,6 +100,7 @@ export function ensureAssistantMessage(agent: string): void {
 
 export function appendChunk(chunk: string): void {
   if (!currentAssistantEl) return
+  if (!(currentAssistantEl.dataset['raw'] ?? '')) currentAssistantEl.innerHTML = ''
   // Render markdown-lite: newlines → <br>, code blocks preserved
   currentAssistantEl.innerHTML = renderMarkdownLite(
     (currentAssistantEl.dataset['raw'] ?? '') + chunk,
@@ -280,4 +299,18 @@ function renderMarkdownLite(text: string): string {
   // Newlines
   text = text.replace(/\n/g, '<br>')
   return text
+}
+
+
+// ── Sending state (Remi's input relations) ────────────────────────────────────
+
+export function setSendingState(sending: boolean): void {
+  const input = document.getElementById('chat-input') as HTMLTextAreaElement | null
+  const btn = document.getElementById('send-btn') as HTMLButtonElement | null
+  if (input) {
+    input.disabled = sending
+    if (!sending) input.focus()
+  }
+  if (btn) btn.disabled = sending
+  document.body.classList.toggle('sending', sending)
 }

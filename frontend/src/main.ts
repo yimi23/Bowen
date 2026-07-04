@@ -189,6 +189,7 @@ ws.on('open', () => {
 ws.on('close', () => {
   ui.setConnectionState(false)
   isSending = false
+  ui.setSendingState(false)
 })
 
 ws.on('message', (msg) => {
@@ -197,6 +198,7 @@ ws.on('message', (msg) => {
       setOrbState('thinking')
       ui.setActiveAgent(msg.to)
       activeAgent = msg.to
+      ui.retagAssistant(msg.to)
       break
 
     case 'chunk':
@@ -230,6 +232,7 @@ ws.on('message', (msg) => {
     case 'done': {
       setOrbState('idle')
       isSending = false
+      ui.setSendingState(false)
       // Backfill: a reply that returned without streaming still shows up.
       const finalText = (msg as { response?: string }).response ?? ''
       if (finalText && !ttsBuffer) {
@@ -245,6 +248,7 @@ ws.on('message', (msg) => {
     case 'error':
       setOrbState('idle')
       isSending = false
+      ui.setSendingState(false)
       ui.dropEmptyAssistantMessage()
       ui.showError(msg.message)
       break
@@ -308,6 +312,8 @@ function sendMessage(): void {
   // Optimistic append: the USER's message renders first, immediately.
   // The assistant bubble is created lazily by the first streamed chunk.
   ui.addUserMessage(text, 'user')
+  ui.showThinking('Y')
+  ui.setSendingState(true)
   setOrbState('thinking')
   isSending = true
 
