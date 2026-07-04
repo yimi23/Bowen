@@ -115,6 +115,24 @@ AGENT_TOOLS_GROQ = [
     {
         "type": "function",
         "function": {
+            "name": "route_to_GENI",
+            "description": (
+                "Route to GENI when the request concerns elder care: medications, pill "
+                "checks, adherence, fall detection, wellness checks, caregiver updates, "
+                "or checking on an elderly family member."
+            ),
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "reason": {"type": "string", "description": "Why GENI is the right agent"}
+                },
+                "required": ["reason"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
             "name": "route_to_BOWEN",
             "description": (
                 "Route to BOWEN when the task requires orchestration across multiple agents, "
@@ -170,6 +188,11 @@ AGENT_TOOLS_ANTHROPIC = [
         "input_schema": {"type": "object", "properties": {"reason": {"type": "string"}}, "required": ["reason"]}
     },
     {
+        "name": "route_to_GENI",
+        "description": "Route to GENI for elder care: medications, pill checks, falls, wellness, caregiver updates.",
+        "input_schema": {"type": "object", "properties": {"reason": {"type": "string"}}, "required": ["reason"]}
+    },
+    {
         "name": "route_to_BOWEN",
         "description": "Route to BOWEN for orchestration, strategy, general conversation, or no clear fit.",
         "input_schema": {"type": "object", "properties": {"reason": {"type": "string"}}, "required": ["reason"]}
@@ -183,6 +206,7 @@ TOOL_TO_AGENT = {
     "route_to_TAMARA":  AgentName.TAMARA,
     "route_to_HELEN":   AgentName.HELEN,
     "route_to_DEVOPS":  AgentName.DEVOPS,
+    "route_to_GENI":    AgentName.GENI,
     "route_to_BOWEN":   AgentName.BOWEN,
 }
 

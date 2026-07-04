@@ -75,6 +75,19 @@ class Config:
     # USERS_DB_PATH: user account registry (separate from personal memory)
     USERS_DB_PATH: Path = BASE_DIR / "memory" / "users.db"
 
+    # ── GENI (elder-care domain, seventh agent) ───────────────────────────────
+    # The GENI Node backend stays a self-contained supervised process.
+    # GENI_ENABLED=true spawns it at startup (requires node + geni/backend).
+    GENI_ENABLED: bool = os.getenv("GENI_ENABLED", "false").lower() == "true"
+    GENI_DIR: Path = BASE_DIR / "geni" / "backend"
+    GENI_BACKEND_URL: str = os.getenv("GENI_BACKEND_URL", "http://localhost:5001")
+    GENI_API_KEY: str = os.getenv("GENI_API_KEY", "")
+
+    # ── Tenants ───────────────────────────────────────────────────────────────
+    # Per-tenant config (quiet hours, alert channels, elder_voice flag) lives in
+    # memory/tenants/<tenant_id>.yaml — see core/tenants.py. Not code.
+    TENANTS_DIR: Path = BASE_DIR / "memory" / "tenants"
+
     # ── Routing ───────────────────────────────────────────────────────────────
     # If Groq misroutes > 10% of inputs, add semantic-router as Tier 1.5
     MISROUTE_THRESHOLD: float = 0.10

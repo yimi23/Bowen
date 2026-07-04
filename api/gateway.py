@@ -48,6 +48,7 @@ from agents.devops import DevOpsAgent
 from agents.scout import ScoutAgent
 from agents.tamara import TamaraAgent
 from agents.helen import HelenAgent
+from agents.geni import GENIAgent
 from agents.planner import Planner, build_enriched_prompt
 from bus.message_bus import MessageBus
 from bus.schema import HandoffPayload, ReviewPayload
@@ -103,6 +104,7 @@ def _make_agents(config, user_memory, user_registry) -> tuple[dict, MessageBus]:
         AgentName.SCOUT:   ScoutAgent(config, user_memory, bus, user_registry),
         AgentName.TAMARA:  TamaraAgent(config, user_memory, bus, user_registry),
         AgentName.HELEN:   HelenAgent(config, user_memory, bus, user_registry),
+        AgentName.GENI:    GENIAgent(config, user_memory, bus, user_registry),
     }
     return agents, bus
 

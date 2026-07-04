@@ -122,6 +122,13 @@ async def lifespan(app: FastAPI):
     # Keep-alive: background pings Anthropic, ChromaDB, Groq every 60s
     keep_alive.start(config, admin_memory)
 
+    # GENI supervisor: spawns the self-contained Node backend when enabled.
+    # Monitoring loops (YOLO subprocess, 15-min cron) live inside that process.
+    from services.geni_supervisor import GENISupervisor
+    geni_supervisor = GENISupervisor(config)
+    await geni_supervisor.start()
+    app.state.geni_supervisor = geni_supervisor
+
     # Store on app.state for router access
     app.state.config = config
     app.state.user_manager = user_manager
@@ -147,6 +154,7 @@ async def lifespan(app: FastAPI):
     yield  # Server runs here
 
     # Shutdown
+    await geni_supervisor.stop()
     keep_alive.stop()
     scheduler.shutdown(wait=False)
     await multi_store.close_all()

@@ -19,6 +19,7 @@ class AgentName:
     SCOUT   = "SCOUT"
     TAMARA  = "TAMARA"
     HELEN   = "HELEN"
+    GENI    = "GENI"
 
     # Ordered list — used by TUI sidebar and gateway agent map
-    ALL: list[str] = [BOWEN, CAPTAIN, DEVOPS, SCOUT, TAMARA, HELEN]
+    ALL: list[str] = [BOWEN, CAPTAIN, DEVOPS, SCOUT, TAMARA, HELEN, GENI]

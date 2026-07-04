@@ -76,6 +76,17 @@ ROUTING_PATTERNS: list[tuple[str, re.Pattern]] = [
         """,
         re.IGNORECASE | re.VERBOSE
     )),
+    (AgentName.GENI, re.compile(
+        r"""
+        (^/geni\b)             |
+        (^@geni\b)             |
+        \b(medication(s)?|pill(s)?|pillbox|pill\s+organizer|
+           fall\s+(detection|alert|check)|wellness\s+check|
+           caregiver|elder\s*care|adherence|
+           check\s+on\s+(grandma|grandpa|mom|dad|her|him))
+        """,
+        re.IGNORECASE | re.VERBOSE
+    )),
 ]
 
 

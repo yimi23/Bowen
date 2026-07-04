@@ -7,7 +7,7 @@ import asyncio
 from typing import Optional
 from .schema import AgentMessage
 
-AGENT_NAMES = ["BOWEN", "CAPTAIN", "SCOUT", "TAMARA", "HELEN", "DEVOPS"]
+AGENT_NAMES = ["BOWEN", "CAPTAIN", "SCOUT", "TAMARA", "HELEN", "DEVOPS", "GENI"]
 
 
 class MessageBus:

@@ -26,6 +26,9 @@ agents:
   DEVOPS:
     provider: anthropic
     model: sonnet
+  GENI:
+    provider: anthropic
+    model: haiku          # elder-care companion: warm, fast, cheap (GENI's own choice)
 
 routing:
   tier2_primary:

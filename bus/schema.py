@@ -164,9 +164,52 @@ class ErrorPayload(BaseModel):
     recoverable: bool = True
 
 
+# ── GENI (elder-care) event payloads ──────────────────────────────────────────
+
+class FallConfirmedPayload(BaseModel):
+    """GENI → TAMARA/BOWEN: a fall passed the confirmation window. Always critical."""
+    tenant_id: str = "default"
+    patient_name: str
+    message: str                       # caregiver-facing text, GENI's voice
+    confidence: float = 1.0
+    detected_at: str                   # ISO timestamp from the monitoring core
+    should_call: bool = True
+
+
+class MedicationMissedPayload(BaseModel):
+    """GENI → TAMARA/BOWEN: a medication is overdue. Priority scales with elapsed time."""
+    tenant_id: str = "default"
+    patient_name: str
+    medication: str
+    due_at: str                        # scheduled time, e.g. "9:00 AM"
+    elapsed_minutes: int
+    message: str
+    priority: Literal["low", "medium", "high"] = "medium"
+
+
+class WellnessCheckPayload(BaseModel):
+    """GENI → BOWEN: periodic wellness observation from the monitoring cycle."""
+    tenant_id: str = "default"
+    patient_name: str
+    activity_level: Literal["normal", "quiet", "concerning"] = "normal"
+    observations: str = ""
+    concern: bool = False
+    message: str = ""
+
+
+class DailyReportPayload(BaseModel):
+    """GENI → BOWEN/TAMARA: end-of-day caregiver summary."""
+    tenant_id: str = "default"
+    patient_name: str
+    date: str
+    meds_taken: int
+    meds_total: int
+    message: str
+
+
 # ── Message Envelope ──────────────────────────────────────────────────────────
 
-AGENT_NAMES = Literal["BOWEN", "CAPTAIN", "SCOUT", "TAMARA", "HELEN", "DEVOPS", "broadcast"]
+AGENT_NAMES = Literal["BOWEN", "CAPTAIN", "SCOUT", "TAMARA", "HELEN", "DEVOPS", "GENI", "broadcast"]
 MSG_TYPES = Literal["request", "response", "inform", "error", "chain", "approval"]
 
 PAYLOAD_TYPES = (
@@ -188,6 +231,10 @@ PAYLOAD_TYPES = (
     | ReviewPayload
     | ReviewResultPayload
     | ErrorPayload
+    | FallConfirmedPayload
+    | MedicationMissedPayload
+    | WellnessCheckPayload
+    | DailyReportPayload
 )
 
 
