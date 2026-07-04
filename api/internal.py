@@ -29,6 +29,7 @@ from pydantic import BaseModel
 from core.alerts import AlertEvent, get_gate
 from core.tenants import load_tenant
 from llm import get_provider
+from utils.retry import with_retry
 
 logger = logging.getLogger(__name__)
 
@@ -64,13 +65,18 @@ async def llm_complete(
     provider = get_provider("anthropic", config)
     model = {"haiku": config.HAIKU_MODEL, "sonnet": config.SONNET_MODEL}.get(body.model, body.model)
 
-    response = await provider.complete(
+    # Retries live HERE, server-side, so every sidecar (GENI's old SDK client
+    # did 2 retries on transient 429/5xx) keeps that behavior without each
+    # shim reimplementing it.
+    response = await with_retry(
+        provider.complete,
         body.messages,
         model=model,
         max_tokens=body.max_tokens,
         system=body.system,
         temperature=body.temperature,
         output_schema=body.output_schema,
+        context="internal.llm_complete",
     )
     return {
         "text": response.text,
