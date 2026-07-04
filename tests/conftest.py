@@ -188,18 +188,62 @@ class FakeAnthropicClient:
         return self._responses.pop(0)
 
 
+# ── Fake LLMProvider (for anything refactored onto the llm/ seam) ──────────────
+
+
+class FakeProvider:
+    """LLMProvider stand-in returning canned LLMResponse objects in order."""
+
+    name = "fake"
+
+    def __init__(self, responses=None):
+        from llm.provider import LLMResponse
+
+        self._responses = list(responses or [])
+        self.calls: list[dict] = []
+        self._response_cls = LLMResponse
+
+    async def complete(self, messages, **kwargs):
+        self.calls.append({"messages": messages, **kwargs})
+        if not self._responses:
+            raise AssertionError("FakeProvider ran out of canned responses")
+        return self._responses.pop(0)
+
+    def stream(self, messages, **kwargs):
+        raise NotImplementedError("FakeProvider.stream not needed in these tests")
+
+
+def llm_text(text: str):
+    """LLMResponse holding one text block."""
+    from llm.provider import LLMResponse
+
+    return LLMResponse(content=[SimpleNamespace(type="text", text=text)], stop_reason="end_turn")
+
+
+def llm_tool_use(name: str, tool_input: dict):
+    """LLMResponse holding one tool_use block."""
+    from llm.provider import LLMResponse
+
+    return LLMResponse(
+        content=[SimpleNamespace(type="tool_use", name=name, input=tool_input, id="tu_1")],
+        stop_reason="tool_use",
+    )
+
+
 # ── Fake Groq client ───────────────────────────────────────────────────────────
 
 
 def groq_tool_call_response(fn_name: str, arguments: str):
-    call = SimpleNamespace(function=SimpleNamespace(name=fn_name, arguments=arguments))
-    msg = SimpleNamespace(tool_calls=[call])
-    return SimpleNamespace(choices=[SimpleNamespace(message=msg)])
+    call = SimpleNamespace(
+        id="call_1", function=SimpleNamespace(name=fn_name, arguments=arguments)
+    )
+    msg = SimpleNamespace(tool_calls=[call], content=None)
+    return SimpleNamespace(choices=[SimpleNamespace(message=msg, finish_reason="tool_calls")])
 
 
 def groq_no_tool_response():
-    msg = SimpleNamespace(tool_calls=None)
-    return SimpleNamespace(choices=[SimpleNamespace(message=msg)])
+    msg = SimpleNamespace(tool_calls=None, content="plain text, no tool")
+    return SimpleNamespace(choices=[SimpleNamespace(message=msg, finish_reason="stop")])
 
 
 class FakeGroqClient:

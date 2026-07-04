@@ -1,0 +1,51 @@
+# agents.yaml — per-agent model policy. THE one place model choice lives.
+#
+# provider: anthropic | groq | local   (registered in llm/registry.py)
+# model:    "sonnet" / "haiku" resolve to config.SONNET_MODEL / config.HAIKU_MODEL
+#           (which read env vars), or give an explicit model id.
+# temperature: omit for provider default.
+#
+# Swapping an agent's brain = edit this file. No code changes.
+
+agents:
+  BOWEN:
+    provider: anthropic
+    model: haiku          # orchestrator: fast routing-adjacent replies
+  CAPTAIN:
+    provider: anthropic
+    model: sonnet         # code and complex reasoning
+  SCOUT:
+    provider: anthropic
+    model: sonnet
+  TAMARA:
+    provider: anthropic
+    model: sonnet
+  HELEN:
+    provider: anthropic
+    model: haiku          # calendar/briefings: cheap and fast
+  DEVOPS:
+    provider: anthropic
+    model: sonnet
+
+routing:
+  tier2_primary:
+    provider: groq
+    model: llama-3.1-8b-instant
+    temperature: 0
+  tier2_fallback:
+    provider: anthropic
+    model: haiku
+
+services:
+  sleep_pipeline:
+    provider: anthropic
+    model: haiku
+  consolidator:
+    provider: anthropic
+    model: haiku
+  planner:
+    provider: anthropic
+    model: haiku
+  qa:
+    provider: anthropic
+    model: haiku
