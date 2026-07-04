@@ -11,8 +11,7 @@ const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as 
 
 const chatMessages = $<HTMLDivElement>('chat-messages')
 const toolActivity = $<HTMLDivElement>('tool-activity')
-const agentStateLabel = $<HTMLDivElement>('agent-state-label')
-const activeAgentLabel = $<HTMLSpanElement>('active-agent-label')
+const statusText = $<HTMLSpanElement>('status-text')
 const connectionDot = $<HTMLSpanElement>('connection-dot')
 const planningModal = $<HTMLDivElement>('planning-modal')
 const planningQuestionsEl = $<HTMLDivElement>('planning-questions')
@@ -30,15 +29,11 @@ const STATE_LABELS: Record<OrbState, string> = {
 }
 
 export function setOrbStateLabel(state: OrbState): void {
-  agentStateLabel.textContent = STATE_LABELS[state]
-  agentStateLabel.className = `state-${state}`
+  statusText.textContent = STATE_LABELS[state]
 }
 
-export function setActiveAgent(agent: string): void {
-  activeAgentLabel.textContent = agent
-  document.querySelectorAll<HTMLButtonElement>('.agent-btn').forEach((btn) => {
-    btn.classList.toggle('active', btn.dataset['agent'] === agent)
-  })
+export function setActiveAgent(_agent: string): void {
+  // agent selector removed — routing is transparent
 }
 
 export function setConnectionState(connected: boolean): void {

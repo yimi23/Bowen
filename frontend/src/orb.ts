@@ -51,6 +51,7 @@ export class Orb {
   private phases!: Float32Array
 
   private state: OrbState = 'idle'
+  private amplitude = 0
   private clock = new THREE.Clock()
   private animFrame = 0
 
@@ -74,6 +75,10 @@ export class Orb {
 
   setOrbState(state: OrbState): void {
     this.state = state
+  }
+
+  setAmplitude(level: number): void {
+    this.amplitude = Math.max(0, Math.min(1, level))
   }
 
   resize(width: number, height: number): void {
@@ -150,7 +155,7 @@ export class Orb {
         // Slow rotation + subtle breathing
         this.particles.rotation.y = t * 0.08
         this.particles.rotation.x = Math.sin(t * 0.04) * 0.1
-        const breathe = 1 + Math.sin(t * 0.6) * 0.025
+        const breathe = 1 + Math.sin(t * 0.6) * 0.025 + this.amplitude * 0.05
         this.particles.scale.setScalar(breathe)
         mat.opacity = 0.8 + Math.sin(t * 0.5) * 0.05
 
@@ -165,10 +170,10 @@ export class Orb {
       }
 
       case 'listening': {
-        // Particles drift slightly inward, soft pulse
+        // Particles drift slightly inward, soft pulse — amplitude expands the pulse
         this.particles.rotation.y = t * 0.12
         this.particles.scale.setScalar(1)
-        const pulse = 0.85 + Math.sin(t * 2.5) * 0.1
+        const pulse = 0.85 + Math.sin(t * 2.5) * 0.1 + this.amplitude * 0.18
 
         for (let i = 0; i < PARTICLE_COUNT; i++) {
           pos[i * 3] = orig[i * 3] * pulse
@@ -203,13 +208,13 @@ export class Orb {
       }
 
       case 'speaking': {
-        // Radial wave ripple
+        // Radial wave ripple — amplitude drives wave intensity
         this.particles.rotation.y = t * 0.1
         this.particles.scale.setScalar(1)
 
         for (let i = 0; i < PARTICLE_COUNT; i++) {
           const d = Math.sqrt(orig[i*3]**2 + orig[i*3+1]**2 + orig[i*3+2]**2)
-          const wave = Math.sin(d * 3 - t * 4 + ph[i]) * 0.12
+          const wave = Math.sin(d * 3 - t * 4 + ph[i]) * (0.12 + this.amplitude * 0.18)
           const norm = d > 0 ? 1 / d : 1
           pos[i * 3] = orig[i * 3] + orig[i * 3] * norm * wave
           pos[i * 3 + 1] = orig[i * 3 + 1] + orig[i * 3 + 1] * norm * wave
