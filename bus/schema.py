@@ -166,7 +166,7 @@ class ErrorPayload(BaseModel):
 
 # ── Message Envelope ──────────────────────────────────────────────────────────
 
-AGENT_NAMES = Literal["BOWEN", "CAPTAIN", "SCOUT", "TAMARA", "HELEN", "broadcast"]
+AGENT_NAMES = Literal["BOWEN", "CAPTAIN", "SCOUT", "TAMARA", "HELEN", "DEVOPS", "broadcast"]
 MSG_TYPES = Literal["request", "response", "inform", "error", "chain", "approval"]
 
 PAYLOAD_TYPES = (

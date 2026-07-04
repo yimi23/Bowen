@@ -122,14 +122,20 @@ class TestDelivery:
     async def test_broadcast_reaches_everyone_except_sender(self):
         bus = MessageBus()
         await bus.send(make_message(sender="BOWEN", recipient="broadcast"))
-        for name in ["CAPTAIN", "SCOUT", "TAMARA", "HELEN"]:
+        for name in ["CAPTAIN", "SCOUT", "TAMARA", "HELEN", "DEVOPS"]:
             assert await bus.receive(name, timeout=0.05) is not None
         assert await bus.receive("BOWEN", timeout=0.05) is None
 
+    async def test_captain_auto_review_reaches_devops(self):
+        # Regression guard for the bug where DEVOPS was missing from
+        # bus.AGENT_NAMES and CAPTAIN's auto-review dispatch raised.
+        bus = MessageBus()
+        await bus.send(make_message(sender="CAPTAIN", recipient="DEVOPS"))
+        received = await bus.receive("DEVOPS", timeout=0.05)
+        assert received is not None
+        assert received.sender == "CAPTAIN"
+
     async def test_unknown_recipient_is_rejected(self):
-        # CHARACTERIZATION OF A LATENT BUG: DEVOPS is a real agent but is
-        # missing from bus.AGENT_NAMES, so CAPTAIN's auto-review dispatch
-        # to DEVOPS raises. Fix belongs in a follow-up, not this suite.
         bus = MessageBus()
         with pytest.raises(ValueError, match="Unknown recipient"):
-            await bus.send(make_message(recipient="DEVOPS"))
+            await bus.send(make_message(recipient="NOBODY"))
