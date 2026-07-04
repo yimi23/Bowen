@@ -378,9 +378,12 @@ async def chat_websocket(websocket: WebSocket):
             )
 
             t0 = time.monotonic()
+            response_text = ""
             try:
                 async with asyncio.timeout(AGENT_TIMEOUT):
-                    await agents[target_name].respond(enriched_content, send=monitored_send)
+                    response_text = await agents[target_name].respond(
+                        enriched_content, send=monitored_send
+                    ) or ""
             except asyncio.TimeoutError:
                 await send({"type": "error", "message": f"{target_name} timed out after {AGENT_TIMEOUT}s"})
             except Exception as e:
@@ -389,7 +392,9 @@ async def chat_websocket(websocket: WebSocket):
                 latency = round((time.monotonic() - t0) * 1000)
                 _log_handoff("user", target_name, "message", active_conversation_id or "", latency, "ok")
 
-            await send({"type": "done", "agent": target_name})
+            # done carries the full text so the UI can backfill any reply path
+            # that returned without streaming chunks (Remi's empty-stream rule).
+            await send({"type": "done", "agent": target_name, "response": response_text})
 
     except WebSocketDisconnect:
         logger.info("User disconnected: %s (%s)", display_name, user_id)

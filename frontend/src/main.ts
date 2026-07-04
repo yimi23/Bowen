@@ -179,6 +179,8 @@ document.getElementById('chat-close')!.addEventListener('click', closeChat)
 
 // ── WebSocket events ──────────────────────────────────────────────────────────
 
+let activeAgent = 'BOWEN'
+
 ws.on('open', () => {
   ui.setConnectionState(true)
   setOrbState('idle')
@@ -186,6 +188,7 @@ ws.on('open', () => {
 
 ws.on('close', () => {
   ui.setConnectionState(false)
+  isSending = false
 })
 
 ws.on('message', (msg) => {
@@ -193,10 +196,12 @@ ws.on('message', (msg) => {
     case 'routing':
       setOrbState('thinking')
       ui.setActiveAgent(msg.to)
+      activeAgent = msg.to
       break
 
     case 'chunk':
       if (orbState !== 'speaking') setOrbState('speaking')
+      ui.ensureAssistantMessage(msg.agent || activeAgent)
       ui.appendChunk(msg.content)
       ttsBuffer += msg.content
       break
@@ -222,18 +227,26 @@ ws.on('message', (msg) => {
       break
     }
 
-    case 'done':
+    case 'done': {
       setOrbState('idle')
-      ui.finalizeAssistantMessage()
-      ttsSpeak(ttsBuffer)
+      isSending = false
+      // Backfill: a reply that returned without streaming still shows up.
+      const finalText = (msg as { response?: string }).response ?? ''
+      if (finalText && !ttsBuffer) {
+        ui.ensureAssistantMessage(msg.agent || activeAgent)
+      }
+      ui.finalizeAssistantMessage(finalText)
+      ttsSpeak(ttsBuffer || finalText)
       ttsBuffer = ''
       toolCallCounter = 0
       break
+    }
 
     case 'error':
       setOrbState('idle')
+      isSending = false
+      ui.dropEmptyAssistantMessage()
       ui.showError(msg.message)
-      ui.finalizeAssistantMessage()
       break
 
     case 'planning_start':
@@ -285,14 +298,18 @@ ws.connect()
 const input = document.getElementById('chat-input') as HTMLTextAreaElement
 const sendBtn = document.getElementById('send-btn') as HTMLButtonElement
 
+let isSending = false
+
 function sendMessage(): void {
   const text = input.value.trim()
-  if (!text || !ws.connected) return
+  if (!text || !ws.connected || isSending) return
 
   openChat()
-  ui.startAssistantMessage('BOWEN')
+  // Optimistic append: the USER's message renders first, immediately.
+  // The assistant bubble is created lazily by the first streamed chunk.
   ui.addUserMessage(text, 'user')
   setOrbState('thinking')
+  isSending = true
 
   ws.sendMessage(text)
 

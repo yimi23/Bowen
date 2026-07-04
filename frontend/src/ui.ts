@@ -74,6 +74,12 @@ export function startAssistantMessage(agent: string): string {
   return id
 }
 
+export function ensureAssistantMessage(agent: string): void {
+  // Remi's rule: the assistant bubble is created LAZILY by the stream —
+  // never at send time, so the user's message always renders first.
+  if (!currentAssistantEl) startAssistantMessage(agent)
+}
+
 export function appendChunk(chunk: string): void {
   if (!currentAssistantEl) return
   // Render markdown-lite: newlines → <br>, code blocks preserved
@@ -84,7 +90,26 @@ export function appendChunk(chunk: string): void {
   scrollToBottom()
 }
 
-export function finalizeAssistantMessage(): void {
+export function finalizeAssistantMessage(fallbackText = ''): void {
+  // Empty-stream rule (from Remi): a bubble that streamed nothing either
+  // gets backfilled with the final response text, or is removed entirely.
+  // A silent empty bubble is never left behind.
+  if (currentAssistantEl) {
+    const raw = currentAssistantEl.dataset['raw'] ?? ''
+    if (!raw && fallbackText) {
+      currentAssistantEl.innerHTML = renderMarkdownLite(fallbackText)
+      currentAssistantEl.dataset['raw'] = fallbackText
+    } else if (!raw) {
+      currentAssistantEl.closest('.message')?.remove()
+    }
+  }
+  currentAssistantEl = null
+}
+
+export function dropEmptyAssistantMessage(): void {
+  if (currentAssistantEl && !(currentAssistantEl.dataset['raw'] ?? '')) {
+    currentAssistantEl.closest('.message')?.remove()
+  }
   currentAssistantEl = null
 }
 
