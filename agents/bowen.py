@@ -80,6 +80,34 @@ class BOWENAgent(BaseAgent):
             send=send,
         )
 
+    async def dispatch_brief(
+        self,
+        recipient: str,
+        objective: str,
+        output_format: str,
+        tools_permitted: list[str] | None = None,
+        boundaries: str = "",
+        mounted_skills: list[str] | None = None,
+        context: str = "",
+        priority: int = 3,
+    ) -> None:
+        """Send a four-part-contract dispatch (see delegating-and-scaling skill)."""
+        from bus.schema import DispatchBriefPayload
+
+        await self.dispatch_to(
+            recipient,
+            DispatchBriefPayload(
+                objective=objective,
+                output_format=output_format,
+                tools_permitted=tools_permitted or [],
+                boundaries=boundaries,
+                mounted_skills=mounted_skills or [],
+                context=context,
+            ),
+            msg_type="request",
+            priority=priority,
+        )
+
     async def surface_for_approval(self, payload: ApprovalRequestPayload) -> None:
         """Surface a high-risk action to the user before it executes."""
         print(f"\n\033[33m[BOWEN] Approval required:\033[0m")

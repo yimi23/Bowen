@@ -75,6 +75,8 @@ class DevOpsAgent(BaseAgent):
         )
 
     async def handle(self, msg: AgentMessage, send: SendFn = None) -> Optional[str]:
+        if type(msg.payload).__name__ == "DispatchBriefPayload":
+            return await self._handle_brief(msg.payload, send=send)
         if isinstance(msg.payload, ReviewPayload):
             files = ", ".join(msg.payload.files_changed) if msg.payload.files_changed else "unspecified"
             text = (

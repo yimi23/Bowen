@@ -7,28 +7,39 @@
 #
 # Swapping an agent's brain = edit this file. No code changes.
 
+# skills: standing expertise — full bodies injected into the agent's system
+# prompt at every spawn. skill_index: true additionally injects the library's
+# name+description index (the orchestrator's discovery tier for mounting).
 agents:
   BOWEN:
     provider: anthropic
     model: haiku          # orchestrator: fast routing-adjacent replies
+    skill_index: true
+    skills: [delegating-and-scaling, synthesizing-one-voice, citing-memory, mounting-skills]
   CAPTAIN:
     provider: anthropic
     model: sonnet         # code and complex reasoning
+    skills: [buildspec-planning, git-discipline, test-first-legacy, repo-conventions]
   SCOUT:
     provider: anthropic
     model: sonnet
+    skills: [research-methodology, condensed-returns]
   TAMARA:
     provider: anthropic
     model: sonnet
+    skills: [praise-voice, register-packs, approval-protocol]
   HELEN:
     provider: anthropic
     model: haiku          # calendar/briefings: cheap and fast
+    skills: [morning-briefing-format, bible-accountability, scheduling-doctrine]
   DEVOPS:
     provider: anthropic
     model: sonnet
+    skills: [security-audit-checklist, severity-rubric, verdict-format, skill-audit]
   GENI:
     provider: anthropic
     model: haiku          # elder-care companion: warm, fast, cheap (GENI's own choice)
+    skills: [elder-voice, medication-adherence-grading, fall-response-protocol, caregiver-report-format]
 
 routing:
   tier2_primary:

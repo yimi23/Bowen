@@ -66,6 +66,12 @@ def resolve_agent_llm(agent_name: str, config) -> tuple[LLMProvider, str, Option
     return _resolve("agents", agent_name, config)
 
 
+def resolve_agent_skills(agent_name: str) -> tuple[list[str], bool]:
+    """(standing skill names, carries_index) for an agent. Unknown agent → ([], False)."""
+    entry = _load_yaml().get("agents", {}).get(agent_name) or {}
+    return list(entry.get("skills", []) or []), bool(entry.get("skill_index", False))
+
+
 def resolve_routing_llm(role: str, config) -> tuple[LLMProvider, str, Optional[float]]:
     return _resolve("routing", role, config)
 

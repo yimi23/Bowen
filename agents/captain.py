@@ -177,6 +177,8 @@ class CaptainAgent(BaseAgent):
         await self.dispatch_to("DEVOPS", payload, msg_type="request", priority=2)
 
     async def handle(self, msg: AgentMessage, send: SendFn = None) -> Optional[str]:
+        if type(msg.payload).__name__ == "DispatchBriefPayload":
+            return await self._handle_brief(msg.payload, send=send)
         """Handle bus messages — including SCOUT handoffs and legacy chain payloads."""
         if isinstance(msg.payload, HandoffPayload):
             task = (

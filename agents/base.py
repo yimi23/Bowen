@@ -128,6 +128,12 @@ class BaseAgent(ABC):
         self.provider = provider
         self._model = self.model_override or model
         self._temperature = temperature
+
+        # Standing skills (agents.yaml): the agent's permanent expertise,
+        # injected full-body into every system prompt. skill_index additionally
+        # gives the orchestrator the library's discovery tier.
+        from llm import resolve_agent_skills
+        self._standing_skills, self._carries_skill_index = resolve_agent_skills(self.name)
         self._session_id: Optional[str] = None
         self._topic_id: str = "default"
         self._turn: int = 0
@@ -196,6 +202,24 @@ class BaseAgent(ABC):
         shared = _load_shared_knowledge()
 
         parts = [self.base_identity]
+
+        # Tier 2 disclosure: standing skills ride every prompt, full body.
+        # Tier 1: the orchestrator also carries the whole library's index.
+        from core.skills import house_library
+        library = house_library()
+        if self._standing_skills:
+            standing = library.load_many(self._standing_skills)
+            if standing:
+                parts.append(f"## Skills\n{standing}")
+        if self._carries_skill_index:
+            index = library.index_text()
+            if index:
+                parts.append(
+                    "## Skill Library Index\n"
+                    "Skills you can mount onto dispatch briefs (full bodies load on mount):\n"
+                    + index
+                )
+
         if topic_instructions:
             parts.append(f"## Topic Context\n{topic_instructions}")
         if shared:
@@ -548,6 +572,10 @@ class BaseAgent(ABC):
 
     async def handle(self, msg: AgentMessage, send: SendFn = None) -> Optional[str]:
         """Handle bus message. Routes based on payload type."""
+        # The four-part delegation contract: objective, output format, tools,
+        # boundaries — plus situational skills mounted for this task only.
+        if type(msg.payload).__name__ == "DispatchBriefPayload":
+            return await self._handle_brief(msg.payload, send=send)
         if hasattr(msg.payload, "text"):
             return await self.respond(msg.payload.text, send=send)
         if hasattr(msg.payload, "task"):
@@ -560,6 +588,24 @@ class BaseAgent(ABC):
                 send=send,
             )
         return None
+
+    async def _handle_brief(self, brief, send: SendFn = None) -> str:
+        """Execute a dispatch brief: mounted skills load at receipt (tier 3)."""
+        from core.skills import house_library
+
+        sections = [f"## Objective\n{brief.objective}"]
+        if brief.context:
+            sections.append(f"## Context\n{brief.context}")
+        sections.append(f"## Output format (hard contract)\n{brief.output_format}")
+        if brief.tools_permitted:
+            sections.append("## Tools permitted\n" + ", ".join(brief.tools_permitted))
+        if brief.boundaries:
+            sections.append(f"## Boundaries\n{brief.boundaries}")
+        if brief.mounted_skills:
+            mounted = house_library().load_many(brief.mounted_skills)
+            if mounted:
+                sections.append(f"## Mounted Skills (for this task)\n{mounted}")
+        return await self.respond("\n\n".join(sections), send=send)
 
     def set_session(self, session_id: str, topic_id: str = "default") -> None:
         self._session_id = session_id

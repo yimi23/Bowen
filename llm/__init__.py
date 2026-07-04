@@ -5,6 +5,7 @@ from llm.local_provider import LocalProvider
 from llm.registry import (
     get_provider,
     resolve_agent_llm,
+    resolve_agent_skills,
     resolve_routing_llm,
     resolve_service_llm,
 )
@@ -17,6 +18,7 @@ __all__ = [
     "LocalProvider",
     "get_provider",
     "resolve_agent_llm",
+    "resolve_agent_skills",
     "resolve_routing_llm",
     "resolve_service_llm",
 ]

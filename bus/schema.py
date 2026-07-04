@@ -164,6 +164,20 @@ class ErrorPayload(BaseModel):
     recoverable: bool = True
 
 
+class DispatchBriefPayload(BaseModel):
+    """
+    Y → any worker: the four-part delegation contract, plus mounted skills.
+    Every field is the law: a brief missing one of the four is a drifting
+    worker waiting to happen.
+    """
+    objective: str                     # what done looks like — the finish line
+    output_format: str                 # exact shape of the return
+    tools_permitted: list[str] = []    # empty = the agent's registry defaults
+    boundaries: str = ""               # out of scope, stop conditions
+    mounted_skills: list[str] = []     # situational packs, loaded at receipt
+    context: str = ""                  # the minimum context the worker needs
+
+
 # ── GENI (elder-care) event payloads ──────────────────────────────────────────
 
 class FallConfirmedPayload(BaseModel):
@@ -231,6 +245,7 @@ PAYLOAD_TYPES = (
     | ReviewPayload
     | ReviewResultPayload
     | ErrorPayload
+    | DispatchBriefPayload
     | FallConfirmedPayload
     | MedicationMissedPayload
     | WellnessCheckPayload
