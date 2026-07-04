@@ -111,6 +111,24 @@ CAPTAIN_TOOL_SCHEMAS = [
         },
     },
     {
+        "name": "edit_file",
+        "description": (
+            "Precisely replace a string in a file. Safer than write_file for edits — "
+            "fails if old_string is not found or appears more than once (prevents wrong-location edits). "
+            "Always read the file first to get the exact text to replace."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "path": {"type": "string", "description": "Absolute or relative path to the file"},
+                "old_string": {"type": "string", "description": "The exact text to replace (must appear exactly once)"},
+                "new_string": {"type": "string", "description": "The text to replace it with"},
+                "description": {"type": "string", "description": "What this edit does"},
+            },
+            "required": ["path", "old_string", "new_string"],
+        },
+    },
+    {
         "name": "web_fetch",
         "description": "Fetch a URL and return its text content. Use for reading documentation, APIs, or web pages.",
         "input_schema": {
@@ -259,6 +277,39 @@ def run_shell(command: str, cwd: str | None = None, timeout: int = 30) -> dict[s
         return {"success": False, "error": str(e)}
 
 
+def edit_file(path: str, old_string: str, new_string: str, description: str = "") -> dict[str, Any]:
+    """Precise string replacement with uniqueness enforcement."""
+    read_result = read_file(path)
+    if not read_result.get("success"):
+        return read_result
+
+    content = read_result["content"]
+    count = content.count(old_string)
+
+    if count == 0:
+        return {
+            "success": False,
+            "error": (
+                f"old_string not found in {path}. "
+                "Read the file first and copy the exact text to replace."
+            ),
+        }
+    if count > 1:
+        return {
+            "success": False,
+            "error": (
+                f"old_string appears {count} times in {path}. "
+                "Add more surrounding lines to make it unique."
+            ),
+        }
+
+    new_content = content.replace(old_string, new_string, 1)
+    result = write_file(path, new_content, description)
+    if result.get("success"):
+        result["edit_applied"] = True
+    return result
+
+
 def web_fetch(url: str, extract: str = "") -> dict[str, Any]:
     """Fetch a URL and return cleaned text."""
     try:
@@ -286,6 +337,7 @@ CAPTAIN_TOOL_MAP = {
     "execute_code": execute_code,
     "read_file": read_file,
     "write_file": write_file,
+    "edit_file": edit_file,
     "run_shell": run_shell,
     "web_fetch": web_fetch,
 }

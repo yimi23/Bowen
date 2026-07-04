@@ -109,15 +109,25 @@ class BibleCheckPayload(BaseModel):
 
 
 class ChainPayload(BaseModel):
+    """Legacy: use HandoffPayload for new code."""
+    from_agent: str
+    original_task: str
+    work_product: str
+    next_action: str
+
+
+class HandoffPayload(BaseModel):
     """
-    Any agent → any agent: pass a work product forward.
-    Primary use: SCOUT → CAPTAIN when research implies code needs writing.
-    SCOUT ends response with 'CHAIN_TO_CAPTAIN: <task>', scout.py parses and dispatches this.
+    Any agent → any agent: typed work handoff.
+    Replaces the CHAIN_TO_CAPTAIN magic string pattern.
+    The sending agent dispatches this via the bus; the receiving agent handles it.
     """
     from_agent: str
+    target: str           # recipient agent name
     original_task: str    # the user's original request
     work_product: str     # what the sending agent produced (research, analysis, etc.)
-    next_action: str      # what the receiving agent should do with the work product
+    task: str             # what the receiving agent should do
+    reason: str = ""      # why this handoff is happening
 
 
 class ApprovalRequestPayload(BaseModel):
@@ -129,6 +139,21 @@ class ApprovalRequestPayload(BaseModel):
     description: str
     data: dict
     risk_level: Literal["low", "medium", "high"] = "medium"
+
+
+class ReviewPayload(BaseModel):
+    """CAPTAIN → DEVOPS: code review request after build."""
+    code_summary: str
+    files_changed: list[str]
+    task: str
+    agent: str = "CAPTAIN"
+
+
+class ReviewResultPayload(BaseModel):
+    """DEVOPS → CAPTAIN/BOWEN: review verdict."""
+    verdict: Literal["SHIP", "NEEDS_WORK", "DO_NOT_SHIP"]
+    issues: list[str] = []
+    summary: str = ""
 
 
 class ErrorPayload(BaseModel):
@@ -158,7 +183,10 @@ PAYLOAD_TYPES = (
     | BriefingPayload
     | BibleCheckPayload
     | ChainPayload
+    | HandoffPayload
     | ApprovalRequestPayload
+    | ReviewPayload
+    | ReviewResultPayload
     | ErrorPayload
 )
 

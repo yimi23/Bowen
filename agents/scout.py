@@ -10,14 +10,7 @@ from agents.base import BaseAgent, SendFn
 from config import Config
 from memory.store import MemoryStore
 from bus.message_bus import MessageBus
-from bus.schema import AgentMessage, ChainPayload, ResearchResponsePayload
-
-
-CHAIN_TRIGGER_PHRASES = [
-    "then write", "then build", "then implement", "then create",
-    "and write", "and build", "and implement", "and code",
-    "pass to captain", "chain to captain",
-]
+from bus.schema import AgentMessage, HandoffPayload, ResearchResponsePayload
 
 
 class ScoutAgent(BaseAgent):
@@ -46,9 +39,10 @@ class ScoutAgent(BaseAgent):
             "- Use web_fetch to go deep on specific pages\n"
             "- Use structured_extract to pull specific fields from raw content\n"
             "- Always include source URLs in your response\n\n"
-            "Chaining rule: if your research implies code needs writing, "
-            "end your response with 'CHAIN_TO_CAPTAIN: <what CAPTAIN should build>' "
-            "on its own line. BOWEN will route it automatically."
+            "Chaining to CAPTAIN: if your research findings require code to be written, "
+            "end your response with a line in EXACTLY this format on its own line:\n"
+            "HANDOFF_TO_CAPTAIN: <one-sentence description of what CAPTAIN should build>\n"
+            "BOWEN will route it automatically. Only use this when code/build work is clearly needed."
         )
 
     @property
@@ -82,36 +76,42 @@ class ScoutAgent(BaseAgent):
                 tags=["research", "scout"],
             )
 
-        # Check if SCOUT wants to chain to CAPTAIN
-        if "CHAIN_TO_CAPTAIN:" in response:
-            await self._chain_to_captain(user_text, response)
+        # Check for typed handoff directive — strip from visible response
+        if "HANDOFF_TO_CAPTAIN:" in response:
+            response = await self._handoff_to_captain(user_text, response)
 
         return response
 
-    async def _chain_to_captain(self, original_task: str, research: str) -> None:
-        """Extract chain instruction and dispatch to CAPTAIN via bus."""
+    async def _handoff_to_captain(self, original_task: str, research: str) -> str:
+        """Extract typed handoff directive, dispatch HandoffPayload, strip line from response."""
         lines = research.splitlines()
-        chain_line = next((l for l in lines if "CHAIN_TO_CAPTAIN:" in l), "")
-        next_action = chain_line.replace("CHAIN_TO_CAPTAIN:", "").strip()
+        handoff_line = next((l for l in lines if "HANDOFF_TO_CAPTAIN:" in l), "")
+        task = handoff_line.replace("HANDOFF_TO_CAPTAIN:", "").strip()
 
-        if not next_action:
-            return
+        # Strip directive from what's shown to user
+        clean_response = "\n".join(l for l in lines if "HANDOFF_TO_CAPTAIN:" not in l).strip()
 
-        # Strip the chain directive from the work product
-        work_product = research.replace(chain_line, "").strip()
+        if not task:
+            return clean_response
 
-        payload = ChainPayload(
+        payload = HandoffPayload(
             from_agent="SCOUT",
+            target="CAPTAIN",
             original_task=original_task,
-            work_product=work_product,
-            next_action=next_action,
+            work_product=clean_response,
+            task=task,
+            reason="Research findings require implementation",
         )
 
-        print(f"  \033[90m[scout] chaining to CAPTAIN: {next_action[:60]}\033[0m")
+        print(f"  \033[90m[scout] handoff → CAPTAIN: {task[:60]}\033[0m")
         await self.dispatch_to("CAPTAIN", payload, msg_type="chain", priority=4)
+        return clean_response
 
     async def handle(self, msg: AgentMessage, send: SendFn = None) -> Optional[str]:
-        return await self.respond(
-            msg.payload.query if hasattr(msg.payload, "query") else str(msg.payload),
-            send=send,
-        )
+        if isinstance(msg.payload, HandoffPayload):
+            query = msg.payload.task
+        elif hasattr(msg.payload, "query"):
+            query = msg.payload.query
+        else:
+            query = str(msg.payload)
+        return await self.respond(query, send=send)

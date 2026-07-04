@@ -15,7 +15,7 @@ from agents.base import BaseAgent, SendFn
 from config import Config
 from memory.store import MemoryStore
 from bus.message_bus import MessageBus
-from bus.schema import AgentMessage
+from bus.schema import AgentMessage, ReviewPayload
 
 
 class DevOpsAgent(BaseAgent):
@@ -75,9 +75,19 @@ class DevOpsAgent(BaseAgent):
         )
 
     async def handle(self, msg: AgentMessage, send: SendFn = None) -> Optional[str]:
-        text = (
-            msg.payload.text if hasattr(msg.payload, "text") else
-            msg.payload.work_product if hasattr(msg.payload, "work_product") else
-            str(msg.payload)
-        )
+        if isinstance(msg.payload, ReviewPayload):
+            files = ", ".join(msg.payload.files_changed) if msg.payload.files_changed else "unspecified"
+            text = (
+                f"Review these files that CAPTAIN just wrote/modified: {files}\n\n"
+                f"Original task: {msg.payload.task}\n\n"
+                f"CAPTAIN's summary: {msg.payload.code_summary}\n\n"
+                f"Run static analysis, check for bugs, security issues, and style problems. "
+                f"End with VERDICT: SHIP / NEEDS WORK / DO NOT SHIP"
+            )
+        elif hasattr(msg.payload, "text"):
+            text = msg.payload.text
+        elif hasattr(msg.payload, "work_product"):
+            text = msg.payload.work_product
+        else:
+            text = str(msg.payload)
         return await self.respond(text, send=send)

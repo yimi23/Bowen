@@ -76,6 +76,25 @@ def _cache_set(key: tuple, prompt: str) -> None:
         _PROMPT_CACHE.popitem(last=False)
 
 
+# ── Before/after tool hook registry (Phase B) ────────────────────────────────
+# Hooks run synchronously within the tool_use_loop — keep them fast.
+# Signature: hook(agent_name: str, tool_name: str, args: dict) -> None
+# After-hook also receives result and status.
+
+_BEFORE_TOOL_HOOKS: list = []
+_AFTER_TOOL_HOOKS: list = []
+
+
+def register_before_tool_hook(fn) -> None:
+    """Register a hook called before every tool execution across all agents."""
+    _BEFORE_TOOL_HOOKS.append(fn)
+
+
+def register_after_tool_hook(fn) -> None:
+    """Register a hook called after every tool execution across all agents."""
+    _AFTER_TOOL_HOOKS.append(fn)
+
+
 _SHARED_KNOWLEDGE_PATH = Path(__file__).parent.parent / "memory" / "shared_knowledge.md"
 
 
@@ -197,6 +216,41 @@ class BaseAgent(ABC):
             "cache_control": {"type": "ephemeral"},
         }]
 
+    # ── Context compression ───────────────────────────────────────────────────
+
+    def _compress_history(self, history: list[dict]) -> list[dict]:
+        """
+        Tiered compression for long conversation histories.
+          last 6 turns  → full content
+          turns 7–20    → first sentence only
+          turns 20+     → single context paragraph
+        This keeps the message list lean without losing continuity.
+        """
+        if len(history) <= 6:
+            return history
+
+        recent = history[-6:]
+        middle = history[-20:-6]
+        old    = history[:-20] if len(history) > 20 else []
+
+        compressed: list[dict] = []
+
+        if old:
+            summary = " | ".join(
+                h["content"].split(".")[0][:80] for h in old
+            )
+            compressed.append({
+                "role": "user",
+                "content": f"[Earlier context: {summary[:600]}]",
+            })
+
+        for h in middle:
+            sentence = (h["content"].split(".")[0] + ".").strip()[:140]
+            compressed.append({"role": h["role"], "content": sentence})
+
+        compressed.extend(recent)
+        return compressed
+
     # ── Output helpers ────────────────────────────────────────────────────────
 
     @staticmethod
@@ -218,7 +272,8 @@ class BaseAgent(ABC):
     ) -> str:
         messages = []
         if history:
-            for turn in history:
+            compressed = self._compress_history(history)
+            for turn in compressed:
                 role = turn.get("role", "user")
                 if role in ("user", "assistant"):
                     messages.append({"role": role, "content": turn["content"]})
@@ -285,7 +340,8 @@ class BaseAgent(ABC):
     ) -> str:
         messages = []
         if history:
-            for turn in history:
+            compressed = self._compress_history(history)
+            for turn in compressed:
                 role = turn.get("role", "user")
                 if role in ("user", "assistant"):
                     messages.append({"role": role, "content": turn["content"]})
@@ -346,6 +402,13 @@ class BaseAgent(ABC):
                         elif print_output:
                             print(f"  \033[90m[tool] {tc.name}({_fmt_args(tc.input)})\033[0m")
 
+                        # ── Before-tool hooks ─────────────────────────────────
+                        for hook in _BEFORE_TOOL_HOOKS:
+                            try:
+                                await asyncio.to_thread(hook, self.name, tc.name, dict(tc.input))
+                            except Exception:
+                                pass
+
                         # ── Execute + time the tool call ──────────────────────
                         tool_t0 = time.monotonic()
                         try:
@@ -374,6 +437,15 @@ class BaseAgent(ABC):
                                 "duration_ms": tool_elapsed,
                             },
                         )
+
+                        # ── After-tool hooks ──────────────────────────────────
+                        for hook in _AFTER_TOOL_HOOKS:
+                            try:
+                                await asyncio.to_thread(
+                                    hook, self.name, tc.name, dict(tc.input), result, status
+                                )
+                            except Exception:
+                                pass
 
                         preview = result_text[:120].replace("\n", " ")
 

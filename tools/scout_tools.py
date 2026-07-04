@@ -137,8 +137,35 @@ def web_search(
         return {"success": False, "error": str(e), "query": query}
 
 
+def _chunk_text(text: str, words_per_chunk: int = 512) -> list[str]:
+    """Split text into word-count chunks."""
+    words = text.split()
+    chunks = []
+    for i in range(0, len(words), words_per_chunk):
+        chunks.append(" ".join(words[i:i + words_per_chunk]))
+    return chunks
+
+
+def _score_chunk(chunk: str, focus: str) -> float:
+    """Score a chunk by keyword overlap with the focus query."""
+    if not focus:
+        return 0.0
+    stop = {"the", "and", "for", "this", "that", "with", "from", "have",
+            "will", "are", "was", "can", "not", "but", "its", "into"}
+    focus_words = {w.lower() for w in focus.split() if w.lower() not in stop and len(w) >= 3}
+    chunk_words = {w.lower().strip(".,;:") for w in chunk.split()}
+    if not focus_words:
+        return 0.0
+    return len(focus_words & chunk_words) / len(focus_words)
+
+
 def web_fetch(url: str, focus: str = "") -> dict[str, Any]:
-    """Fetch and clean text from a URL. SSL uses macOS system trust store."""
+    """
+    Fetch and clean text from a URL.
+    Chunks content at ~512 words. Returns top-3 most relevant chunks
+    (scored by keyword overlap with `focus`) plus a fallback full excerpt.
+    SSL uses macOS system trust store.
+    """
     try:
         headers = {"User-Agent": "Mozilla/5.0 (compatible; BOWEN-SCOUT/1.0)"}
         resp = requests.get(url, headers=headers, timeout=15, verify="/etc/ssl/cert.pem")
@@ -150,9 +177,29 @@ def web_fetch(url: str, focus: str = "") -> dict[str, Any]:
 
         text = soup.get_text(separator="\n", strip=True)
         lines = [l for l in text.splitlines() if l.strip()]
-        content = "\n".join(lines)[:10000]
+        clean = "\n".join(lines)
 
-        return {"success": True, "url": url, "content": content}
+        if len(clean.split()) <= 600 or not focus:
+            # Short page or no focus — return full text (capped)
+            return {"success": True, "url": url, "content": clean[:8000]}
+
+        # Chunked retrieval: score by keyword overlap, return top-3
+        chunks = _chunk_text(clean)
+        scored = sorted(
+            enumerate(chunks),
+            key=lambda x: _score_chunk(x[1], focus),
+            reverse=True,
+        )
+        top_chunks = [chunks[i] for i, _ in scored[:3]]
+        content = "\n\n---\n\n".join(top_chunks)
+
+        return {
+            "success": True,
+            "url": url,
+            "content": content,
+            "chunks_returned": len(top_chunks),
+            "total_chunks": len(chunks),
+        }
     except Exception as e:
         return {"success": False, "error": str(e), "url": url}
 

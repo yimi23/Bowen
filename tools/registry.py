@@ -31,7 +31,7 @@ logger = logging.getLogger(__name__)
 
 TOOL_REGISTRY: dict[str, list[str]] = {
     AgentName.CAPTAIN: [
-        "execute_code", "read_file", "write_file", "run_shell", "web_fetch",
+        "execute_code", "read_file", "write_file", "edit_file", "run_shell", "web_fetch",
         "dispatch_create", "dispatch_update", "dispatch_list",
     ],
     AgentName.SCOUT:  ["web_search", "web_fetch", "document_parse", "structured_extract"],
