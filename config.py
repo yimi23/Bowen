@@ -82,6 +82,15 @@ class Config:
     GENI_BACKEND_URL: str = os.getenv("GENI_BACKEND_URL", "http://localhost:5001")
     GENI_API_KEY: str = os.getenv("GENI_API_KEY", "")
 
+    # ── Foundry corpus (language packs) ───────────────────────────────────────
+    # Corpus data and house data never share a store. JSONL proposals live in
+    # corpus/data/<lang>/; verified entries index into corpus/chroma/.
+    CORPUS_DATA_DIR: Path = BASE_DIR / "corpus" / "data"
+    CORPUS_CHROMA_DIR: Path = BASE_DIR / "corpus" / "chroma"
+    # Comma-separated language tags with retrieval injection ENABLED,
+    # e.g. "pidgin,yoruba". Empty = language packs off.
+    CORPUS_ENABLED_LANGS: str = os.getenv("CORPUS_ENABLED_LANGS", "")
+
     # ── Tenants ───────────────────────────────────────────────────────────────
     # Per-tenant config (quiet hours, alert channels, elder_voice flag) lives in
     # memory/tenants/<tenant_id>.yaml — see core/tenants.py. Not code.

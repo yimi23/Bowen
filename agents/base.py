@@ -205,6 +205,14 @@ class BaseAgent(ABC):
         if retrieved:
             parts.append(f"## Relevant Memory\n{retrieved}")
 
+        # Foundry language pack: when the inbound message is a supported and
+        # enabled Nigerian language, verified corpus entries ride in as
+        # few-shot context. Fails safely to None — never blocks a reply.
+        from corpus.retrieval import build_language_pack
+        language_pack = build_language_pack(query, self.config)
+        if language_pack:
+            parts.append(language_pack)
+
         prompt = "\n\n".join(parts)
         _cache_set(cache_key, prompt)
         logger.debug(
