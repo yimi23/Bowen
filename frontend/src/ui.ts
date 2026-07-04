@@ -29,7 +29,9 @@ const STATE_LABELS: Record<OrbState, string> = {
 }
 
 export function setOrbStateLabel(state: OrbState): void {
-  statusText.textContent = STATE_LABELS[state]
+  // Null-safe: the status pill only exists in voice mode's DOM — a stale
+  // cached page (or future layout) without it must never crash the app.
+  if (statusText) statusText.textContent = STATE_LABELS[state]
 }
 
 export function setActiveAgent(_agent: string): void {
@@ -37,6 +39,7 @@ export function setActiveAgent(_agent: string): void {
 }
 
 export function setConnectionState(connected: boolean): void {
+  if (!connectionDot) return
   connectionDot.className = `dot ${connected ? 'connected' : 'disconnected'}`
   connectionDot.title = connected ? 'Connected' : 'Reconnecting...'
 }

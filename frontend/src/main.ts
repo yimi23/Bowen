@@ -19,7 +19,11 @@ import type { OrbState, ToolActivity } from './types'
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
-const WS_URL = `${location.protocol === 'https:' ? 'wss' : 'ws'}://${location.host}/ws/chat`
+// Tenant key: ?key=... in the URL (stored for next visits) or a prior visit's stored key.
+const _urlKey = new URLSearchParams(location.search).get('key') || ''
+if (_urlKey) localStorage.setItem('bowen_key', _urlKey)
+const _key = _urlKey || localStorage.getItem('bowen_key') || ''
+const WS_URL = `${location.protocol === 'https:' ? 'wss' : 'ws'}://${location.host}/ws/chat${_key ? `?key=${encodeURIComponent(_key)}` : ''}`
 
 // ── State ─────────────────────────────────────────────────────────────────────
 
