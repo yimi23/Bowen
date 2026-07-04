@@ -1,35 +1,41 @@
 """
 api/gateway.py — WebSocket chat gateway.
-Endpoint: ws://localhost:8000/ws/chat?key=<api_key>
+Endpoint: ws://localhost:8000/ws/chat
 
-Auth: API key passed as `key` query parameter.
-      Server hashes it, looks up in users.db, binds connection to that user.
-      Each user gets isolated memory but shares agent code + tools.
+Auth: none — hardcoded to usr_admin (Praise Oyimi). Single-user local setup.
 
 Message protocol (client → server):
   {"type": "message", "content": str, "topic_id": str, "conversation_id": str}
+  {"type": "planning_answer", "question": str, "answer": str}
+  {"type": "approval_response", "correlation_id": str, "approved": bool}
   {"type": "ping"}
 
 Message protocol (server → client):
-  {"type": "auth_ok",     "user": str}                             — auth successful
-  {"type": "routing",     "from": "user", "to": str}              — routing decision
-  {"type": "chunk",       "agent": str, "content": str}           — streaming text token
+  {"type": "auth_ok",     "user": str}
+  {"type": "routing",     "from": "user", "to": str}
+  {"type": "chunk",       "agent": str, "content": str}
   {"type": "tool_call",   "agent": str, "tool": str, "args": dict}
   {"type": "tool_result", "agent": str, "tool": str, "status": str, "preview": str}
-  {"type": "done",        "agent": str}                            — turn complete
-  {"type": "error",       "message": str}                         — agent error
+  {"type": "done",        "agent": str}
+  {"type": "error",       "message": str}
   {"type": "pong"}
 
-Each WebSocket connection creates fresh agent instances bound to that user's memory.
-The MessageBus is per-connection (not shared across users).
+Phase A:
+  - session_context dict accumulates cross-turn state
+  - JSONL handoff log at /Volumes/S1/bowen/logs/handoffs.jsonl
+  - HandoffPayload routing in _drain_bus
+Phase B:
+  - Live bus loop runs as a background asyncio task for the duration of the session
 """
 
 from __future__ import annotations
 
 import asyncio
-import uuid
 import json
 import logging
+import time
+from datetime import datetime, timezone
+from pathlib import Path
 from typing import Optional
 
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
@@ -44,6 +50,7 @@ from agents.tamara import TamaraAgent
 from agents.helen import HelenAgent
 from agents.planner import Planner, build_enriched_prompt
 from bus.message_bus import MessageBus
+from bus.schema import HandoffPayload, ReviewPayload
 from memory.pipeline import run_sleep_pipeline
 from services.monitor import monitor
 from tools.registry import UserRegistry
@@ -52,13 +59,45 @@ logger = logging.getLogger(__name__)
 router = APIRouter()
 
 AGENT_TIMEOUT = 120
+_LOGS_DIR = Path("/Volumes/S1/bowen/logs")
+_HANDOFF_LOG = _LOGS_DIR / "handoffs.jsonl"
 
 
-def _make_agents(config, user_memory, user_registry) -> dict:
+# ── Handoff JSONL logger ──────────────────────────────────────────────────────
+
+def _log_handoff(
+    from_agent: str,
+    to_agent: str,
+    payload_type: str,
+    session_id: str,
+    latency_ms: int,
+    outcome: str,
+) -> None:
+    """Append one handoff event to the JSONL log. Fire-and-forget; errors are suppressed."""
+    try:
+        _LOGS_DIR.mkdir(parents=True, exist_ok=True)
+        entry = {
+            "ts": datetime.now(timezone.utc).isoformat(),
+            "session": session_id[:8] if session_id else "",
+            "from": from_agent,
+            "to": to_agent,
+            "payload": payload_type,
+            "latency_ms": latency_ms,
+            "outcome": outcome,
+        }
+        with _HANDOFF_LOG.open("a") as f:
+            f.write(json.dumps(entry) + "\n")
+    except Exception:
+        pass
+
+
+# ── Agent factory ─────────────────────────────────────────────────────────────
+
+def _make_agents(config, user_memory, user_registry) -> tuple[dict, MessageBus]:
     """Create fresh agent instances for one user connection."""
     bus = MessageBus()
     agents = {
-        AgentName.BOWEN:   BOWENAgent(config, user_memory, bus, user_registry),
+        AgentName.BOWEN:   BOWENAgent(config, user_memory, bus),
         AgentName.CAPTAIN: CaptainAgent(config, user_memory, bus, user_registry),
         AgentName.DEVOPS:  DevOpsAgent(config, user_memory, bus, user_registry),
         AgentName.SCOUT:   ScoutAgent(config, user_memory, bus, user_registry),
@@ -68,7 +107,9 @@ def _make_agents(config, user_memory, user_registry) -> dict:
     return agents, bus
 
 
-async def _drain_bus(agents: dict, bus, send: SendFn, depth: int = 0) -> None:
+# ── Bus drain (handles one pass of all pending messages) ─────────────────────
+
+async def _drain_bus(agents: dict, bus, send: SendFn, session_id: str = "", depth: int = 0) -> None:
     if depth > 10:
         return
 
@@ -94,45 +135,70 @@ async def _drain_bus(agents: dict, bus, send: SendFn, depth: int = 0) -> None:
 
         await send({"type": "routing", "from": msg.sender, "to": msg.recipient})
 
+        t0 = time.monotonic()
+        outcome = "ok"
         try:
             async with asyncio.timeout(AGENT_TIMEOUT):
                 await target.handle(msg, send=send)
         except asyncio.TimeoutError:
+            outcome = "timeout"
             await send({"type": "error", "message": f"{msg.recipient} timed out"})
         except Exception as e:
+            outcome = f"error:{type(e).__name__}"
             await send({"type": "error", "message": f"{msg.recipient} error: {type(e).__name__}: {e}"})
+        finally:
+            latency = round((time.monotonic() - t0) * 1000)
+            _log_handoff(
+                from_agent=msg.sender,
+                to_agent=msg.recipient,
+                payload_type=type(msg.payload).__name__,
+                session_id=session_id,
+                latency_ms=latency,
+                outcome=outcome,
+            )
 
-    await _drain_bus(agents, bus, send, depth=depth + 1)
+    await _drain_bus(agents, bus, send, session_id, depth=depth + 1)
 
+
+# ── Live bus loop (Phase B: background task) ──────────────────────────────────
+
+async def _bus_loop(agents: dict, bus, send: SendFn, session_id: str, stop: asyncio.Event) -> None:
+    """
+    Continuously drain the bus while the WebSocket session is active.
+    Runs as a background asyncio task — replaced the post-turn drain pattern.
+    """
+    while not stop.is_set():
+        try:
+            if bus.any_pending():
+                await _drain_bus(agents, bus, send, session_id)
+            else:
+                await asyncio.sleep(0.1)
+        except asyncio.CancelledError:
+            break
+        except Exception as e:
+            logger.error("Bus loop error: %s", e)
+            await asyncio.sleep(0.5)
+
+
+# ── WebSocket endpoint ────────────────────────────────────────────────────────
 
 @router.websocket("/ws/chat")
 async def chat_websocket(websocket: WebSocket):
     await websocket.accept()
 
-    config       = websocket.app.state.config
-    user_manager = websocket.app.state.user_manager
-    multi_store  = websocket.app.state.multi_store
+    config      = websocket.app.state.config
+    multi_store = websocket.app.state.multi_store
 
-    # ── Auth ──────────────────────────────────────────────────────────────────
-    api_key = websocket.query_params.get("key", "")
-    user = await user_manager.authenticate(api_key)
-    if not user:
-        await websocket.send_json({
-            "type": "error",
-            "message": "Invalid or missing API key. Connect with: ws://...?key=<your_key>",
-        })
-        await websocket.close(code=4001)
-        return
-
-    user_id = user["id"]
-    display_name = user["display_name"]
+    # ── Session (always Praise / admin) ──────────────────────────────────────
+    user_id      = "usr_admin"
+    display_name = "Praise Oyimi"
 
     # ── Per-user memory ───────────────────────────────────────────────────────
     user_memory = await multi_store.get_or_create(
-        user_id, user["username"], display_name
+        user_id, "praise", display_name
     )
 
-    # ── Per-user registry (user-specific DB bindings) ─────────────────────────
+    # ── Per-user registry ─────────────────────────────────────────────────────
     user_registry = UserRegistry(
         user_id=user_id,
         db_path=user_memory._db_path,
@@ -143,7 +209,6 @@ async def chat_websocket(websocket: WebSocket):
     # ── Per-connection agents ─────────────────────────────────────────────────
     agents, bus = _make_agents(config, user_memory, user_registry)
 
-    # Tell client auth succeeded
     await websocket.send_json({
         "type": "auth_ok",
         "user": display_name,
@@ -153,13 +218,27 @@ async def chat_websocket(websocket: WebSocket):
     active_conversation_id: Optional[str] = None
     active_topic_id: str = "default"
 
+    # session_context accumulates cross-turn state (Phase A)
+    session_context: dict = {
+        "turn_count": 0,
+        "agents_used": [],
+        "last_agent": None,
+    }
+
     async def send(data: dict) -> None:
         try:
             await websocket.send_json(data)
         except Exception:
             pass
 
-    logger.info(f"User connected: {display_name} ({user_id})")
+    # ── Live bus loop (Phase B) ───────────────────────────────────────────────
+    bus_stop = asyncio.Event()
+    bus_task = asyncio.create_task(
+        _bus_loop(agents, bus, send, active_conversation_id or "", bus_stop),
+        name="bus_loop",
+    )
+
+    logger.info("User connected: %s (%s)", display_name, user_id)
 
     try:
         while True:
@@ -202,8 +281,20 @@ async def chat_websocket(websocket: WebSocket):
                     "topic_id": active_topic_id,
                 })
 
+            # Update bus loop with current session ID
+            bus_task.cancel()
+            bus_stop.set()
+            bus_stop = asyncio.Event()
+            bus_task = asyncio.create_task(
+                _bus_loop(agents, bus, send, active_conversation_id or "", bus_stop),
+                name="bus_loop",
+            )
+
             for agent in agents.values():
                 agent.set_session(active_conversation_id, topic_id=active_topic_id)
+
+            # Update session context
+            session_context["turn_count"] += 1
 
             # Routing
             forced = msg.get("target_agent", "").upper()
@@ -215,6 +306,10 @@ async def chat_websocket(websocket: WebSocket):
                         target_name = await agents[AgentName.BOWEN].route(content)
                 except (asyncio.TimeoutError, Exception):
                     target_name = AgentName.BOWEN
+
+            session_context["last_agent"] = target_name
+            if target_name not in session_context["agents_used"]:
+                session_context["agents_used"].append(target_name)
 
             await send({"type": "routing", "from": "user", "to": target_name})
 
@@ -259,6 +354,7 @@ async def chat_websocket(websocket: WebSocket):
                 agent=target_name,
             )
 
+            t0 = time.monotonic()
             try:
                 async with asyncio.timeout(AGENT_TIMEOUT):
                     await agents[target_name].respond(enriched_content, send=monitored_send)
@@ -266,12 +362,23 @@ async def chat_websocket(websocket: WebSocket):
                 await send({"type": "error", "message": f"{target_name} timed out after {AGENT_TIMEOUT}s"})
             except Exception as e:
                 await send({"type": "error", "message": f"{target_name}: {type(e).__name__}: {e}"})
+            finally:
+                latency = round((time.monotonic() - t0) * 1000)
+                _log_handoff("user", target_name, "message", active_conversation_id or "", latency, "ok")
 
-            await _drain_bus(agents, bus, send)
             await send({"type": "done", "agent": target_name})
 
     except WebSocketDisconnect:
-        logger.info(f"User disconnected: {display_name} ({user_id})")
+        logger.info("User disconnected: %s (%s)", display_name, user_id)
+    finally:
+        # Stop live bus loop
+        bus_stop.set()
+        bus_task.cancel()
+        try:
+            await bus_task
+        except (asyncio.CancelledError, Exception):
+            pass
+
         if active_conversation_id:
             await user_memory.end_conversation(active_conversation_id)
             asyncio.create_task(
