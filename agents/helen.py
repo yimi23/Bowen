@@ -64,5 +64,17 @@ class HelenAgent(BaseAgent):
         return await self.stream_response(user_text, history=history, send=send)
 
     async def morning_briefing(self) -> str:
-        """Called by the 7am scheduler job. Generates and prints the daily briefing."""
+        """
+        Called by the 7am scheduler job. The gate is consulted FIRST — it
+        dedups repeat briefings (6h cooldown) and honors tenant quiet hours.
+        Priority high: the 7am send sits inside the high window (7-23).
+        """
+        from core.alerts import AlertEvent, get_gate
+
+        decision = await get_gate().dispatch(AlertEvent(
+            type="morning_briefing", priority="high",
+            message="Morning briefing", dedup_key="morning_briefing",
+        ))
+        if decision.decision.value != "deliver":
+            return f"[HELEN] briefing {decision.decision.value} ({decision.reason})"
         return await self.respond("Generate my morning briefing for today.")

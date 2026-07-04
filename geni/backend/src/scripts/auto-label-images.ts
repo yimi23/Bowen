@@ -2,14 +2,9 @@
  * Auto-label training images using Claude Vision
  */
 
-import Anthropic from '@anthropic-ai/sdk';
 import fs from 'fs';
 import path from 'path';
-import { config } from '../config';
-
-const anthropic = new Anthropic({
-  apiKey: config.anthropic.apiKey,
-});
+import { anthropic } from '../lib/anthropic';
 
 const TRAINING_DIR = path.join(__dirname, '../../training-data');
 const IMAGES_DIR = path.join(TRAINING_DIR, 'images');

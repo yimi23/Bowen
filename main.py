@@ -50,6 +50,7 @@ from api.health import router as health_router
 from api.memory import router as memory_router
 from api.topics import router as topics_router
 from api.admin import router as admin_router
+from api.internal import router as internal_router
 
 # Initialize logging immediately — before anything else logs
 setup_logging(log_level="INFO", log_file="logs/bowen.log")
@@ -122,6 +123,12 @@ async def lifespan(app: FastAPI):
     # Keep-alive: background pings Anthropic, ChromaDB, Groq every 60s
     keep_alive.start(config, admin_memory)
 
+    # Kokoro TTS engine for /internal/tts (loads lazily; absent models = 503)
+    from voice.tts import TTSEngine
+    tts_engine = TTSEngine(config=config)
+    tts_engine.initialize()
+    app.state.tts_engine = tts_engine
+
     # GENI supervisor: spawns the self-contained Node backend when enabled.
     # Monitoring loops (YOLO subprocess, 15-min cron) live inside that process.
     from services.geni_supervisor import GENISupervisor
@@ -187,3 +194,4 @@ app.include_router(ws_router)
 app.include_router(memory_router)
 app.include_router(topics_router)
 app.include_router(admin_router)
+app.include_router(internal_router)

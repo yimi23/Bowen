@@ -345,13 +345,31 @@ def bible_check(
 
 
 def notify(message: str, urgency: str = "normal") -> dict[str, Any]:
-    """Print a prominent notification. Phase 5: swap with plyer system notification."""
+    """
+    Reminder ping — routed through the OS alert gate (core/alerts), which owns
+    deliver/defer/suppress. A 2am reminder waits for morning; the gate decides.
+    The terminal box is the local rendering of a DELIVERED alert.
+    """
+    import asyncio
+    from core.alerts import AlertEvent, get_gate
+
+    priority = {"low": "low", "normal": "medium", "high": "high"}.get(urgency, "medium")
+    decision = asyncio.run(get_gate().dispatch(AlertEvent(
+        type="reminder", priority=priority, message=message,
+    )))
+
+    if decision.decision.value != "deliver":
+        return {
+            "success": True, "message": message, "urgency": urgency,
+            "delivery": decision.decision.value, "reason": decision.reason,
+        }
+
     colors = {"low": "\033[90m", "normal": "\033[36m", "high": "\033[33m"}
     color = colors.get(urgency, "\033[36m")
     print(f"\n{color}╔══ HELEN REMINDER ══╗\033[0m")
     print(f"{color}  {message}\033[0m")
     print(f"{color}╚════════════════════╝\033[0m\n")
-    return {"success": True, "message": message, "urgency": urgency}
+    return {"success": True, "message": message, "urgency": urgency, "delivery": "deliver"}
 
 
 def daily_briefing(

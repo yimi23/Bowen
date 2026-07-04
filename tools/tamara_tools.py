@@ -239,6 +239,16 @@ def gmail_send(
     if not google_configured(credentials_path):
         return _not_configured_error(credentials_path)
 
+    # Approval request rides through the OS alert gate (audit + dedup).
+    # force=True: the user initiated this send in an active conversation, so
+    # quiet hours do not apply — the gate still records it as the doorway.
+    import asyncio as _asyncio
+    from core.alerts import AlertEvent as _AlertEvent, get_gate as _get_gate
+    _asyncio.run(_get_gate().dispatch(_AlertEvent(
+        type="approval_request", priority="high", force=True,
+        message=f"TAMARA requests approval to email {to}: {subject}",
+    )))
+
     # Surface the draft for approval before touching the API
     print("\n\033[33m[TAMARA] Ready to send — approval required:\033[0m")
     print(f"  To:      {to}")

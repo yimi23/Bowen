@@ -1,13 +1,25 @@
 """
 agents/tamara.py — TAMARA: Messaging & Communications.
 Phase 4+: Gmail read/send/draft. Phase 5+: send callback for WebSocket streaming.
+GENI merge: TAMARA owns outbound human interruptions — GENI's care events
+arrive here as typed payloads and go out through the core/alerts gate.
 
 RULE: Never sends without explicit user approval.
       gmail_send enforces this at the tool level (prompts before API call).
 """
 
+from typing import Optional
+
 from agents.base import BaseAgent, SendFn
+from bus.schema import (
+    AgentMessage,
+    DailyReportPayload,
+    FallConfirmedPayload,
+    MedicationMissedPayload,
+    WellnessCheckPayload,
+)
 from config import Config
+from core.alerts import AlertEvent, get_gate
 from memory.store import MemoryStore
 from bus.message_bus import MessageBus
 
@@ -18,7 +30,6 @@ class TamaraAgent(BaseAgent):
 
     def __init__(self, config: Config, memory: MemoryStore, bus: MessageBus, user_registry=None) -> None:
         super().__init__(config, memory, bus, user_registry)
-        self._model = config.SONNET_MODEL
 
     @property
     def base_identity(self) -> str:
@@ -60,3 +71,49 @@ class TamaraAgent(BaseAgent):
 
         # Fallback: no tools registered (Google not configured yet)
         return await self.stream_response(user_text, history=history, send=send)
+
+    # ── GENI care events → the alerts gate ────────────────────────────────────
+
+    async def handle(self, msg: AgentMessage, send: SendFn = None) -> Optional[str]:
+        event = self._to_alert_event(msg.payload)
+        if event is not None:
+            decision = await get_gate().dispatch(event)
+            return f"[TAMARA] {event.type} → {decision.decision.value} ({decision.reason})"
+        return await super().handle(msg, send=send)
+
+    @staticmethod
+    def _to_alert_event(payload) -> Optional[AlertEvent]:
+        """Map typed GENI payloads onto gate events. Gate owns the timing."""
+        if isinstance(payload, FallConfirmedPayload):
+            return AlertEvent(
+                type="fall_detected",
+                priority="critical",
+                message=payload.message,
+                tenant_id=payload.tenant_id,
+                should_call=payload.should_call,
+                details={"confidence": payload.confidence, "detected_at": payload.detected_at},
+            )
+        if isinstance(payload, MedicationMissedPayload):
+            return AlertEvent(
+                type="medication_missed",
+                priority=payload.priority,
+                message=payload.message,
+                tenant_id=payload.tenant_id,
+                dedup_key=f"medication_missed:{payload.medication}",
+                details={"due_at": payload.due_at, "elapsed_minutes": payload.elapsed_minutes},
+            )
+        if isinstance(payload, WellnessCheckPayload):
+            return AlertEvent(
+                type="wellness_check",
+                priority="medium" if payload.concern else "low",
+                message=payload.message or payload.observations,
+                tenant_id=payload.tenant_id,
+            )
+        if isinstance(payload, DailyReportPayload):
+            return AlertEvent(
+                type="daily_report",
+                priority="low",
+                message=payload.message,
+                tenant_id=payload.tenant_id,
+            )
+        return None

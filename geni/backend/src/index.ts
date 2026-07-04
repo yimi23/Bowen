@@ -123,8 +123,8 @@ app.get('/health', (req, res) => {
       ...fallDetection,
     },
     ai: {
-      anthropicConfigured: !!config.anthropic.apiKey,
-      openaiConfigured: !!config.openai.apiKey,
+      anthropicConfigured: true,  // GENI merge: brain rides BOWEN's LLM seam
+      groqConfigured: !!process.env.GROQ_API_KEY,
       elevenlabsConfigured: !!config.elevenlabs.apiKey,
     },
     messagingEnabled: config.messaging.enabled,

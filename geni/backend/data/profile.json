@@ -1,0 +1,31 @@
+{
+  "patient": {
+    "name": "Alex Morgan",
+    "age": 80,
+    "conditions": ["High Blood Pressure"],
+    "allergies": []
+  },
+  "contacts": [
+    {
+      "name": "Jamie Morgan",
+      "relationship": "Caregiver",
+      "phone": "+15550000001",
+      "isPrimary": true
+    },
+    {
+      "name": "Dr. Lee",
+      "relationship": "Primary Care",
+      "phone": "+15550000002",
+      "isPrimary": false
+    }
+  ],
+  "medications": [
+    { "name": "Lisinopril", "dosage": "10mg", "time": "8:00 AM", "period": "morning" },
+    { "name": "Vitamin D", "dosage": "1000 IU", "time": "8:00 AM", "period": "morning" },
+    { "name": "Lisinopril", "dosage": "10mg", "time": "8:00 PM", "period": "evening" }
+  ],
+  "reminders": [
+    { "time": "8:00 AM", "message": "Morning medication", "type": "medication" },
+    { "time": "8:00 PM", "message": "Evening medication", "type": "medication" }
+  ]
+}

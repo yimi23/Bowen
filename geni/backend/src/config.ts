@@ -41,10 +41,6 @@ export const config = {
     visionModel: process.env.ANTHROPIC_VISION_MODEL || 'claude-haiku-4-5',
   },
   
-  openai: {
-    apiKey: process.env.OPENAI_API_KEY || '',
-  },
-  
   elevenlabs: {
     apiKey: process.env.ELEVENLABS_API_KEY || '',
     voiceId: process.env.ELEVENLABS_VOICE_ID || '',
@@ -65,8 +61,7 @@ export const config = {
 const requiredVars = [
   'TWILIO_ACCOUNT_SID',
   'TWILIO_AUTH_TOKEN',
-  'ANTHROPIC_API_KEY',
-  'OPENAI_API_KEY',
+  'GROQ_API_KEY',
   'GENI_API_KEY',
 ];
 

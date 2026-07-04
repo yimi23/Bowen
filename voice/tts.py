@@ -96,6 +96,31 @@ class TTSEngine:
         except Exception as e:
             logger.warning(f"TTS speak failed: {e}")
 
+    def synthesize_wav(self, text: str) -> bytes:
+        """
+        Synthesize to WAV bytes WITHOUT playing (GENI merge: elder-facing
+        speech is synthesized here and played on the GENI device). Raises if
+        the engine is not ready — callers decide their fallback.
+        """
+        if not self._ready:
+            raise RuntimeError("Kokoro TTS engine not initialized")
+        import io
+        import wave
+
+        import numpy as np
+
+        samples, sample_rate = self._kokoro.create(
+            text, voice=self.voice, speed=self.speed, lang="en-us",
+        )
+        pcm = (np.clip(samples, -1.0, 1.0) * 32767).astype(np.int16)
+        buf = io.BytesIO()
+        with wave.open(buf, "wb") as wf:
+            wf.setnchannels(1)
+            wf.setsampwidth(2)
+            wf.setframerate(sample_rate)
+            wf.writeframes(pcm.tobytes())
+        return buf.getvalue()
+
     async def speak_streaming(self, text: str) -> None:
         """Speak as text arrives — splits on sentence boundaries."""
         if not self._ready:

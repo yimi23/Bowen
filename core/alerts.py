@@ -199,18 +199,48 @@ class AlertGate:
         return list(self._deferred)
 
     async def _deliver(self, event: AlertEvent, tenant) -> None:
-        for name in tenant.channels:
-            channel = self._channels.get(name)
-            if channel is None:
-                logger.warning("unknown alert channel %r for tenant %s", name, tenant.tenant_id)
-                continue
-            try:
-                await channel.send(event, tenant)
-                logger.info(
-                    "alert delivered",
-                    extra={"type": event.type, "channel": name, "tenant": tenant.tenant_id},
-                )
-                return   # first successful channel wins
-            except Exception as exc:
-                logger.error("channel %s failed: %s: %s — trying next", name, type(exc).__name__, exc)
-        logger.error("all channels failed for alert %s (tenant %s)", event.type, tenant.tenant_id)
+        await deliver_via_channels(self._channels, event, tenant)
+
+
+async def deliver_via_channels(channels: dict, event: AlertEvent, tenant) -> None:
+    # An event may pin its channel (e.g. GENI escalation voice call);
+    # otherwise the tenant's preference order decides.
+    pinned = event.details.get("channel")
+    order = [pinned] + [c for c in tenant.channels if c != pinned] if pinned else tenant.channels
+    for name in order:
+        channel = channels.get(name)
+        if channel is None:
+            logger.warning("unknown alert channel %r for tenant %s", name, tenant.tenant_id)
+            continue
+        try:
+            await channel.send(event, tenant)
+            logger.info(
+                "alert delivered",
+                extra={"type": event.type, "channel": name, "tenant": tenant.tenant_id},
+            )
+            return   # first successful channel wins
+        except Exception as exc:
+            logger.error("channel %s failed: %s: %s — trying next", name, type(exc).__name__, exc)
+    logger.error("all channels failed for alert %s (tenant %s)", event.type, tenant.tenant_id)
+
+
+# ── Process-wide gate singleton ────────────────────────────────────────────────
+# Tools and agents share ONE gate so dedup history is coherent across the OS.
+
+_GATE: Optional[AlertGate] = None
+
+
+def get_gate(tenants_dir=None) -> AlertGate:
+    global _GATE
+    if _GATE is None:
+        if tenants_dir is None:
+            from config import Config
+            tenants_dir = Config().TENANTS_DIR
+        _GATE = AlertGate(tenants_dir)
+    return _GATE
+
+
+def set_gate(gate: Optional[AlertGate]) -> None:
+    """Test seam — swap or reset the process-wide gate."""
+    global _GATE
+    _GATE = gate

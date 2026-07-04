@@ -30,7 +30,8 @@ class TwilioWhatsAppChannel:
         self._from = from_number or os.getenv("TWILIO_WHATSAPP_NUMBER", "")
 
     async def send(self, event, tenant) -> None:
-        if not (self._sid and self._token and self._from and tenant.caregiver_phone):
+        to = event.details.get("to_phone") or tenant.caregiver_phone
+        if not (self._sid and self._token and self._from and to):
             raise RuntimeError("twilio_whatsapp not configured for this tenant")
         async with httpx.AsyncClient(timeout=15) as client:
             resp = await client.post(
@@ -38,7 +39,7 @@ class TwilioWhatsAppChannel:
                 auth=(self._sid, self._token),
                 data={
                     "From": f"whatsapp:{self._from}",
-                    "To": f"whatsapp:{tenant.caregiver_phone}",
+                    "To": f"whatsapp:{to}",
                     "Body": event.message,
                 },
             )
@@ -54,7 +55,8 @@ class TwilioSMSChannel:
         self._from = from_number or os.getenv("TWILIO_PHONE_NUMBER", "")
 
     async def send(self, event, tenant) -> None:
-        if not (self._sid and self._token and self._from and tenant.caregiver_phone):
+        to = event.details.get("to_phone") or tenant.caregiver_phone
+        if not (self._sid and self._token and self._from and to):
             raise RuntimeError("twilio_sms not configured for this tenant")
         async with httpx.AsyncClient(timeout=15) as client:
             resp = await client.post(
@@ -62,9 +64,43 @@ class TwilioSMSChannel:
                 auth=(self._sid, self._token),
                 data={
                     "From": self._from,
-                    "To": tenant.caregiver_phone,
+                    "To": to,
                     "Body": event.message,
                 },
+            )
+            resp.raise_for_status()
+
+
+class TwilioVoiceChannel:
+    """Escalation voice call (GENI's TwiML preserved verbatim)."""
+
+    name = "twilio_voice"
+
+    def __init__(self, account_sid: str = "", auth_token: str = "", from_number: str = "") -> None:
+        self._sid = account_sid or os.getenv("TWILIO_ACCOUNT_SID", "")
+        self._token = auth_token or os.getenv("TWILIO_AUTH_TOKEN", "")
+        self._from = from_number or os.getenv("TWILIO_PHONE_NUMBER", "")
+
+    async def send(self, event, tenant) -> None:
+        to = event.details.get("to_phone") or tenant.caregiver_phone
+        if not (self._sid and self._token and self._from and to):
+            raise RuntimeError("twilio_voice not configured for this tenant")
+        caller = event.details.get("caller_name", "GENI")
+        patient = event.details.get("patient_name", "the patient")
+        twiml = (
+            "<Response>"
+            f'<Say voice="Polly.Joanna">Hello, this is {caller} calling on behalf of {patient}. '
+            f"{event.message}</Say>"
+            '<Pause length="2"/>'
+            f'<Say voice="Polly.Joanna">If this is an emergency, please check on {patient.split(" ")[0]} '
+            "immediately. You can also reply to this number via text message.</Say>"
+            "</Response>"
+        )
+        async with httpx.AsyncClient(timeout=15) as client:
+            resp = await client.post(
+                f"{TWILIO_API}/Accounts/{self._sid}/Calls.json",
+                auth=(self._sid, self._token),
+                data={"From": self._from, "To": to, "Twiml": twiml},
             )
             resp.raise_for_status()
 
@@ -85,5 +121,6 @@ def default_channels() -> dict:
     return {
         "twilio_whatsapp": TwilioWhatsAppChannel(),
         "twilio_sms": TwilioSMSChannel(),
+        "twilio_voice": TwilioVoiceChannel(),
         "log": LogChannel(),
     }

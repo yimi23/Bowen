@@ -1,5 +1,4 @@
 import { Router, Request, Response } from 'express';
-import twilio from 'twilio';
 import { addActivity, state } from '../state';
 import { emitActivity, emitIncomingMessage } from '../socket';
 import { config } from '../config';
@@ -7,8 +6,14 @@ import { moduleLogger } from '../lib/logger';
 
 const log = moduleLogger('twilio');
 
-const MessagingResponse = twilio.twiml.MessagingResponse;
-const VoiceResponse = twilio.twiml.VoiceResponse;
+// GENI merge: these webhooks only ever BUILT TwiML XML — no API calls — so
+// the twilio SDK import is replaced by two tiny XML helpers. Inbound
+// webhooks stay here; outbound delivery lives in BOWEN's gate delivery layer.
+const xmlEscape = (s: string) =>
+  s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+const messageTwiml = (text: string) =>
+  `<?xml version="1.0" encoding="UTF-8"?><Response><Message>${xmlEscape(text)}</Message></Response>`;
 
 const router = Router();
 
@@ -48,12 +53,9 @@ router.post('/webhook/message', (req: Request, res: Response) => {
     });
     
     // Auto-respond (optional)
-    const twiml = new MessagingResponse();
     const patientFirstName = config.patient.name.split(' ')[0];
-    twiml.message(`Thank you for your message. ${patientFirstName} will be notified. - GENI`);
-    
     res.type('text/xml');
-    res.send(twiml.toString());
+    res.send(messageTwiml(`Thank you for your message. ${patientFirstName} will be notified. - GENI`));
     
   } catch (error) {
     log.error({ err: error }, '❌ Webhook error:');
@@ -71,29 +73,17 @@ router.post('/webhook/voice', (req: Request, res: Response) => {
     
     log.info(`📞 Voice call status from ${From}: ${CallStatus}`);
     
-    const twiml = new VoiceResponse();
-    
+    let body = '';
     if (CallStatus === 'ringing' || CallStatus === 'in-progress') {
-      // Call connected - play emergency message
-      twiml.say({
-        voice: 'Polly.Joanna'
-      }, `This is GENI calling on behalf of ${config.patient.name}. Please check on ${config.patient.name.split(' ')[0]} immediately. They may need assistance.`);
-      
-      twiml.pause({ length: 2 });
-      
-      twiml.say({
-        voice: 'Polly.Joanna'
-      }, 'Press any key to confirm you received this alert.');
-      
-      // Gather response
-      twiml.gather({
-        numDigits: 1,
-        action: '/api/twilio/webhook/voice/confirm',
-      });
+      const first = config.patient.name.split(' ')[0];
+      body =
+        `<Say voice="Polly.Joanna">${xmlEscape(`This is GENI calling on behalf of ${config.patient.name}. Please check on ${first} immediately. They may need assistance.`)}</Say>` +
+        '<Pause length="2"/>' +
+        '<Say voice="Polly.Joanna">Press any key to confirm you received this alert.</Say>' +
+        '<Gather numDigits="1" action="/api/twilio/webhook/voice/confirm"/>';
     }
-    
     res.type('text/xml');
-    res.send(twiml.toString());
+    res.send(`<?xml version="1.0" encoding="UTF-8"?><Response>${body}</Response>`);
     
   } catch (error) {
     log.error({ err: error }, '❌ Voice webhook error:');
@@ -107,19 +97,15 @@ router.post('/webhook/voice', (req: Request, res: Response) => {
 router.post('/webhook/voice/confirm', (req: Request, res: Response) => {
   const { Digits } = req.body;
   
-  const twiml = new VoiceResponse();
-  
+  let body = '';
   if (Digits) {
-    twiml.say({
-      voice: 'Polly.Joanna'
-    }, `Thank you for confirming. ${config.patient.name.split(' ')[0]} has been notified that help is on the way.`);
-    
+    const first = config.patient.name.split(' ')[0];
+    body = `<Say voice="Polly.Joanna">${xmlEscape(`Thank you for confirming. ${first} has been notified that help is on the way.`)}</Say>`;
     // Log confirmation
     addActivity('Emergency alert acknowledged by caregiver', 'system');
   }
-  
   res.type('text/xml');
-  res.send(twiml.toString());
+  res.send(`<?xml version="1.0" encoding="UTF-8"?><Response>${body}</Response>`);
 });
 
 /**

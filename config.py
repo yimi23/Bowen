@@ -18,8 +18,7 @@ BASE_DIR = Path(__file__).parent
 class Config:
     # ── Core AI ───────────────────────────────────────────────────────────────
     ANTHROPIC_API_KEY: str = os.getenv("ANTHROPIC_API_KEY", "")
-    GROQ_API_KEY: str = os.getenv("GROQ_API_KEY", "")      # Tier 2 routing + Phase 5 STT
-    OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY", "")  # Phase 5 fallback STT
+    GROQ_API_KEY: str = os.getenv("GROQ_API_KEY", "")      # Tier 2 routing + STT (BOWEN and GENI)
     PERPLEXITY_API_KEY: str = os.getenv("PERPLEXITY_API_KEY", "")
 
     # ── Research ──────────────────────────────────────────────────────────────
