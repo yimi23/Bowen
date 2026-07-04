@@ -77,7 +77,7 @@ class STTEngine:
     def __init__(self, api_key: str) -> None:
         self._api_key = api_key
         self._ready = False
-        self._client = None
+        self._llm = None
         self._sd = None
 
     def initialize(self) -> bool:
@@ -86,9 +86,9 @@ class STTEngine:
             logger.warning("STT: no Groq API key")
             return False
         try:
-            from groq import Groq
+            from llm import GroqProvider
             import sounddevice as sd
-            self._client = Groq(api_key=self._api_key)
+            self._llm = GroqProvider(api_key=self._api_key)
             self._sd = sd
             self._ready = True
             logger.info("STT ready — Groq whisper-large-v3-turbo")
@@ -165,13 +165,13 @@ class STTEngine:
     def _transcribe_sync(self, audio_bytes: bytes) -> Optional[str]:
         """Send WAV bytes to Groq Whisper, return transcribed text."""
         try:
-            result = self._client.audio.transcriptions.create(
+            result = self._llm.transcribe_sync(
                 file=("audio.wav", audio_bytes, "audio/wav"),
                 model="whisper-large-v3-turbo",
                 language="en",
                 response_format="text",
             )
-            text = result.strip() if isinstance(result, str) else result.text.strip()
+            text = result.strip()
             text = _apply_corrections(text)
             logger.debug(f"STT: transcribed: {text[:80]}")
             return text if text else None

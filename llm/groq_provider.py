@@ -81,11 +81,17 @@ class GroqProvider(LLMProvider):
 
     # ── Whisper transcription (voice STT) ─────────────────────────────────────
 
-    def transcribe_sync(self, audio_file, model: str = "whisper-large-v3-turbo") -> str:
+    def transcribe_sync(self, file, model: str = "whisper-large-v3-turbo", **kwargs) -> str:
         """Blocking Whisper call — STT engine runs this inside a thread."""
         if self._sync_client is None:
             self._sync_client = Groq(api_key=self._api_key)
         result = self._sync_client.audio.transcriptions.create(
-            file=audio_file, model=model,
+            file=file, model=model, **kwargs,
         )
-        return result.text
+        return result if isinstance(result, str) else result.text
+
+    # ── Health check (keep-alive service) ─────────────────────────────────────
+
+    async def health_check(self) -> None:
+        """Cheap liveness ping — raises on failure."""
+        await self._client.models.list()

@@ -1,17 +1,19 @@
 """
-routing/tier2.py — Tier 2 Groq LLaMA Router.
-~100-200ms, ~$0.0002 (80% cheaper than Haiku, 3x faster).
-Falls back to Anthropic Haiku if Groq key is unavailable.
+routing/tier2.py — Tier 2 LLM Router.
+~100-200ms, ~$0.0002 via Groq (80% cheaper than Haiku, 3x faster).
+Falls back to Anthropic Haiku if Groq is unavailable or errors.
 
-Strategy: model 5 agents as tools, force a single tool selection.
+Strategy: model the agents as tools, force a single tool selection.
 This avoids parsing free-text responses — we always get a clean agent name.
+
+Which model does the routing is policy, not code: agents.yaml
+(routing.tier2_primary / routing.tier2_fallback) via llm/registry.
 """
 
-import json
 import logging
-from groq import AsyncGroq
-import anthropic
-from utils.rate_limiter import groq_limiter, anthropic_limiter
+
+from llm import resolve_routing_llm
+from llm.provider import LLMProvider
 from agents.constants import AgentName
 
 logger = logging.getLogger(__name__)
@@ -190,20 +192,20 @@ ROUTING_SYSTEM = (
 )
 
 
-async def route(
-    text: str,
-    anthropic_client: anthropic.AsyncAnthropic,
-    anthropic_model: str,
-    groq_api_key: str = "",
-) -> tuple[str, str]:
+async def route(text: str, config) -> tuple[str, str]:
     """
     Returns (agent_name, reason).
-    Primary: Groq LLaMA 3.1 8B (~100ms, $0.0002).
-    Fallback: Anthropic Haiku (~400ms, $0.001) if Groq unavailable or errors.
+    Primary: routing.tier2_primary from agents.yaml (Groq LLaMA — ~100ms, $0.0002).
+    Fallback: routing.tier2_fallback (Anthropic Haiku) if Groq unavailable or errors.
     """
-    if groq_api_key:
+    if config.GROQ_API_KEY:
         try:
-            result = await _route_groq(text, groq_api_key)
+            provider, model, temperature = resolve_routing_llm("tier2_primary", config)
+            result = await _route_via(
+                provider, model, temperature, text,
+                tools=AGENT_TOOLS_GROQ, tool_choice="required",
+                empty_reason="groq-fallback",
+            )
             logger.debug("Routed via Groq", extra={"agent": result[0], "reason": result[1][:60]})
             return result
         except Exception as exc:
@@ -212,69 +214,45 @@ async def route(
                 extra={"err": f"{type(exc).__name__}: {str(exc)[:120]}"},
             )
 
-    result = await _route_anthropic(text, anthropic_client, anthropic_model)
+    provider, model, temperature = resolve_routing_llm("tier2_fallback", config)
+    result = await _route_via(
+        provider, model, temperature, text,
+        tools=AGENT_TOOLS_ANTHROPIC, tool_choice={"type": "any"},
+        empty_reason="anthropic-fallback",
+    )
     logger.debug("Routed via Anthropic", extra={"agent": result[0], "reason": result[1][:60]})
     return result
 
 
-async def _route_groq(text: str, api_key: str) -> tuple[str, str]:
-    """
-    Groq routing. Uses tool_choice="required" — model MUST call a function.
-    max_tokens=64 is enough for the reason string; temperature=0 for determinism.
-    """
-    await groq_limiter.acquire()
-    client = AsyncGroq(api_key=api_key)
-    response = await client.chat.completions.create(
-        model="llama-3.1-8b-instant",
-        messages=[
-            {"role": "system", "content": ROUTING_SYSTEM},
-            {"role": "user", "content": text},
-        ],
-        tools=AGENT_TOOLS_GROQ,
-        tool_choice="required",  # forces a function call — no free-text fallback
-        max_tokens=64,
-        temperature=0,           # deterministic routing
-    )
-
-    msg = response.choices[0].message
-    if msg.tool_calls:
-        call = msg.tool_calls[0]
-        agent = TOOL_TO_AGENT.get(call.function.name, "BOWEN")
-        try:
-            args = json.loads(call.function.arguments)
-            reason = args.get("reason", "")
-        except Exception:
-            reason = ""
-        return agent, reason
-
-    # Should never happen with tool_choice="required"
-    logger.error("Groq returned no tool calls despite tool_choice=required — defaulting to BOWEN")
-    return AgentName.BOWEN, "groq-fallback"
-
-
-async def _route_anthropic(
-    text: str,
-    client: anthropic.AsyncAnthropic,
+async def _route_via(
+    provider: LLMProvider,
     model: str,
+    temperature,
+    text: str,
+    *,
+    tools: list[dict],
+    tool_choice,
+    empty_reason: str,
 ) -> tuple[str, str]:
     """
-    Anthropic Haiku fallback routing.
-    tool_choice={"type": "any"} is Anthropic's equivalent of Groq's tool_choice="required".
+    One routing call through the provider seam. tool_choice forces a function
+    call so we never parse free text; max_tokens=64 is enough for the reason.
     """
-    await anthropic_limiter.acquire()
-    response = await client.messages.create(
+    response = await provider.complete(
+        [{"role": "user", "content": text}],
         model=model,
         max_tokens=64,
-        tools=AGENT_TOOLS_ANTHROPIC,
-        tool_choice={"type": "any"},   # force a tool call — no text response allowed
         system=ROUTING_SYSTEM,
-        messages=[{"role": "user", "content": text}],
+        tools=tools,
+        tool_choice=tool_choice,
+        temperature=temperature,
     )
-    for block in response.content:
-        if block.type == "tool_use":
-            agent = TOOL_TO_AGENT.get(block.name, "BOWEN")
-            reason = block.input.get("reason", "")
-            return agent, reason
 
-    logger.error("Anthropic returned no tool calls despite tool_choice=any — defaulting to BOWEN")
-    return AgentName.BOWEN, "anthropic-fallback"
+    for block in response.tool_uses():
+        agent = TOOL_TO_AGENT.get(block.name, AgentName.BOWEN)
+        reason = block.input.get("reason", "")
+        return agent, reason
+
+    # Should never happen with a forced tool choice
+    logger.error("Router returned no tool calls despite forced tool_choice — defaulting to BOWEN")
+    return AgentName.BOWEN, empty_reason

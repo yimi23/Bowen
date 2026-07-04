@@ -9,8 +9,7 @@ import logging
 from datetime import datetime, timezone
 from typing import Optional
 
-import anthropic
-
+from llm import AnthropicProvider
 from memory.store import MemoryStore
 
 logger = logging.getLogger(__name__)
@@ -26,7 +25,7 @@ Return ONLY the merged sentence. No preamble.
 class MemoryConsolidator:
     def __init__(self, memory: MemoryStore, api_key: str, model: str) -> None:
         self._memory = memory
-        self._client = anthropic.AsyncAnthropic(api_key=api_key)
+        self._llm = AnthropicProvider(api_key)
         self._model = model
 
     async def run(self) -> dict:
@@ -140,16 +139,13 @@ class MemoryConsolidator:
 
     async def _merge(self, a: str, b: str) -> Optional[str]:
         try:
-            response = await self._client.messages.create(
+            response = await self._llm.complete(
+                [{"role": "user", "content": f"Memory 1: {a}\nMemory 2: {b}"}],
                 model=self._model,
                 max_tokens=100,
                 system=MERGE_SYSTEM,
-                messages=[{"role": "user", "content": f"Memory 1: {a}\nMemory 2: {b}"}],
             )
-            return response.content[0].text.strip()
-        except anthropic.APIError as e:
-            logger.warning("Consolidation: merge API error: %s", e)
-            return None
+            return response.text.strip()
         except Exception as e:
-            logger.error("Consolidation: unexpected merge error: %s: %s", type(e).__name__, e)
+            logger.error("Consolidation: merge error: %s: %s", type(e).__name__, e)
             return None

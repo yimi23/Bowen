@@ -26,13 +26,11 @@ from collections import OrderedDict
 from pathlib import Path
 from typing import Optional, Callable, Awaitable, Any
 
-import anthropic
-
 from config import Config
+from llm import get_provider, resolve_agent_llm
 from memory.store import MemoryStore
 from bus.message_bus import MessageBus
 from bus.schema import AgentMessage, TextPayload
-from utils.rate_limiter import anthropic_limiter
 from utils.retry import with_retry
 
 logger = logging.getLogger(__name__)
@@ -120,8 +118,16 @@ class BaseAgent(ABC):
         self.config = config
         self.memory = memory
         self.bus = bus
-        self.client = anthropic.AsyncAnthropic(api_key=config.ANTHROPIC_API_KEY)
-        self._model = self.model_override or config.SONNET_MODEL
+        # Model policy lives in agents.yaml. Agents not listed there (ad-hoc
+        # subclasses) default to Anthropic Sonnet — the pre-seam behavior.
+        try:
+            provider, model, temperature = resolve_agent_llm(self.name, config)
+        except KeyError:
+            provider = get_provider("anthropic", config)
+            model, temperature = config.SONNET_MODEL, None
+        self.provider = provider
+        self._model = self.model_override or model
+        self._temperature = temperature
         self._session_id: Optional[str] = None
         self._topic_id: str = "default"
         self._turn: int = 0
@@ -288,15 +294,14 @@ class BaseAgent(ABC):
         t0 = time.monotonic()
         try:
             async with asyncio.timeout(AGENT_TIMEOUT):
-                await anthropic_limiter.acquire()
 
                 async def _do_stream():
                     nonlocal full_response
-                    async with self.client.messages.stream(
+                    async with self.provider.stream(
+                        messages,
                         model=self._model,
                         max_tokens=2048,
                         system=system,
-                        messages=messages,
                     ) as stream:
                         async for text in stream.text_stream:
                             full_response += text
@@ -357,14 +362,12 @@ class BaseAgent(ABC):
         try:
             async with asyncio.timeout(AGENT_TIMEOUT):
                 for iteration in range(max_iterations):
-                    await anthropic_limiter.acquire()
-
                     response = await with_retry(
-                        self.client.messages.create,
+                        self.provider.complete,
+                        messages=messages,
                         model=self._model,
                         max_tokens=4096,
                         system=system,
-                        messages=messages,
                         tools=tools,
                         context=f"{self.name}.tool_use_loop iter={iteration}",
                     )

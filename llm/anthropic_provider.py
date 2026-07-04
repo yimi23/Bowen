@@ -100,6 +100,32 @@ class AnthropicProvider(LLMProvider):
             kwargs["system"] = system
         if temperature is not None:
             kwargs["temperature"] = temperature
-        # The SDK object is itself an async context manager with .text_stream —
-        # returned as-is so streaming behavior is byte-identical to before.
-        return self._client.messages.stream(**kwargs)
+        # Rate-limit on entry, then hand back the SDK stream (which already
+        # exposes .text_stream) so streaming behavior is identical to before.
+        return _LimitedStream(lambda: self._client.messages.stream(**kwargs))
+
+
+    # ── Health check (keep-alive service) ─────────────────────────────────────
+
+    async def health_check(self, model: str) -> None:
+        """count_tokens preflight — bills input tokens only (negligible). Raises on failure."""
+        await self._client.messages.count_tokens(
+            model=model,
+            messages=[{"role": "user", "content": "ping"}],
+        )
+
+
+class _LimitedStream:
+    """Async CM: acquire the rate limiter, then delegate to the SDK stream."""
+
+    def __init__(self, make_stream) -> None:
+        self._make_stream = make_stream
+        self._stream = None
+
+    async def __aenter__(self):
+        await anthropic_limiter.acquire()
+        self._stream = self._make_stream()
+        return await self._stream.__aenter__()
+
+    async def __aexit__(self, exc_type, exc, tb):
+        return await self._stream.__aexit__(exc_type, exc, tb)

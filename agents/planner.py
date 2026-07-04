@@ -23,7 +23,7 @@ import re
 from pathlib import Path
 from typing import Optional
 
-import anthropic
+from llm import AnthropicProvider
 
 logger = logging.getLogger(__name__)
 
@@ -85,7 +85,7 @@ class Planner:
     """
 
     def __init__(self, api_key: str, haiku_model: str) -> None:
-        self._client = anthropic.AsyncAnthropic(api_key=api_key)
+        self._llm = AnthropicProvider(api_key)
         self._model = haiku_model
 
     async def classify(self, text: str) -> str:
@@ -106,15 +106,15 @@ class Planner:
         # Use Haiku for ambiguous cases
         try:
             msg = await asyncio.wait_for(
-                self._client.messages.create(
+                self._llm.complete(
+                    [{"role": "user", "content": text}],
                     model=self._model,
                     max_tokens=8,
                     system=_CLASSIFICATION_SYSTEM,
-                    messages=[{"role": "user", "content": text}],
                 ),
                 timeout=8,
             )
-            result = msg.content[0].text.strip().lower() if msg.content else "clear"
+            result = msg.text.strip().lower() if msg.content else "clear"
             return "vague" if "vague" in result else "clear"
         except Exception:
             return "clear"  # fail open
@@ -123,15 +123,15 @@ class Planner:
         """Generate clarifying questions for a vague request."""
         try:
             msg = await asyncio.wait_for(
-                self._client.messages.create(
+                self._llm.complete(
+                    [{"role": "user", "content": text}],
                     model=self._model,
                     max_tokens=200,
                     system=_QUESTIONS_SYSTEM,
-                    messages=[{"role": "user", "content": text}],
                 ),
                 timeout=10,
             )
-            raw = msg.content[0].text.strip() if msg.content else "[]"
+            raw = msg.text.strip() if msg.content else "[]"
             questions = json.loads(raw)
             return questions[:3] if isinstance(questions, list) else []
         except Exception:

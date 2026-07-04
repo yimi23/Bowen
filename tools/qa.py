@@ -17,7 +17,7 @@ import asyncio
 import logging
 from dataclasses import dataclass, field
 
-import anthropic
+from llm import AnthropicProvider
 
 logger = logging.getLogger(__name__)
 
@@ -80,24 +80,24 @@ async def verify_output(
         return QAResult(passed=True, attempt=attempt)
 
     try:
-        client = anthropic.AsyncAnthropic(api_key=api_key)
+        llm = AnthropicProvider(api_key)
         msg = await asyncio.wait_for(
-            client.messages.create(
-                model=model,
-                max_tokens=256,
-                system=_QA_SYSTEM,
-                messages=[{
+            llm.complete(
+                [{
                     "role": "user",
                     "content": (
                         f"ORIGINAL REQUEST:\n{original_request[:800]}\n\n"
                         f"RESPONSE:\n{response[:2000]}"
                     ),
                 }],
+                model=model,
+                max_tokens=256,
+                system=_QA_SYSTEM,
             ),
             timeout=30,
         )
 
-        text = msg.content[0].text.strip() if msg.content else ""
+        text = msg.text.strip() if msg.content else ""
         return _parse_qa_response(text, attempt)
 
     except asyncio.TimeoutError:

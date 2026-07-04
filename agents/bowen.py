@@ -22,7 +22,7 @@ class BOWENAgent(BaseAgent):
 
     def __init__(self, config: Config, memory: MemoryStore, bus: MessageBus) -> None:
         super().__init__(config, memory, bus)
-        self._model = config.HAIKU_MODEL  # voice uses Haiku; text deep work uses Sonnet
+        # Model choice comes from agents.yaml (BOWEN -> haiku). Do not override here.
 
     @property
     def base_identity(self) -> str:
@@ -53,10 +53,7 @@ class BOWENAgent(BaseAgent):
             print(f"  \033[90m[router] tier1 → {agent}\033[0m")
             return agent
 
-        agent, reason = await tier2_route(
-            user_text, self.client, self.config.HAIKU_MODEL,
-            groq_api_key=self.config.GROQ_API_KEY,
-        )
+        agent, reason = await tier2_route(user_text, self.config)
         backend = "groq" if self.config.GROQ_API_KEY else "haiku"
         print(f"  \033[90m[router] tier2/{backend} → {agent} ({reason})\033[0m")
         return agent

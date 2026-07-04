@@ -16,7 +16,7 @@ import pytest
 from bus.message_bus import MessageBus
 from memory.consolidator import MemoryConsolidator
 from memory.pipeline import SleepTimeAgent
-from tests.conftest import FakeAnthropicClient, make_config, text_response
+from tests.conftest import FakeProvider, llm_text, make_config
 
 PROFILE_MARKER = "PRAISE-PROFILE-MARKER-7F3A"
 
@@ -108,7 +108,7 @@ class TestSleepPipeline:
             ),
         ]
         agent = SleepTimeAgent(store, api_key="test", model="haiku-test")
-        agent._client = FakeAnthropicClient([text_response(json.dumps(extracted))])
+        agent._llm = FakeProvider([llm_text(json.dumps(extracted))])
 
         stored = await agent.run(session_id)
 
@@ -122,7 +122,7 @@ class TestSleepPipeline:
     async def test_short_transcript_extracts_nothing(self, store):
         await store.log_message("sess-short", 1, "user", "BOWEN", "hi")
         agent = SleepTimeAgent(store, api_key="test", model="haiku-test")
-        agent._client = FakeAnthropicClient([])  # must never be called
+        agent._llm = FakeProvider([])  # must never be called
         assert await agent.run("sess-short") == 0
 
     async def test_conflicting_fact_noops_instead_of_duplicating(self, store):
@@ -138,9 +138,9 @@ class TestSleepPipeline:
         store.fake_collection.distance_by_id[existing_id] = 0.1
 
         agent = SleepTimeAgent(store, api_key="test", model="haiku-test")
-        agent._client = FakeAnthropicClient([
-            text_response(json.dumps([make_memory_json(importance=0.9)])),  # extraction
-            text_response(json.dumps({"action": "NOOP", "reason": "already known"})),
+        agent._llm = FakeProvider([
+            llm_text(json.dumps([make_memory_json(importance=0.9)])),  # extraction
+            llm_text(json.dumps({"action": "NOOP", "reason": "already known"})),
         ])
 
         stored = await agent.run(session_id)
@@ -151,7 +151,7 @@ class TestSleepPipeline:
         session_id = "sess-badjson"
         await seed_transcript(store, session_id)
         agent = SleepTimeAgent(store, api_key="test", model="haiku-test")
-        agent._client = FakeAnthropicClient([text_response("I could not produce JSON, sorry")])
+        agent._llm = FakeProvider([llm_text("I could not produce JSON, sorry")])
         assert await agent.run(session_id) == 0
         assert store.fake_collection.count() == 0
 
@@ -181,7 +181,7 @@ class TestConsolidator:
         store.fake_collection.distance_by_id[id_b] = 0.03
 
         cons = MemoryConsolidator(store, api_key="test", model="haiku-test")
-        cons._client = FakeAnthropicClient([text_response("Praise prefers tea to coffee.")])
+        cons._llm = FakeProvider([llm_text("Praise prefers tea to coffee.")])
 
         stats = await cons.run()
 
@@ -204,7 +204,7 @@ class TestConsolidator:
         await self._age_memory(store, stale_id, days=400)
 
         cons = MemoryConsolidator(store, api_key="test", model="haiku-test")
-        cons._client = FakeAnthropicClient([])  # nothing similar enough to merge
+        cons._llm = FakeProvider([])  # nothing similar enough to merge
 
         stats = await cons.run()
 
@@ -221,7 +221,7 @@ class TestConsolidator:
             content="Recently accessed fact.", importance=0.5,
         )
         cons = MemoryConsolidator(store, api_key="test", model="haiku-test")
-        cons._client = FakeAnthropicClient([])
+        cons._llm = FakeProvider([])
         stats = await cons.run()
         assert stats == {"decayed": 0, "merged": 0, "pruned": 0}
         assert cid in store.fake_collection.docs

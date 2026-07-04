@@ -14,8 +14,7 @@ import asyncio
 import logging
 from typing import Optional
 
-import anthropic
-
+from llm import AnthropicProvider
 from memory.store import MemoryStore
 
 logger = logging.getLogger(__name__)
@@ -90,7 +89,7 @@ class SleepTimeAgent:
 
     def __init__(self, memory: MemoryStore, api_key: str, model: str) -> None:
         self._memory = memory
-        self._client = anthropic.AsyncAnthropic(api_key=api_key)
+        self._llm = AnthropicProvider(api_key)
         self._model = model  # always Haiku — fast + cheap
 
     async def run(self, session_id: str) -> int:
@@ -194,19 +193,19 @@ class SleepTimeAgent:
     async def _check_conflict(self, new_content: str, existing_text: str) -> dict:
         """Call Haiku to decide: ADD / UPDATE / NOOP."""
         try:
-            response = await self._client.messages.create(
-                model=self._model,
-                max_tokens=256,
-                system=CONFLICT_CHECK_SYSTEM,
-                messages=[{
+            response = await self._llm.complete(
+                [{
                     "role": "user",
                     "content": (
                         f"NEW FACT:\n{new_content}\n\n"
                         f"EXISTING MEMORIES:\n{existing_text}"
                     )
                 }],
+                model=self._model,
+                max_tokens=256,
+                system=CONFLICT_CHECK_SYSTEM,
             )
-            text = response.content[0].text.strip()
+            text = response.text.strip()
             if text.startswith("```"):
                 text = text.split("```")[1]
                 if text.startswith("json"):
@@ -218,16 +217,16 @@ class SleepTimeAgent:
 
     async def _extract_memories(self, transcript: str) -> list[dict]:
         try:
-            response = await self._client.messages.create(
-                model=self._model,
-                max_tokens=1024,
-                system=EXTRACTION_SYSTEM,
-                messages=[{
+            response = await self._llm.complete(
+                [{
                     "role": "user",
                     "content": f"Extract memories from this conversation:\n\n{transcript}"
                 }],
+                model=self._model,
+                max_tokens=1024,
+                system=EXTRACTION_SYSTEM,
             )
-            text = response.content[0].text.strip()
+            text = response.text.strip()
             if text.startswith("```"):
                 text = text.split("```")[1]
                 if text.startswith("json"):
@@ -236,11 +235,8 @@ class SleepTimeAgent:
         except json.JSONDecodeError as e:
             logger.warning("Memory extraction: invalid JSON: %s", e)
             return []
-        except anthropic.APIError as e:
-            logger.warning("Memory extraction: API error: %s", e)
-            return []
         except Exception as e:
-            logger.error("Memory extraction: unexpected error: %s: %s", type(e).__name__, e)
+            logger.error("Memory extraction: error: %s: %s", type(e).__name__, e)
             return []
 
     async def _refresh_profile(self, new_memories: list[dict]) -> None:
@@ -253,11 +249,8 @@ class SleepTimeAgent:
         )
 
         try:
-            response = await self._client.messages.create(
-                model=self._model,
-                max_tokens=2048,
-                system=PROFILE_UPDATE_SYSTEM,
-                messages=[{
+            response = await self._llm.complete(
+                [{
                     "role": "user",
                     "content": (
                         f"Current user_profile.md:\n{current_profile}\n\n"
@@ -265,14 +258,15 @@ class SleepTimeAgent:
                         f"Return the updated user_profile.md."
                     )
                 }],
+                model=self._model,
+                max_tokens=2048,
+                system=PROFILE_UPDATE_SYSTEM,
             )
-            updated = response.content[0].text.strip()
+            updated = response.text.strip()
             if updated and len(updated) > 200:
                 self._memory.update_core_memory(updated)
-        except anthropic.APIError as e:
-            logger.warning("Profile refresh: API error: %s", e)
         except Exception as e:
-            logger.error("Profile refresh: unexpected error: %s: %s", type(e).__name__, e)
+            logger.error("Profile refresh: error: %s: %s", type(e).__name__, e)
 
 
 async def run_sleep_pipeline(memory: MemoryStore, session_id: str, api_key: str, model: str) -> None:

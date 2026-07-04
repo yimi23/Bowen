@@ -93,12 +93,10 @@ class KeepAliveService:
     async def _check_anthropic(self) -> None:
         status = self._status["anthropic"]
         try:
-            import anthropic
-            client = anthropic.AsyncAnthropic(api_key=self._config.ANTHROPIC_API_KEY)
-            # count_tokens is a lightweight preflight — bills input tokens only (negligible cost)
-            await client.messages.count_tokens(
-                model=self._config.HAIKU_MODEL,
-                messages=[{"role": "user", "content": "ping"}],
+            from llm import get_provider
+            # count_tokens preflight — bills input tokens only (negligible cost)
+            await get_provider("anthropic", self._config).health_check(
+                model=self._config.HAIKU_MODEL
             )
             status.healthy = True
             status.last_error = ""
@@ -131,9 +129,8 @@ class KeepAliveService:
             status.last_check = time.monotonic()
             return
         try:
-            from groq import AsyncGroq
-            client = AsyncGroq(api_key=self._config.GROQ_API_KEY)
-            await client.models.list()
+            from llm import get_provider
+            await get_provider("groq", self._config).health_check()
             status.healthy = True
             status.last_error = ""
         except Exception as exc:
