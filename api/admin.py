@@ -30,11 +30,13 @@ SHARED_KNOWLEDGE_PATH = Path(__file__).parent.parent / "memory" / "shared_knowle
 # ── Auth ──────────────────────────────────────────────────────────────────────
 
 def _require_admin(request: Request, x_admin_key: Optional[str] = Header(default=None)) -> None:
+    import hmac
+
     config = request.app.state.config
     expected = config.ADMIN_API_KEY
     if not expected:
         raise HTTPException(status_code=503, detail="Admin key not configured")
-    if x_admin_key != expected:
+    if not hmac.compare_digest(x_admin_key or "", expected):
         raise HTTPException(status_code=403, detail="Invalid admin key")
 
 

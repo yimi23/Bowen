@@ -33,7 +33,7 @@ If this file is committed to version control (git), shared, or accessed by unaut
 1. **Before initializing git:** Verify `.env` is in `.gitignore`
 2. **After first commit:** Run `git log --all --full-history -- .env` to verify .env was never committed
 3. **Consider:** Using a secrets manager (1Password CLI, AWS Secrets Manager, etc.) instead of .env for production
-4. **Never:** Share this .env file via email, Slack, or any messaging platform
+4. **Never:** Share this .env file via email, Slack, or any messaging service
 5. **Rotate keys:** If this file was ever accidentally shared, rotate ALL keys immediately
 
 ---

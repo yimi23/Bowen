@@ -187,7 +187,7 @@ MEMORIES = [
 
     (
         "Twine Campus Inc. is a Delaware C-Corp. Restructured April 2026, 80/20 split (80% founders, "
-        "20% company reserve). Core message: other platforms connect you to the world, "
+        "20% company reserve). Core message: other networks connect you to the world, "
         "Twine connects you to your campus. GTM: campus-by-campus, own one campus completely before expanding.",
         "business", 0.85, ["twine", "business"]
     ),

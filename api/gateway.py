@@ -191,13 +191,34 @@ async def chat_websocket(websocket: WebSocket):
     config      = websocket.app.state.config
     multi_store = websocket.app.state.multi_store
 
-    # ── Session (always Praise / admin) ──────────────────────────────────────
-    user_id      = "usr_admin"
-    display_name = "Praise Oyimi"
+    # ── Tenant authentication ─────────────────────────────────────────────────
+    # Every session binds to exactly one tenant's isolated stores. The key in
+    # ?key= decides which. No-key connections are allowed ONLY when no admin
+    # key is configured (fully local, single-tenant dev mode).
+    from memory.users import RateLimited
 
-    # ── Per-user memory ───────────────────────────────────────────────────────
+    api_key = websocket.query_params.get("key", "")
+    if api_key:
+        try:
+            user = await websocket.app.state.user_manager.authenticate(api_key)
+        except RateLimited:
+            await websocket.close(code=4429, reason="rate limit exceeded")
+            return
+        if not user:
+            await websocket.close(code=4401, reason="invalid API key")
+            return
+        user_id      = user["id"]
+        username     = user.get("username", user_id)
+        display_name = user.get("display_name", username)
+    elif not config.ADMIN_API_KEY:
+        user_id, username, display_name = "usr_admin", "praise", "Praise Oyimi"
+    else:
+        await websocket.close(code=4401, reason="API key required")
+        return
+
+    # ── Per-tenant memory ─────────────────────────────────────────────────────
     user_memory = await multi_store.get_or_create(
-        user_id, "praise", display_name
+        user_id, username, display_name
     )
 
     # ── Per-user registry ─────────────────────────────────────────────────────

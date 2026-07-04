@@ -48,7 +48,7 @@ search_tools = TavilyTools(api_key=settings.TAVILY_API_KEY)
 - API Key: set LIVEKIT_API_KEY in .env
 - Secret: set LIVEKIT_API_SECRET in .env
 
-**What it is:** Real-time voice communication platform  
+**What it is:** Real-time voice communication service  
 **Why useful:**
 - **Sub-second latency** for voice agents
 - **Built-in VAD** (Voice Activity Detection)

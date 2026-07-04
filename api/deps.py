@@ -43,7 +43,12 @@ async def get_user_memory(
     user_manager = request.app.state.user_manager
     multi_store  = request.app.state.multi_store
 
-    user = await user_manager.authenticate(x_api_key)
+    from memory.users import RateLimited
+
+    try:
+        user = await user_manager.authenticate(x_api_key)
+    except RateLimited:
+        raise HTTPException(status_code=429, detail="Rate limit exceeded. Slow down.")
     if not user:
         raise HTTPException(status_code=401, detail="Invalid API key.")
 

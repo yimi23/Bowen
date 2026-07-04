@@ -24,13 +24,25 @@ Users table:
 from __future__ import annotations
 
 import hashlib
+import hmac
 import secrets
 import string
+import time
+from collections import deque
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
 
 import aiosqlite
+
+
+class RateLimited(Exception):
+    """Raised when a tenant exceeds their per-minute request budget."""
+
+    def __init__(self, user_id: str, limit: int) -> None:
+        self.user_id = user_id
+        self.limit = limit
+        super().__init__(f"tenant {user_id} exceeded {limit} requests/min")
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS users (
@@ -68,9 +80,13 @@ class UserManager:
     Single-writer — safe for the single-server deployment.
     """
 
-    def __init__(self, db_path: Path) -> None:
+    def __init__(self, db_path: Path, rate_limit_per_min: int = 120) -> None:
         self._db_path = db_path
         self._db: Optional[aiosqlite.Connection] = None
+        # Per-tenant sliding-window rate limit (auth-time choke point:
+        # every REST and WS request authenticates, so this covers both).
+        self._rate_limit = rate_limit_per_min
+        self._request_log: dict[str, deque[float]] = {}
 
     async def initialize(self) -> None:
         self._db_path.parent.mkdir(parents=True, exist_ok=True)
@@ -146,18 +162,27 @@ class UserManager:
         """
         Validate an API key. Returns user dict or None.
         Updates last_seen_at on success.
+
+        Raises RateLimited when the tenant exceeds their per-minute budget.
+        The stored hash is re-verified with a constant-time compare after the
+        indexed lookup, so key verification never leaks timing.
         """
         if not api_key:
             return None
         key_hash = _hash_key(api_key)
         async with self._db.execute(
-            "SELECT id, username, display_name, is_admin FROM users WHERE key_hash = ?",
+            "SELECT id, username, display_name, is_admin, key_hash FROM users WHERE key_hash = ?",
             (key_hash,),
         ) as cur:
             row = await cur.fetchone()
         if not row:
             return None
         user = dict(row)
+        stored_hash = user.pop("key_hash", "")
+        if not hmac.compare_digest(stored_hash, key_hash):
+            return None
+
+        self._check_rate(user["id"])
         # Update last_seen_at (fire-and-forget)
         await self._db.execute(
             "UPDATE users SET last_seen_at = ? WHERE id = ?",
@@ -165,6 +190,16 @@ class UserManager:
         )
         await self._db.commit()
         return user
+
+    def _check_rate(self, user_id: str) -> None:
+        """Sliding 60s window per tenant. Raises RateLimited on excess."""
+        now = time.monotonic()
+        window = self._request_log.setdefault(user_id, deque())
+        while window and now - window[0] > 60.0:
+            window.popleft()
+        if len(window) >= self._rate_limit:
+            raise RateLimited(user_id, self._rate_limit)
+        window.append(now)
 
     # ── Queries ───────────────────────────────────────────────────────────────
 

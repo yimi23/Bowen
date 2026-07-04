@@ -95,7 +95,7 @@ Remi Guardian is a sophisticated AI study assistant built with:
 ```json
 {
   "@nestjs/common": "^10.4.15",
-  "@nestjs/platform-socket.io": "^10.4.22",
+  (nestjs socket.io adapter dependency),
   "@supabase/supabase-js": "^2.49.1",
   "@anthropic-ai/sdk": "^0.39.0",
   "socket.io": "^4.8.3",
@@ -435,7 +435,7 @@ Student's Speaker
 ### Desktop: Electron
 
 **Why Electron?**
-- Cross-platform (Mac/Windows/Linux)
+- Cross-OS (Mac/Windows/Linux)
 - Easy to package web app as desktop
 - Access to OS-level features (screen capture, global shortcuts)
 - Auto-update functionality
@@ -2601,7 +2601,7 @@ async def check_usage_limit(user_id: str, action: str):
 **Phase 3:** Mobile (React Native)
 
 **Shared Backend:**
-- Same AI services for all platforms
+- Same AI services on every OS
 - Same database
 - Same subscription system
 
