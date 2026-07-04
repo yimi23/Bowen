@@ -133,6 +133,21 @@ CREATE TABLE IF NOT EXISTS dispatches (
     created_at  TEXT NOT NULL,
     updated_at  TEXT NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS memory_history (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    chroma_id   TEXT NOT NULL,
+    event       TEXT NOT NULL,
+    content     TEXT NOT NULL,
+    reason      TEXT DEFAULT '',
+    created_at  TEXT NOT NULL
+);
+
+CREATE VIRTUAL TABLE IF NOT EXISTS memories_fts USING fts5(
+    content,
+    chroma_id UNINDEXED,
+    tokenize = 'porter ascii'
+);
 """
 
 SEED_DATA = """
@@ -229,6 +244,28 @@ class MemoryStore:
                 pass  # column already exists
 
         await self._db.commit()
+
+        # v4: populate FTS5 index from existing memories (idempotent)
+        await self._migrate_v4()
+
+    async def _migrate_v4(self) -> None:
+        """Populate memories_fts from existing memories that aren't yet indexed."""
+        try:
+            # Find memories not yet in FTS
+            cursor = await self._db.execute(
+                """SELECT chroma_id, content FROM memories
+                   WHERE chroma_id NOT IN (SELECT chroma_id FROM memories_fts)"""
+            )
+            rows = await cursor.fetchall()
+            for row in rows:
+                await self._db.execute(
+                    "INSERT INTO memories_fts (content, chroma_id) VALUES (?, ?)",
+                    (row[1], row[0]),
+                )
+            if rows:
+                await self._db.commit()
+        except Exception:
+            pass  # FTS table may not exist yet in very old schemas; schema CREATE handles it
 
     def set_profile_path(self, path: Path) -> None:
         self._profile_path = path
@@ -354,35 +391,93 @@ class MemoryStore:
         self,
         query: str,
         top_k: int = 8,
-        min_relevance: float = 0.7,
+        min_relevance: float = 0.6,
         time_decay: bool = True,
         topic_id: Optional[str] = None,
     ) -> str:
         """
-        Vector search with optional time decay and topic filtering.
-        Sync — ChromaDB is fast (<5ms) and safe to call from async context.
-        Score = cosine_similarity × exp(-0.01 × age_days) × importance
+        Hybrid BM25 + vector search with composite scoring.
+
+        Stage 1 — BM25 (SQLite FTS5): get up to 20 keyword candidates.
+        Stage 2 — ChromaDB: vector-score those candidates (or all if FTS returns none).
+        Stage 3 — Composite score: 0.5×similarity + 0.3×recency_decay + 0.2×importance.
+
+        Runs sync — called from asyncio.to_thread; safe.
         """
+        import sqlite3
+
         count = self._collection.count()
         if count == 0:
             return ""
 
-        k = min(top_k, count)
+        # ── Stage 1: BM25 candidate selection ────────────────────────────────
+        bm25_ids: set[str] = set()
+        try:
+            # FTS5 MATCH query — porter stemmer, ASCII tokenizer
+            fts_query = " ".join(
+                w for w in query.split()
+                if len(w) >= 3 and w.lower() not in {
+                    "the", "and", "for", "this", "that", "with", "from", "have",
+                    "will", "are", "was", "can", "not", "but",
+                }
+            )
+            if fts_query:
+                conn = sqlite3.connect(self._db_path)
+                try:
+                    rows = conn.execute(
+                        "SELECT chroma_id FROM memories_fts WHERE memories_fts MATCH ? LIMIT 20",
+                        (fts_query,),
+                    ).fetchall()
+                    bm25_ids = {r[0] for r in rows if r[0]}
+                finally:
+                    conn.close()
+        except Exception:
+            pass  # FTS unavailable — fall through to pure vector search
+
+        # ── Stage 2: ChromaDB vector search ───────────────────────────────────
+        k = min(max(top_k, 20), count)  # fetch more candidates for composite reranking
         query_kwargs: dict = {
             "query_texts": [query],
             "n_results": k,
             "include": ["documents", "metadatas", "distances"],
         }
-        # Filter to topic if provided, or search globally
         if topic_id and topic_id != "all":
             query_kwargs["where"] = {"topic_id": {"$in": [topic_id, "all"]}}
 
-        results = self._collection.query(**query_kwargs)
+        # If BM25 found candidates, restrict ChromaDB to those + a few vector-only extras
+        if bm25_ids:
+            try:
+                bm25_results = self._collection.query(
+                    query_texts=[query],
+                    n_results=min(len(bm25_ids), count),
+                    where={"chroma_id": {"$in": list(bm25_ids)}},
+                    include=["documents", "metadatas", "distances"],
+                )
+                # Also get pure vector results for coverage
+                vector_results = self._collection.query(**query_kwargs)
+                # Merge both result sets (dedup by chroma_id)
+                seen: set[str] = set()
+                docs, metas, distances = [], [], []
+                for res in (bm25_results, vector_results):
+                    for d, m, dist in zip(res["documents"][0], res["metadatas"][0], res["distances"][0]):
+                        cid = m.get("chroma_id", "")
+                        if cid not in seen:
+                            seen.add(cid)
+                            docs.append(d)
+                            metas.append(m)
+                            distances.append(dist)
+            except Exception:
+                results = self._collection.query(**query_kwargs)
+                docs = results["documents"][0]
+                metas = results["metadatas"][0]
+                distances = results["distances"][0]
+        else:
+            results = self._collection.query(**query_kwargs)
+            docs = results["documents"][0]
+            metas = results["metadatas"][0]
+            distances = results["distances"][0]
 
-        docs = results["documents"][0]
-        metas = results["metadatas"][0]
-        distances = results["distances"][0]
-
+        # ── Stage 3: Composite scoring ────────────────────────────────────────
         now = datetime.now(timezone.utc)
         scored = []
         for doc, meta, dist in zip(docs, metas, distances):
@@ -390,30 +485,37 @@ class MemoryStore:
             if similarity < min_relevance:
                 continue
 
-            score = similarity
+            # BM25 bonus: memories that appeared in FTS get a small boost
+            bm25_bonus = 0.05 if meta.get("chroma_id") in bm25_ids else 0.0
+
+            recency = 1.0
             if time_decay and "created_at" in meta:
                 try:
                     created = datetime.fromisoformat(meta["created_at"])
                     age_days = (now - created).days
-                    score *= math.exp(-0.01 * age_days)
+                    recency = math.exp(-0.01 * age_days)
                 except Exception:
                     pass
 
-            score *= float(meta.get("importance", 0.5))
+            importance = float(meta.get("importance", 0.5))
+
+            # Composite: 0.5×similarity + 0.3×recency + 0.2×importance + bm25_bonus
+            score = 0.5 * similarity + 0.3 * recency + 0.2 * importance + bm25_bonus
             scored.append((score, doc, meta))
 
         if not scored:
             return ""
 
         scored.sort(key=lambda x: x[0], reverse=True)
+        scored = scored[:top_k]
 
-        # Update access stats for retrieved memories (fire-and-forget, sync)
+        # Update access stats (fire-and-forget)
         chroma_ids = [m.get("chroma_id") for _, _, m in scored if m.get("chroma_id")]
         if chroma_ids:
             try:
                 asyncio.create_task(self._update_access(chroma_ids))
             except RuntimeError:
-                pass  # called from asyncio.to_thread; access stats skipped
+                pass
 
         lines = []
         for _, doc, meta in scored:
@@ -470,6 +572,16 @@ class MemoryStore:
             (chroma_id, agent_id, memory_type, content, importance,
              json.dumps(tags or []), topic_id, now, now),
         )
+
+        # Keep FTS5 index in sync
+        try:
+            await self._exec(
+                "INSERT INTO memories_fts (content, chroma_id) VALUES (?, ?)",
+                (content, chroma_id),
+            )
+        except Exception:
+            pass
+
         return chroma_id
 
     def get_all_memories_for_consolidation(self) -> list[dict]:
@@ -488,6 +600,26 @@ class MemoryStore:
     async def delete_memory(self, chroma_id: str) -> None:
         self._collection.delete(ids=[chroma_id])
         await self._exec("DELETE FROM memories WHERE chroma_id = ?", (chroma_id,))
+        try:
+            await self._exec("DELETE FROM memories_fts WHERE chroma_id = ?", (chroma_id,))
+        except Exception:
+            pass
+
+    async def log_memory_event(
+        self,
+        chroma_id: str,
+        event: str,
+        content: str,
+        reason: str = "",
+    ) -> None:
+        """Record ADD/UPDATE/DELETE/MERGE events with lineage."""
+        try:
+            await self._exec(
+                "INSERT INTO memory_history (chroma_id, event, content, reason, created_at) VALUES (?,?,?,?,?)",
+                (chroma_id, event, content[:500], reason, _now()),
+            )
+        except Exception:
+            pass
 
     async def update_memory_importance(self, chroma_id: str, importance: float) -> None:
         await self._exec(
